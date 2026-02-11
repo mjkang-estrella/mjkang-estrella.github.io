@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="780" viewBox="0 0 1200 780" role="img" aria-label="Ping Pong project image">
+  <defs>
+    <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3f3f46"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="780" fill="url(#g4)"/>
+  <rect x="150" y="180" width="900" height="420" rx="18" fill="#f3f4f6" opacity="0.12"/>
+  <rect x="590" y="180" width="20" height="420" fill="#f9fafb" opacity="0.6"/>
+  <circle cx="420" cy="390" r="24" fill="#ffffff"/>
+  <circle cx="760" cy="320" r="24" fill="#ffffff"/>
+  <text x="120" y="120" fill="#f9fafb" font-size="84" font-family="Helvetica, Arial, sans-serif" font-weight="700">PING PONG</text>
+  <text x="120" y="700" fill="#d1d5db" font-size="34" font-family="Helvetica, Arial, sans-serif">Canvas mini-game and physics experiments</text>
+</svg>
