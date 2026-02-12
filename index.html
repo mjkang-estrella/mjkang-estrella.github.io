@@ -160,6 +160,21 @@
                 background: #fff;
                 flex-shrink: 0;
             }
+            .company-logo-frame.is-logo {
+                border: none;
+                overflow: hidden;
+                background: transparent;
+            }
+            .company-logo {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                display: block;
+            }
+            .company-logo--cover {
+                object-fit: cover;
+                border-radius: 50%;
+            }
 
             .role-title {
                 font-size: 1.25rem;
@@ -335,19 +350,22 @@
                             </div>
                             <div>
                                 <div class="company-block">
-                                    <div class="company-logo-frame">
-                                        F
+                                    <div class="company-logo-frame is-logo">
+                                        <img
+                                            class="company-logo"
+                                            src="images/logos/viva-republica.png"
+                                            alt="Toss Bank logo"
+                                        />
                                     </div>
-                                    <span class="company-name"
-                                        >Toss Bank</span
-                                    >
+                                    <span class="company-name">Toss Bank</span>
                                 </div>
                                 <div class="role-title">
-                                    Product Manager
+                                    Product Manager (Social, Growth)
                                 </div>
                                 <p class="dense-text">
-                                    Spearheading payment infrastructure and user
-                                    acquisition flows for Series B startup.
+                                    Launched social banking products and growth
+                                    loops that drove 300K+ MAU in 1 month and
+                                    accelerated new-account growth at scale.
                                 </p>
                             </div>
                         </div>
@@ -358,19 +376,22 @@
                             </div>
                             <div>
                                 <div class="company-block">
-                                    <div class="company-logo-frame">
-                                        LS
+                                    <div class="company-logo-frame is-logo">
+                                        <img
+                                            class="company-logo company-logo--cover"
+                                            src="images/logos/match-group.jpg"
+                                            alt="Match Group logo"
+                                        />
                                     </div>
-                                    <span class="company-name"
-                                        >Match Group</span
-                                    >
+                                    <span class="company-name">Match Group</span>
                                 </div>
                                 <div class="role-title">
-                                    Product Manager
+                                    Product Manager (Live Streaming)
                                 </div>
                                 <p class="dense-text">
-                                    Managed creator economy tools and real-time
-                                    engagement features.
+                                    Owned Hakuna Live roadmap and iterative
+                                    launches, driving 100K+ MAU growth while
+                                    improving moderation accuracy and speed.
                                 </p>
                             </div>
                         </div>
@@ -381,55 +402,52 @@
 
                         <div class="timeline-item">
                             <div class="timeline-date">
-                                2015—<br />2017
+                                2025~<br />2027
                             </div>
                             <div>
                                 <div class="company-block">
-                                    <div
-                                        class="company-logo-frame"
-                                        style="
-                                            background: #003262;
-                                            color: #fdb515;
-                                        "
-                                       
-                                    >
-                                        B
+                                    <div class="company-logo-frame is-logo">
+                                        <img
+                                            class="company-logo"
+                                            src="images/logos/uc-berkeley-seal.svg"
+                                            alt="UC Berkeley Haas logo"
+                                        />
                                     </div>
-                                    <span class="company-name"
-                                        >UC Berkeley Haas</span
-                                    >
+                                    <span class="company-name">UC Berkeley Haas</span>
                                 </div>
-                                <div class="role-title">MBA</div>
+                                <div class="role-title">
+                                    Master of Business Administration (MBA)
+                                </div>
                                 <p class="dense-text">
-                                    Focused on Technology Product Management and
-                                    Entrepreneurship.
+                                    Studying Agentic AI, AI ethics, and
+                                    entrepreneurship; serving as VP roles in AI
+                                    Club and Product Management Club.
                                 </p>
                             </div>
                         </div>
 
                         <div class="timeline-item">
                             <div class="timeline-date">
-                                2011—<br />2015
+                                2016~<br />2022
                             </div>
                             <div>
                                 <div class="company-block">
-                                    <div
-                                        class="company-logo-frame"
-                                        style="background: #004191; color: #fff"
-                                       
-                                    >
-                                        K
+                                    <div class="company-logo-frame is-logo">
+                                        <img
+                                            class="company-logo"
+                                            src="images/logos/kaist.svg"
+                                            alt="KAIST logo"
+                                        />
                                     </div>
-                                    <span class="company-name"
-                                        >KAIST</span
-                                    >
+                                    <span class="company-name">KAIST</span>
                                 </div>
                                 <div class="role-title">
                                     B.S. Computer Science
                                 </div>
                                 <p class="dense-text">
-                                    Summa Cum Laude. Specialization in
-                                    Distributed Systems and Algorithms.
+                                    Studied Computer Science and Business
+                                    Technology Management with focus on systems,
+                                    analytics, and product thinking.
                                 </p>
                             </div>
                         </div>
@@ -470,7 +488,7 @@
                             Interactive resume platform that answers questions
                             about my background.
                         </p>
-                        <a href="https://blog.mj-kang.com/" class="project-link">Launch</a>
+                        <a href="https://resume-os.com/" class="project-link">Launch</a>
                     </div>
                 </div>
                 <div class="project-card">
@@ -486,7 +504,7 @@
                             AI-based CrossFit performance analyzer &amp;
                             advisor.
                         </p>
-                        <a href="https://github.com/mjkang-estrella" class="project-link">View Case</a>
+                        <a href="https://ardent-footer-45845870.figma.site/" class="project-link">View Case</a>
                     </div>
                 </div>
                 <div class="project-card">
@@ -502,23 +520,38 @@
                             Voice journaling application powered by NLP for
                             sentiment analysis.
                         </p>
-                        <a href="https://github.com/mjkang-estrella?tab=repositories" class="project-link">App Store</a>
+                        <a href="https://github.com/mjkang-estrella/reflect" class="project-link">App Store</a>
                     </div>
                 </div>
                 <div class="project-card">
                     <img
                         src="images/projects/ping-pong.svg"
                         class="project-image"
-                        alt="Ping Pong"
+                        alt="Block Fighter"
                        
                     />
                     <div class="project-info">
-                        <h4 class="project-title">Ping Pong</h4>
+                        <h4 class="project-title">Block Fighter</h4>
                         <p class="project-desc">
                             Browser-based physics mini-game built with Canvas
                             API.
                         </p>
-                        <a href="/jeonse/" class="project-link">Play</a>
+                        <a href="https://github.com/mjkang-estrella/block-fighter" class="project-link">Play</a>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img
+                        src="images/projects/rent-calculator.svg"
+                        class="project-image"
+                        alt="Rent Calculator"
+                    />
+                    <div class="project-info">
+                        <h4 class="project-title">Rent Calculator</h4>
+                        <p class="project-desc">
+                            Interactive Jeonse rent calculator for exploring
+                            deposit, monthly rent, and conversion tradeoffs.
+                        </p>
+                        <a href="/jeonse/" class="project-link">Open</a>
                     </div>
                 </div>
             </div>
@@ -532,7 +565,13 @@
                     </div>
                     <div>
                         <strong>Social</strong><br />
-                        LinkedIn / X / GitHub / Blog
+                        <a href="https://www.linkedin.com/in/mj-kang-product/">LinkedIn</a>
+                        /
+                        <a href="https://x.com/mj_kang">X</a>
+                        /
+                        <a href="https://github.com/mjkang-estrella">Github</a>
+                        /
+                        <a href="https://blog.mj-kang.com/">Blog</a>
                     </div>
                     <div>
                         <strong>Colophon</strong><br />
