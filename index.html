@@ -168,6 +168,39 @@
                 font-weight: 700;
             }
 
+            .intro-columns {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+
+            .history-title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .history-copy {
+                font-size: 0.9rem;
+                opacity: 0.7;
+            }
+
+            .history-columns {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                padding: 0;
+            }
+
+            .works-header {
+                border-bottom: var(--border-width) solid var(--border-color);
+                padding: 20px 40px;
+            }
+
+            .works-title {
+                font-size: 4rem;
+                text-transform: uppercase;
+                font-weight: 700;
+            }
+
             .cta-banner {
                 width: 100%;
                 background-color: var(--ink-color);
@@ -424,8 +457,147 @@
                     flex-direction: column;
                     gap: 0.9rem;
                 }
+                .display-text.profile-name {
+                    font-size: clamp(2.8rem, 7vw, 3.6rem);
+                }
+                .intro-heading {
+                    font-size: clamp(2rem, 4.2vw, 2.35rem);
+                }
+                .works-title {
+                    font-size: clamp(2.9rem, 8vw, 3.6rem);
+                }
                 .projects-wrapper {
                     grid-template-columns: repeat(2, 1fr);
+                }
+                .project-card:nth-child(4n) {
+                    border-right: var(--border-width) solid var(--border-color);
+                }
+                .project-card:nth-child(2n) {
+                    border-right: none;
+                }
+            }
+
+            @media (max-width: 820px) {
+                .grid-row {
+                    grid-template-columns: 1fr;
+                }
+                .border-right {
+                    border-right: none;
+                }
+                .grid-row > .grid-cell.border-right,
+                .history-columns > .grid-cell.border-right {
+                    border-bottom: var(--border-width) solid var(--border-color);
+                }
+                .header-content {
+                    padding: 48px 28px;
+                }
+                .intro-columns {
+                    grid-template-columns: 1fr;
+                    gap: 1.25rem;
+                }
+                .history-columns {
+                    grid-template-columns: 1fr;
+                    gap: 0;
+                }
+                .cta-banner {
+                    padding: 16px 24px;
+                    align-items: flex-start;
+                    flex-direction: column;
+                    gap: 0.5rem;
+                }
+                .cta-text {
+                    font-size: 1rem;
+                    letter-spacing: 0.06em;
+                    white-space: normal;
+                    overflow-wrap: anywhere;
+                }
+                .works-header {
+                    padding: 18px 28px;
+                }
+                .projects-wrapper {
+                    grid-template-columns: 1fr;
+                }
+                .project-card {
+                    height: auto;
+                    min-height: 360px;
+                    border-right: none;
+                }
+                .project-card:nth-child(2n),
+                .project-card:nth-child(4n) {
+                    border-right: none;
+                }
+                .project-image {
+                    height: 220px;
+                }
+                .timeline-item {
+                    grid-template-columns: 72px 1fr;
+                    margin-bottom: 2rem;
+                }
+                .footer-grid {
+                    grid-template-columns: 1fr;
+                    gap: 1.2rem;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .grid-cell {
+                    padding: 18px;
+                }
+                .header-content {
+                    padding: 32px 18px;
+                }
+                .profile-badge {
+                    width: 88px;
+                    height: 88px;
+                }
+                .display-text.profile-name {
+                    font-size: clamp(2.3rem, 14vw, 3rem);
+                }
+                .intro-heading {
+                    font-size: clamp(1.7rem, 9vw, 2.1rem);
+                    margin-bottom: 1.25rem;
+                }
+                .meta-label {
+                    font-size: 0.75rem;
+                }
+                .timeline-item {
+                    grid-template-columns: 64px 1fr;
+                    margin-bottom: 1.6rem;
+                }
+                .timeline-date {
+                    font-size: 0.78rem;
+                }
+                .role-title {
+                    font-size: 1rem;
+                }
+                .company-name {
+                    font-size: 0.82rem;
+                }
+                .dense-text {
+                    font-size: 0.72rem;
+                    line-height: 1.45;
+                }
+                .cta-banner {
+                    padding: 14px 18px;
+                    gap: 0.35rem;
+                }
+                .cta-text {
+                    font-size: 0.9rem;
+                }
+                .works-header {
+                    padding: 14px 18px;
+                }
+                .works-title {
+                    font-size: clamp(1.9rem, 11vw, 2.4rem);
+                }
+                .project-image {
+                    height: 190px;
+                }
+                .project-link {
+                    padding: 7px 10px;
+                }
+                .footer {
+                    padding: 24px 18px;
                 }
             }
         </style>
@@ -458,14 +630,7 @@
                     <h2 class="intro-heading">
                         Connecting human needs with technical possibilities.
                     </h2>
-                    <div
-                        style="
-                            display: grid;
-                            grid-template-columns: 1fr 1fr;
-                            gap: 2rem;
-                        "
-                       
-                    >
+                    <div class="intro-columns">
                         <p class="body-text">
                             I am a Product Manager with over 5 years of
                             experience navigating the complexities of Fintech,
@@ -495,28 +660,16 @@
 
             <div class="grid-row">
                 <div class="grid-cell border-right">
-                    <h3 style="font-size: 2rem; margin-bottom: 2rem">
+                    <h3 class="history-title">
                         History
                     </h3>
-                    <p
-                        class="body-text"
-                        style="font-size: 0.9rem; opacity: 0.7"
-                       
-                    >
+                    <p class="body-text history-copy">
                         A timeline of professional evolution and academic
                         foundations.
                     </p>
                 </div>
 
-                <div
-                    class="grid-cell"
-                    style="
-                        display: grid;
-                        grid-template-columns: 1fr 1fr;
-                        padding: 0;
-                    "
-                   
-                >
+                <div class="grid-cell history-columns">
                     <div class="grid-cell border-right">
                         <span class="meta-label">Experience</span>
 
@@ -631,21 +784,8 @@
                 </div>
             </div>
 
-            <div
-                style="
-                    border-bottom: var(--border-width) solid var(--border-color);
-                    padding: 20px 40px;
-                "
-               
-            >
-                <h2
-                    style="
-                        font-size: 4rem;
-                        text-transform: uppercase;
-                        font-weight: 700;
-                    "
-                   
-                >
+            <div class="works-header">
+                <h2 class="works-title">
                     Selected Works
                 </h2>
             </div>
