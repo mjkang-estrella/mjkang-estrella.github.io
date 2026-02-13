@@ -154,6 +154,27 @@
                 display: block;
                 opacity: 0.8;
             }
+            .meta-action-link {
+                font-size: 0.72rem;
+                text-transform: uppercase;
+                letter-spacing: 0.07em;
+                text-decoration: none;
+                color: inherit;
+                opacity: 0.72;
+                border-bottom: 1px solid currentColor;
+                padding-bottom: 1px;
+                transition: opacity 0.2s ease, transform 0.2s ease;
+                white-space: nowrap;
+            }
+            .meta-action-link::after {
+                content: " \2197";
+                font-size: 0.86em;
+            }
+            .meta-action-link:hover,
+            .meta-action-link:focus-visible {
+                opacity: 1;
+                transform: translateX(2px);
+            }
 
             .body-text {
                 font-size: 1rem;
@@ -323,6 +344,17 @@
                 grid-template-columns: 80px 1fr;
                 margin-bottom: 2.5rem;
                 align-items: flex-start;
+            }
+            .timeline-item--cta {
+                grid-template-columns: 1fr;
+                margin-bottom: 0;
+            }
+            .timeline-item--cta .timeline-date {
+                display: none;
+            }
+            .timeline-item--cta > div:last-child {
+                display: flex;
+                justify-content: flex-end;
             }
 
             .timeline-date {
@@ -563,6 +595,9 @@
                 }
                 .meta-label {
                     font-size: 0.75rem;
+                }
+                .meta-action-link {
+                    font-size: 0.66rem;
                 }
                 .timeline-item {
                     grid-template-columns: 64px 1fr;
@@ -810,6 +845,22 @@
                                     Technology Management with focus on systems,
                                     analytics, and product thinking.
                                 </p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item timeline-item--cta">
+                            <div class="timeline-date" aria-hidden="true">
+                                &nbsp;
+                            </div>
+                            <div>
+                                <a
+                                    class="meta-action-link"
+                                    href="https://www.linkedin.com/in/mj-kang-product/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    See more
+                                </a>
                             </div>
                         </div>
                     </div>
