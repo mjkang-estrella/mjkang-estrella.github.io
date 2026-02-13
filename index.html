@@ -96,7 +96,7 @@
                 border: none;
                 overflow: hidden;
                 position: relative;
-                margin: 0;
+                margin: 0 0 0.7rem;
                 flex-shrink: 0;
                 background: radial-gradient(
                     circle at 30% 25%,
@@ -189,8 +189,6 @@
 
             .cta-banner:hover,
             .cta-banner:focus-visible {
-                background-color: var(--bg-color);
-                color: var(--ink-color);
                 transform: translateY(-1px) scale(1.01);
                 box-shadow: inset 0 0 0 1px var(--ink-color);
             }
@@ -436,23 +434,23 @@
         <div class="page-container">
             <div class="grid-row">
                 <div class="grid-cell border-right header-content">
+                    <div class="profile-badge">
+                        <span class="profile-fallback" aria-hidden="true">MK</span>
+                        <img
+                            src="images/profile/mj-profile.jpg"
+                            alt="Myeongjin Kang profile photo"
+                            class="profile-photo"
+                            onerror="this.style.display='none';"
+                        />
+                    </div>
                     <span class="meta-label">Profile</span>
                     <div class="profile-identity">
-                        <div class="profile-badge">
-                            <span class="profile-fallback" aria-hidden="true">MK</span>
-                            <img
-                                src="images/profile/mj-profile.jpg"
-                                alt="Myeongjin Kang profile photo"
-                                class="profile-photo"
-                                onerror="this.style.display='none';"
-                            />
-                        </div>
                         <div class="profile-copy">
                             <h1 class="display-text profile-name">MJ<br />Kang</h1>
                         </div>
                     </div>
                     <p class="body-text profile-subtitle">
-                        Product Manager <br />Based in SF
+                        Product Manager <br />Based in Bay Area
                     </p>
                 </div>
                 <div class="grid-cell header-content">
