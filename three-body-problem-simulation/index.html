@@ -1,0 +1,447 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">Three Body Simulation</title>
+    <style vid="5">
+        :root {
+            --c-sand: #D9D0C5;
+            --c-orange: #FF4A1C;
+            --c-purple: #B5BBE8;
+            --c-black: #0F0F0F;
+            --c-white: #FFFFFF;
+            --c-bg-dark: #121212;
+            
+            --f-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            
+            --s-spacing: 24px;
+            --s-spacing-sm: 12px;
+            --s-spacing-xs: 8px;
+            
+            --border-width: 1px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--f-sans);
+            background-color: var(--c-bg-dark);
+            color: var(--c-black);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+        }
+
+        
+        .t-headline {
+            font-size: 140px;
+            line-height: 0.8;
+            font-weight: 800;
+            letter-spacing: -4px;
+            color: var(--c-white);
+            mix-blend-mode: exclusion;
+            pointer-events: none;
+        }
+
+        .t-h2 {
+            font-size: 24px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .t-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            display: block;
+            opacity: 0.6;
+        }
+
+        .t-data {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        
+        .simulation-view {
+            flex: 1;
+            position: relative;
+            background-color: var(--c-bg-dark);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .controls-sidebar {
+            width: 380px;
+            display: flex;
+            flex-direction: column;
+            border-left: var(--border-width) solid var(--c-black);
+            overflow-y: auto;
+        }
+
+        
+        .sim-background-text {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            z-index: 1;
+            opacity: 0.15;
+        }
+        
+        .sim-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 0;
+        }
+
+        
+        .body-render {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 10;
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+        }
+        
+        .body-1 { width: 40px; height: 40px; background: var(--c-orange); top: 30%; left: 40%; }
+        .body-2 { width: 60px; height: 60px; background: var(--c-purple); top: 60%; left: 60%; }
+        .body-3 { width: 20px; height: 20px; background: var(--c-sand); top: 45%; left: 55%; }
+
+        .trail {
+            position: absolute;
+            border: 1px dashed;
+            border-radius: 50%;
+            opacity: 0.3;
+            z-index: 5;
+            pointer-events: none;
+        }
+        .trail-1 { border-color: var(--c-orange); width: 300px; height: 300px; top: 20%; left: 30%; transform: rotate(45deg); }
+        .trail-2 { border-color: var(--c-purple); width: 400px; height: 100px; top: 55%; left: 50%; transform: rotate(-15deg); }
+
+        
+        .control-block {
+            padding: var(--s-spacing);
+            display: flex;
+            flex-direction: column;
+            gap: var(--s-spacing);
+            border-bottom: var(--border-width) solid var(--c-black);
+            position: relative;
+        }
+
+        .block-orange { background-color: var(--c-orange); }
+        .block-purple { background-color: var(--c-purple); }
+        .block-sand { background-color: var(--c-sand); }
+        
+        .block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: var(--s-spacing-sm);
+        }
+
+        
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--s-spacing-sm);
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 2px;
+            background: rgba(0,0,0,0.2);
+            outline: none;
+            margin-top: 8px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            background: var(--c-black);
+            cursor: pointer;
+            border-radius: 0; 
+        }
+
+        .value-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 4px;
+        }
+
+        
+        .global-controls {
+            background-color: var(--c-sand); 
+            padding: var(--s-spacing);
+            flex: 1; 
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .control-bar {
+            display: flex;
+            gap: var(--s-spacing-sm);
+            margin-top: var(--s-spacing);
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid var(--c-black);
+            padding: 12px 24px;
+            font-family: var(--f-sans);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--c-black);
+            color: var(--c-sand);
+        }
+
+        .btn-primary {
+            background: var(--c-black);
+            color: var(--c-white);
+        }
+
+        
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: var(--s-spacing);
+            border-top: 1px solid var(--c-black);
+        }
+        
+        .data-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        
+        .mnk-overlay {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 120px;
+            font-weight: 800;
+            color: var(--c-white);
+            line-height: 0.8;
+            letter-spacing: -5px;
+            opacity: 1;
+            z-index: 20;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+        }
+        
+        
+        .coord-label {
+            position: absolute;
+            color: white;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            margin-top: 5px;
+            opacity: 0.7;
+        }
+
+    </style>
+</head>
+<body vid="6">
+
+    
+    <main class="simulation-view" vid="7">
+        <div class="sim-grid" vid="8"></div>
+        <div class="sim-background-text t-headline" vid="9">THREE<br vid="10">BODY<br vid="11">PROB</div>
+        
+        
+        <div class="trail trail-1" vid="12"></div>
+        <div class="trail trail-2" vid="13"></div>
+        
+        <div class="body-render body-1" vid="14">
+            <span class="coord-label" style="top: 100%; left: 0;" vid="15">ALPHA [X:12.4 Y:88.2]</span>
+        </div>
+        <div class="body-render body-2" vid="16">
+            <span class="coord-label" style="top: 100%; left: 0;" vid="17">BETA [X:44.1 Y:12.9]</span>
+        </div>
+        <div class="body-render body-3" vid="18">
+            <span class="coord-label" style="top: 100%; left: 0;" vid="19">GAMMA [X:99.2 Y:01.4]</span>
+        </div>
+    </main>
+
+    
+    <aside class="controls-sidebar" vid="20">
+        
+        
+        <div class="control-block block-orange" vid="21">
+            <div class="mnk-overlay" style="font-size: 80px; top: -10px; right: -10px; opacity: 0.3;" vid="22">01</div>
+            <div class="block-header" vid="23">
+                <h2 class="t-h2" vid="24">Alpha Centauri A</h2>
+                <span class="t-data" vid="25">M: 2.19e30</span>
+            </div>
+            
+            <div class="input-grid" vid="26">
+                <div class="control-group" vid="27">
+                    <label class="t-label" vid="28">Initial Velocity X</label>
+                    <div class="value-display" vid="29">
+                        <span class="t-data" vid="30">24.5 m/s</span>
+                    </div>
+                    <input type="range" value="60" vid="31">
+                </div>
+                <div class="control-group" vid="32">
+                    <label class="t-label" vid="33">Initial Velocity Y</label>
+                    <div class="value-display" vid="34">
+                        <span class="t-data" vid="35">-12.2 m/s</span>
+                    </div>
+                    <input type="range" value="30" vid="36">
+                </div>
+            </div>
+
+            <div class="data-row" vid="37">
+                <div class="data-item" vid="38">
+                    <span class="t-label" vid="39">Trajectory</span>
+                    <span class="t-data" vid="40">ELLIPTICAL</span>
+                </div>
+                <div class="data-item" style="text-align: right;" vid="41">
+                    <span class="t-label" vid="42">Status</span>
+                    <span class="t-data" vid="43">STABLE</span>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="control-block block-purple" vid="44">
+            <div class="mnk-overlay" style="font-size: 80px; top: -10px; right: -10px; opacity: 0.3;" vid="45">02</div>
+            <div class="block-header" vid="46">
+                <h2 class="t-h2" vid="47">Alpha Centauri B</h2>
+                <span class="t-data" vid="48">M: 1.88e30</span>
+            </div>
+            
+            <div class="input-grid" vid="49">
+                <div class="control-group" vid="50">
+                    <label class="t-label" vid="51">Initial Velocity X</label>
+                    <div class="value-display" vid="52">
+                        <span class="t-data" vid="53">18.1 m/s</span>
+                    </div>
+                    <input type="range" value="45" vid="54">
+                </div>
+                <div class="control-group" vid="55">
+                    <label class="t-label" vid="56">Initial Velocity Y</label>
+                    <div class="value-display" vid="57">
+                        <span class="t-data" vid="58">44.8 m/s</span>
+                    </div>
+                    <input type="range" value="70" vid="59">
+                </div>
+            </div>
+
+            <div class="data-row" vid="60">
+                <div class="data-item" vid="61">
+                    <span class="t-label" vid="62">Trajectory</span>
+                    <span class="t-data" vid="63">UNSTABLE</span>
+                </div>
+                <div class="data-item" style="text-align: right;" vid="64">
+                    <span class="t-label" vid="65">Status</span>
+                    <span class="t-data" vid="66">DECAYING</span>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="control-block block-sand" vid="67">
+            <div class="mnk-overlay" style="font-size: 80px; top: -10px; right: -10px; opacity: 0.3;" vid="68">03</div>
+            <div class="block-header" vid="69">
+                <h2 class="t-h2" vid="70">Proxima Centauri</h2>
+                <span class="t-data" vid="71">M: 2.44e29</span>
+            </div>
+            
+            <div class="input-grid" vid="72">
+                <div class="control-group" vid="73">
+                    <label class="t-label" vid="74">Initial Velocity X</label>
+                    <div class="value-display" vid="75">
+                        <span class="t-data" vid="76">08.2 m/s</span>
+                    </div>
+                    <input type="range" value="20" vid="77">
+                </div>
+                <div class="control-group" vid="78">
+                    <label class="t-label" vid="79">Initial Velocity Y</label>
+                    <div class="value-display" vid="80">
+                        <span class="t-data" vid="81">03.5 m/s</span>
+                    </div>
+                    <input type="range" value="15" vid="82">
+                </div>
+            </div>
+
+            <div class="data-row" vid="83">
+                <div class="data-item" vid="84">
+                    <span class="t-label" vid="85">Trajectory</span>
+                    <span class="t-data" vid="86">HYPERBOLIC</span>
+                </div>
+                <div class="data-item" style="text-align: right;" vid="87">
+                    <span class="t-label" vid="88">Status</span>
+                    <span class="t-data" vid="89">EJECTED</span>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="global-controls" vid="90">
+            <div class="block-header" vid="91">
+                <h2 class="t-h2" vid="92">SIMULATION</h2>
+                <span class="t-data" vid="93">T: 14:02:44</span>
+            </div>
+            
+            <div class="input-grid" vid="94">
+                <div class="control-group" vid="95">
+                    <label class="t-label" vid="96">Gravitational Constant</label>
+                    <div class="value-display" vid="97">
+                        <span class="t-data" vid="98">6.674e-11</span>
+                    </div>
+                    <input type="range" value="50" vid="99">
+                </div>
+                <div class="control-group" vid="100">
+                    <label class="t-label" vid="101">Time Step</label>
+                    <div class="value-display" vid="102">
+                        <span class="t-data" vid="103">dt: 0.01</span>
+                    </div>
+                    <input type="range" value="50" vid="104">
+                </div>
+            </div>
+
+            <div class="control-bar" vid="105">
+                <button class="btn btn-primary" vid="106">Run Simulation</button>
+                <button class="btn" vid="107">Reset</button>
+            </div>
+
+            <div class="data-row" vid="108">
+                <span class="t-label" vid="109">Frame: 20491</span>
+                <span class="t-data" vid="110">MODE: N-BODY</span>
+            </div>
+        </div>
+
+    </aside>
+
+
+</body></html>

@@ -1,0 +1,40 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="60" x2="1080" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#182032"/>
+      <stop offset="1" stop-color="#0D111A"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(412 338) rotate(90) scale(150)">
+      <stop stop-color="#FF5A36" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#FF5A36" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(790 516) rotate(90) scale(190)">
+      <stop stop-color="#BBC1F0" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#BBC1F0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowC" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(660 414) rotate(90) scale(90)">
+      <stop stop-color="#E7E0D7" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#E7E0D7" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#bg)"/>
+
+  <g opacity="0.4">
+    <path d="M216 476C275 258 628 124 902 208C1046 254 1124 362 1028 486C936 604 654 666 426 632C262 608 171 547 216 476Z" stroke="#FF5A36" stroke-width="3" stroke-dasharray="12 10"/>
+    <path d="M154 378C194 312 328 278 496 288C686 299 874 380 916 488C955 588 844 686 642 718C420 752 184 696 124 591C86 525 111 451 154 378Z" stroke="#BBC1F0" stroke-width="3" stroke-dasharray="12 10"/>
+    <path d="M326 238C476 168 772 188 908 330C1036 464 968 648 776 706C576 766 314 694 198 548C93 418 179 307 326 238Z" stroke="#E7E0D7" stroke-width="3" stroke-dasharray="10 10"/>
+  </g>
+
+  <circle cx="412" cy="338" r="150" fill="url(#glowA)"/>
+  <circle cx="790" cy="516" r="190" fill="url(#glowB)"/>
+  <circle cx="660" cy="414" r="90" fill="url(#glowC)"/>
+
+  <circle cx="412" cy="338" r="28" fill="#FF5A36"/>
+  <circle cx="790" cy="516" r="40" fill="#BBC1F0"/>
+  <circle cx="660" cy="414" r="15" fill="#E7E0D7"/>
+
+  <g opacity="0.78" fill="#EAF0FF" font-family="'Courier New', monospace" font-size="24" letter-spacing="2">
+    <text x="84" y="102">THREE BODY SIMULATOR</text>
+  </g>
+</svg>

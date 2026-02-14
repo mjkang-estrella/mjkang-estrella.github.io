@@ -275,24 +275,9 @@
                 width: 100%;
                 height: 2px;
                 background: currentColor;
-                transform: scaleX(0);
+                transform: scaleX(1);
                 transform-origin: left center;
                 transition: transform 0.22s ease;
-            }
-
-            .cta-banner:hover .cta-text--primary::after,
-            .cta-banner:focus-visible .cta-text--primary::after {
-                transform: scaleX(1);
-            }
-
-            .cta-text--secondary {
-                opacity: 0.5;
-                transition: opacity 0.22s ease;
-            }
-
-            .cta-banner:hover .cta-text--secondary,
-            .cta-banner:focus-visible .cta-text--secondary {
-                opacity: 0.75;
             }
 
             .cta-triangle {
@@ -323,8 +308,7 @@
 
             @media (prefers-reduced-motion: reduce) {
                 .cta-banner,
-                .cta-text--primary::after,
-                .cta-text--secondary {
+                .cta-text--primary::after {
                     transition: none;
                 }
 
@@ -692,9 +676,6 @@
                     >Connecting Ideas: Read My Blog
                     <span class="cta-triangle" aria-hidden="true"></span
                 ></span>
-                <span class="cta-text cta-text--secondary"
-                    >Latest posts and experiments</span
-                >
             </a>
 
             <div class="grid-row">
@@ -920,6 +901,21 @@
                             sentiment analysis.
                         </p>
                         <a href="https://github.com/mjkang-estrella/reflect" class="project-link">App Store</a>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img
+                        src="images/projects/three-body-simulator.svg"
+                        class="project-image"
+                        alt="Three Body Simulator"
+                    />
+                    <div class="project-info">
+                        <h4 class="project-title">Three Body Simulator</h4>
+                        <p class="project-desc">
+                            Interactive three-dimensional gravity simulation for
+                            chaotic multi-body orbital dynamics.
+                        </p>
+                        <a href="/three-body-problem-simulation/" class="project-link">Open</a>
                     </div>
                 </div>
                 <div class="project-card">
