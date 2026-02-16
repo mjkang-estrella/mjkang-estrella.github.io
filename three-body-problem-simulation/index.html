@@ -109,12 +109,30 @@
             z-index: 0;
         }
 
+        #trail-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 4;
+            pointer-events: none;
+        }
+
         
         .body-render {
             position: absolute;
             border-radius: 50%;
             z-index: 10;
             box-shadow: 0 0 40px rgba(0,0,0,0.5);
+            transform: translate(-50%, -50%);
+            cursor: grab;
+            touch-action: none;
+            user-select: none;
+        }
+
+        .body-render.is-dragging {
+            cursor: grabbing;
+            z-index: 25;
         }
         
         .body-1 { width: 40px; height: 40px; background: var(--c-orange); top: 30%; left: 40%; }
@@ -122,12 +140,7 @@
         .body-3 { width: 20px; height: 20px; background: var(--c-sand); top: 45%; left: 55%; }
 
         .trail {
-            position: absolute;
-            border: 1px dashed;
-            border-radius: 50%;
-            opacity: 0.3;
-            z-index: 5;
-            pointer-events: none;
+            display: none;
         }
         .trail-1 { border-color: var(--c-orange); width: 300px; height: 300px; top: 20%; left: 30%; transform: rotate(45deg); }
         .trail-2 { border-color: var(--c-purple); width: 400px; height: 100px; top: 55%; left: 50%; transform: rotate(-15deg); }
@@ -163,6 +176,20 @@
         .control-group {
             display: flex;
             flex-direction: column;
+        }
+
+        .control-select {
+            width: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.35);
+            background: rgba(255, 255, 255, 0.25);
+            font-family: var(--f-sans);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: var(--c-black);
+            outline: none;
         }
 
         input[type="range"] {
@@ -266,6 +293,8 @@
             font-size: 10px;
             margin-top: 5px;
             opacity: 0.7;
+            white-space: nowrap;
+            pointer-events: none;
         }
 
     </style>
@@ -273,22 +302,23 @@
 <body vid="6">
 
     
-    <main class="simulation-view" vid="7">
+    <main class="simulation-view" id="sim-view" vid="7">
         <div class="sim-grid" vid="8"></div>
+        <canvas id="trail-canvas"></canvas>
         <div class="sim-background-text t-headline" vid="9">THREE<br vid="10">BODY<br vid="11">PROB</div>
         
         
         <div class="trail trail-1" vid="12"></div>
         <div class="trail trail-2" vid="13"></div>
         
-        <div class="body-render body-1" vid="14">
-            <span class="coord-label" style="top: 100%; left: 0;" vid="15">ALPHA [X:12.4 Y:88.2]</span>
+        <div class="body-render body-1" id="body-alpha" vid="14">
+            <span class="coord-label" id="label-alpha" style="top: 100%; left: 0;" vid="15">ALPHA [X:-9.70 Y:2.43]</span>
         </div>
-        <div class="body-render body-2" vid="16">
-            <span class="coord-label" style="top: 100%; left: 0;" vid="17">BETA [X:44.1 Y:12.9]</span>
+        <div class="body-render body-2" id="body-beta" vid="16">
+            <span class="coord-label" id="label-beta" style="top: 100%; left: 0;" vid="17">BETA [X:9.70 Y:-2.43]</span>
         </div>
-        <div class="body-render body-3" vid="18">
-            <span class="coord-label" style="top: 100%; left: 0;" vid="19">GAMMA [X:99.2 Y:01.4]</span>
+        <div class="body-render body-3" id="body-gamma" vid="18">
+            <span class="coord-label" id="label-gamma" style="top: 100%; left: 0;" vid="19">GAMMA [X:0.00 Y:0.00]</span>
         </div>
     </main>
 
@@ -300,34 +330,34 @@
             <div class="mnk-overlay" style="font-size: 80px; top: -10px; right: -10px; opacity: 0.3;" vid="22">01</div>
             <div class="block-header" vid="23">
                 <h2 class="t-h2" vid="24">Alpha Centauri A</h2>
-                <span class="t-data" vid="25">M: 2.19e30</span>
+                <span class="t-data" id="mass-alpha" vid="25">M: 1.00</span>
             </div>
             
             <div class="input-grid" vid="26">
                 <div class="control-group" vid="27">
                     <label class="t-label" vid="28">Initial Velocity X</label>
                     <div class="value-display" vid="29">
-                        <span class="t-data" vid="30">24.5 m/s</span>
+                        <span class="t-data" id="vx-alpha-value" vid="30">4.662 u/s</span>
                     </div>
-                    <input type="range" value="60" vid="31">
+                    <input id="vx-alpha" type="range" min="-60" max="60" step="0.000001" value="4.66203685" vid="31">
                 </div>
                 <div class="control-group" vid="32">
                     <label class="t-label" vid="33">Initial Velocity Y</label>
                     <div class="value-display" vid="34">
-                        <span class="t-data" vid="35">-12.2 m/s</span>
+                        <span class="t-data" id="vy-alpha-value" vid="35">4.324 u/s</span>
                     </div>
-                    <input type="range" value="30" vid="36">
+                    <input id="vy-alpha" type="range" min="-60" max="60" step="0.000001" value="4.3236573" vid="36">
                 </div>
             </div>
 
             <div class="data-row" vid="37">
                 <div class="data-item" vid="38">
                     <span class="t-label" vid="39">Trajectory</span>
-                    <span class="t-data" vid="40">ELLIPTICAL</span>
+                    <span class="t-data" id="traj-alpha" vid="40">ELLIPTICAL</span>
                 </div>
                 <div class="data-item" style="text-align: right;" vid="41">
                     <span class="t-label" vid="42">Status</span>
-                    <span class="t-data" vid="43">STABLE</span>
+                    <span class="t-data" id="status-alpha" vid="43">STABLE</span>
                 </div>
             </div>
         </div>
@@ -337,34 +367,34 @@
             <div class="mnk-overlay" style="font-size: 80px; top: -10px; right: -10px; opacity: 0.3;" vid="45">02</div>
             <div class="block-header" vid="46">
                 <h2 class="t-h2" vid="47">Alpha Centauri B</h2>
-                <span class="t-data" vid="48">M: 1.88e30</span>
+                <span class="t-data" id="mass-beta" vid="48">M: 1.00</span>
             </div>
             
             <div class="input-grid" vid="49">
                 <div class="control-group" vid="50">
                     <label class="t-label" vid="51">Initial Velocity X</label>
                     <div class="value-display" vid="52">
-                        <span class="t-data" vid="53">18.1 m/s</span>
+                        <span class="t-data" id="vx-beta-value" vid="53">4.662 u/s</span>
                     </div>
-                    <input type="range" value="45" vid="54">
+                    <input id="vx-beta" type="range" min="-60" max="60" step="0.000001" value="4.66203685" vid="54">
                 </div>
                 <div class="control-group" vid="55">
                     <label class="t-label" vid="56">Initial Velocity Y</label>
                     <div class="value-display" vid="57">
-                        <span class="t-data" vid="58">44.8 m/s</span>
+                        <span class="t-data" id="vy-beta-value" vid="58">4.324 u/s</span>
                     </div>
-                    <input type="range" value="70" vid="59">
+                    <input id="vy-beta" type="range" min="-60" max="60" step="0.000001" value="4.3236573" vid="59">
                 </div>
             </div>
 
             <div class="data-row" vid="60">
                 <div class="data-item" vid="61">
                     <span class="t-label" vid="62">Trajectory</span>
-                    <span class="t-data" vid="63">UNSTABLE</span>
+                    <span class="t-data" id="traj-beta" vid="63">UNSTABLE</span>
                 </div>
                 <div class="data-item" style="text-align: right;" vid="64">
                     <span class="t-label" vid="65">Status</span>
-                    <span class="t-data" vid="66">DECAYING</span>
+                    <span class="t-data" id="status-beta" vid="66">DECAYING</span>
                 </div>
             </div>
         </div>
@@ -374,34 +404,34 @@
             <div class="mnk-overlay" style="font-size: 80px; top: -10px; right: -10px; opacity: 0.3;" vid="68">03</div>
             <div class="block-header" vid="69">
                 <h2 class="t-h2" vid="70">Proxima Centauri</h2>
-                <span class="t-data" vid="71">M: 2.44e29</span>
+                <span class="t-data" id="mass-gamma" vid="71">M: 1.00</span>
             </div>
             
             <div class="input-grid" vid="72">
                 <div class="control-group" vid="73">
                     <label class="t-label" vid="74">Initial Velocity X</label>
                     <div class="value-display" vid="75">
-                        <span class="t-data" vid="76">08.2 m/s</span>
+                        <span class="t-data" id="vx-gamma-value" vid="76">-9.324 u/s</span>
                     </div>
-                    <input type="range" value="20" vid="77">
+                    <input id="vx-gamma" type="range" min="-60" max="60" step="0.000001" value="-9.3240737" vid="77">
                 </div>
                 <div class="control-group" vid="78">
                     <label class="t-label" vid="79">Initial Velocity Y</label>
                     <div class="value-display" vid="80">
-                        <span class="t-data" vid="81">03.5 m/s</span>
+                        <span class="t-data" id="vy-gamma-value" vid="81">-8.647 u/s</span>
                     </div>
-                    <input type="range" value="15" vid="82">
+                    <input id="vy-gamma" type="range" min="-60" max="60" step="0.000001" value="-8.6473146" vid="82">
                 </div>
             </div>
 
             <div class="data-row" vid="83">
                 <div class="data-item" vid="84">
                     <span class="t-label" vid="85">Trajectory</span>
-                    <span class="t-data" vid="86">HYPERBOLIC</span>
+                    <span class="t-data" id="traj-gamma" vid="86">HYPERBOLIC</span>
                 </div>
                 <div class="data-item" style="text-align: right;" vid="87">
                     <span class="t-label" vid="88">Status</span>
-                    <span class="t-data" vid="89">EJECTED</span>
+                    <span class="t-data" id="status-gamma" vid="89">EJECTED</span>
                 </div>
             </div>
         </div>
@@ -410,38 +440,54 @@
         <div class="global-controls" vid="90">
             <div class="block-header" vid="91">
                 <h2 class="t-h2" vid="92">SIMULATION</h2>
-                <span class="t-data" vid="93">T: 14:02:44</span>
+                <span class="t-data" id="sim-time" vid="93">T: 00:00:00</span>
+            </div>
+
+            <div class="control-group">
+                <label class="t-label" for="preset-select">Preset Solutions</label>
+                <select id="preset-select" class="control-select">
+                    <option value="figure-eight">Figure Eight</option>
+                    <option value="lagrange-triangle">Lagrange Triangle</option>
+                    <option value="euler-collinear">Euler Collinear</option>
+                    <option value="butterfly-i">Butterfly I</option>
+                    <option value="broucke">Broucke</option>
+                    <option value="moth-iii">Moth III</option>
+                    <option value="goggles">Goggles</option>
+                    <option value="dragonfly">Dragonfly</option>
+                    <option value="yarn">Yarn</option>
+                </select>
             </div>
             
             <div class="input-grid" vid="94">
                 <div class="control-group" vid="95">
                     <label class="t-label" vid="96">Gravitational Constant</label>
                     <div class="value-display" vid="97">
-                        <span class="t-data" vid="98">6.674e-11</span>
+                        <span class="t-data" id="g-value" vid="98">1.00e+0</span>
                     </div>
-                    <input type="range" value="50" vid="99">
+                    <input id="g-slider" type="range" min="0.1" max="3.0" step="0.01" value="1.00" vid="99">
                 </div>
                 <div class="control-group" vid="100">
-                    <label class="t-label" vid="101">Time Step</label>
+                    <label class="t-label" vid="101">Time Speed</label>
                     <div class="value-display" vid="102">
-                        <span class="t-data" vid="103">dt: 0.01</span>
+                        <span class="t-data" id="speed-value" vid="103">x1.00</span>
                     </div>
-                    <input type="range" value="50" vid="104">
+                    <input id="speed-slider" type="range" min="0.1" max="4.0" step="0.1" value="1.0" vid="104">
                 </div>
             </div>
 
             <div class="control-bar" vid="105">
-                <button class="btn btn-primary" vid="106">Run Simulation</button>
-                <button class="btn" vid="107">Reset</button>
+                <button id="run-btn" class="btn btn-primary" vid="106">Run Simulation</button>
+                <button id="reset-btn" class="btn" vid="107">Reset</button>
             </div>
 
             <div class="data-row" vid="108">
-                <span class="t-label" vid="109">Frame: 20491</span>
-                <span class="t-data" vid="110">MODE: N-BODY</span>
+                <span id="frame-value" class="t-label" vid="109">Frame: 0</span>
+                <span id="mode-value" class="t-data" vid="110">MODE: 2D N-BODY RK4</span>
             </div>
         </div>
 
     </aside>
 
 
+    <script src="./simulator.js"></script>
 </body></html>
