@@ -78,6 +78,18 @@
             .header-content {
                 padding: 80px 40px;
             }
+            .intro-panel {
+                display: flex;
+                flex-direction: column;
+                padding-bottom: 0;
+            }
+            .intro-panel .cta-banner {
+                margin-top: auto;
+                margin-left: -40px;
+                margin-right: -40px;
+                width: calc(100% + 80px);
+                border-bottom: none;
+            }
 
             .profile-identity {
                 display: flex;
@@ -511,6 +523,11 @@
                 .header-content {
                     padding: 48px 28px;
                 }
+                .intro-panel .cta-banner {
+                    margin-left: -28px;
+                    margin-right: -28px;
+                    width: calc(100% + 56px);
+                }
                 .intro-columns {
                     grid-template-columns: 1fr;
                     gap: 1.25rem;
@@ -565,6 +582,11 @@
                 }
                 .header-content {
                     padding: 32px 18px;
+                }
+                .intro-panel .cta-banner {
+                    margin-left: -18px;
+                    margin-right: -18px;
+                    width: calc(100% + 36px);
                 }
                 .profile-badge {
                     width: 88px;
@@ -648,7 +670,7 @@
                         Product Manager <br />Based in Bay Area
                     </p>
                 </div>
-                <div class="grid-cell header-content">
+                <div class="grid-cell header-content intro-panel">
                     <span class="meta-label">Introduction</span>
                     <h2 class="intro-heading">
                         Connecting human needs with technical possibilities.
@@ -668,15 +690,15 @@
                             solve personal problems or explore new technologies.
                         </p>
                     </div>
+
+                    <a href="https://blog.mj-kang.com/" class="cta-banner">
+                        <span class="cta-text cta-text--primary"
+                            >Connecting Ideas: Read My Blog
+                            <span class="cta-triangle" aria-hidden="true"></span
+                        ></span>
+                    </a>
                 </div>
             </div>
-
-            <a href="https://blog.mj-kang.com/" class="cta-banner">
-                <span class="cta-text cta-text--primary"
-                    >Connecting Ideas: Read My Blog
-                    <span class="cta-triangle" aria-hidden="true"></span
-                ></span>
-            </a>
 
             <div class="grid-row">
                 <div class="grid-cell border-right">
