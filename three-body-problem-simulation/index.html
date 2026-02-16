@@ -1,6 +1,23 @@
 <html lang="en" vid="0"><head vid="1">
     <meta charset="UTF-8" vid="2">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <link rel="apple-touch-icon" sizes="57x57" href="../images/logo/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="../images/logo/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/logo/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="../images/logo/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/logo/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="../images/logo/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="../images/logo/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="../images/logo/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../images/logo/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../images/logo/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../images/logo/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="../images/logo/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../images/logo/favicon-16x16.png">
+    <link rel="manifest" href="../images/logo/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="../images/logo/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
     <title vid="4">Three Body Simulation</title>
     <style vid="5">
         :root {
@@ -295,6 +312,85 @@
             opacity: 0.7;
             white-space: nowrap;
             pointer-events: none;
+        }
+
+        @media (max-width: 980px) {
+            body {
+                width: 100%;
+                min-height: 100dvh;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                overflow-x: hidden;
+                overflow-y: auto;
+            }
+
+            .simulation-view {
+                width: 100%;
+                min-height: 52dvh;
+                flex: 0 0 auto;
+            }
+
+            .controls-sidebar {
+                width: 100%;
+                border-left: 0;
+                border-top: var(--border-width) solid var(--c-black);
+                overflow: visible;
+            }
+
+            .t-headline {
+                font-size: clamp(72px, 17vw, 128px);
+                letter-spacing: -2px;
+            }
+
+            .sim-background-text {
+                top: 18px;
+                left: 18px;
+            }
+
+            .control-block {
+                padding: 18px;
+                gap: 18px;
+            }
+
+            .global-controls {
+                padding: 18px;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .simulation-view {
+                min-height: 44dvh;
+            }
+
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .control-bar {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 10px 14px;
+                font-size: 11px;
+            }
+
+            .block-header .t-h2 {
+                font-size: 18px;
+            }
+
+            .mnk-overlay {
+                font-size: 58px !important;
+                top: 0 !important;
+                right: 6px !important;
+            }
+
+            .coord-label {
+                font-size: 9px;
+            }
         }
 
     </style>
