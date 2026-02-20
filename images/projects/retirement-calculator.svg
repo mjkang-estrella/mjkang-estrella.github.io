@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="780" viewBox="0 0 1200 780" role="img" aria-label="Retirement Calculator project image">
+  <defs>
+    <linearGradient id="bg-retire" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d0d0d"/>
+      <stop offset="100%" stop-color="#1a1a1a"/>
+    </linearGradient>
+    <linearGradient id="glow-retire" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#cbe656" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#cbe656" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="780" fill="url(#bg-retire)"/>
+
+  <g transform="translate(120 120)">
+    <rect x="0" y="0" width="960" height="500" rx="18" fill="#111111" stroke="#262626"/>
+
+    <rect x="0" y="0" width="280" height="500" fill="#101010" stroke="#262626"/>
+
+    <g opacity="0.9">
+      <rect x="36" y="52" width="208" height="2" fill="#3a3a3a"/>
+      <rect x="36" y="124" width="208" height="2" fill="#3a3a3a"/>
+      <rect x="36" y="196" width="208" height="2" fill="#3a3a3a"/>
+      <rect x="36" y="268" width="208" height="2" fill="#3a3a3a"/>
+      <rect x="36" y="340" width="208" height="2" fill="#3a3a3a"/>
+      <rect x="156" y="46" width="14" height="14" fill="#0d0d0d" stroke="#cbe656"/>
+      <rect x="178" y="118" width="14" height="14" fill="#0d0d0d" stroke="#cbe656"/>
+      <rect x="138" y="190" width="14" height="14" fill="#0d0d0d" stroke="#cbe656"/>
+      <rect x="198" y="262" width="14" height="14" fill="#0d0d0d" stroke="#cbe656"/>
+      <rect x="168" y="334" width="14" height="14" fill="#0d0d0d" stroke="#cbe656"/>
+    </g>
+
+    <g transform="translate(320 52)">
+      <rect x="0" y="0" width="604" height="372" fill="#101010" stroke="#262626"/>
+      <rect x="24" y="70" width="556" height="1" fill="#1f1f1f"/>
+      <rect x="24" y="140" width="556" height="1" fill="#1f1f1f"/>
+      <rect x="24" y="210" width="556" height="1" fill="#1f1f1f"/>
+      <rect x="24" y="280" width="556" height="1" fill="#1f1f1f"/>
+
+      <path d="M24 320 L120 300 L205 270 L290 228 L375 184 L460 120 L580 54 L580 320 L24 320 Z" fill="url(#glow-retire)"/>
+      <path d="M24 320 L120 300 L205 270 L290 228 L375 184 L460 120 L580 54" fill="none" stroke="#cbe656" stroke-width="4"/>
+
+      <rect x="456" y="116" width="12" height="12" fill="#0d0d0d" stroke="#cbe656"/>
+      <rect x="574" y="48" width="12" height="12" fill="#0d0d0d" stroke="#cbe656"/>
+    </g>
+  </g>
+
+  <text x="120" y="700" fill="#f5f5f5" font-size="68" font-family="Helvetica, Arial, sans-serif" font-weight="700">RETIREMENT CALCULATOR</text>
+</svg>

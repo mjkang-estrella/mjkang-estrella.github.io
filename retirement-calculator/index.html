@@ -1,0 +1,562 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">Retirement Plan Simulator</title>
+    <style vid="5">
+        :root {
+            
+            --bg-app: #0D0D0D;
+            --bg-panel: #111111;
+            --border-color: #262626;
+            --accent-lime: #CBE656;
+            --accent-lime-dim: rgba(203, 230, 86, 0.1);
+            --text-primary: #FFFFFF;
+            --text-secondary: #888888;
+            --text-tertiary: #444444;
+            
+            
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-size-xs: 11px;
+            --font-size-sm: 13px;
+            --font-size-md: 15px;
+            --font-size-lg: 24px;
+            --font-size-xl: 32px;
+            
+            
+            --spacing-unit: 24px;
+            --grid-border-width: 1px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            font-family: var(--font-family);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            grid-template-rows: 60px 1fr 100px;
+            height: 100%;
+            width: 100%;
+            border-top: var(--grid-border-width) solid var(--border-color);
+        }
+
+        
+        .cell {
+            border-right: var(--grid-border-width) solid var(--border-color);
+            border-bottom: var(--grid-border-width) solid var(--border-color);
+            background-color: var(--bg-panel);
+            padding: var(--spacing-unit);
+            position: relative;
+        }
+
+        
+        .header {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--spacing-unit);
+        }
+
+        .brand {
+            font-size: var(--font-size-xs);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+        }
+
+        .header-title {
+            font-size: var(--font-size-md);
+            font-weight: 400;
+        }
+
+        
+        .sidebar {
+            grid-row: 2 / 3;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 0; 
+        }
+
+        .input-group {
+            padding: 32px var(--spacing-unit);
+            border-bottom: var(--grid-border-width) solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: background-color 0.2s;
+        }
+
+        .input-group:hover {
+            background-color: #161616;
+        }
+
+        .input-label {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .input-value-display {
+            font-size: var(--font-size-lg);
+            font-weight: 400;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+        }
+
+        .currency-symbol {
+            font-size: var(--font-size-md);
+            color: var(--text-tertiary);
+        }
+
+        
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+            cursor: pointer;
+            height: 20px;
+            margin-top: 4px;
+        }
+
+        input[type=range]:focus {
+            outline: none;
+        }
+
+        
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 1px;
+            background: var(--text-tertiary);
+            border: none;
+        }
+        
+        
+        input[type=range]::-webkit-slider-thumb {
+            height: 12px;
+            width: 12px;
+            background: var(--bg-app);
+            border: 1px solid var(--accent-lime);
+            -webkit-appearance: none;
+            margin-top: -5.5px; 
+            border-radius: 0;
+        }
+
+        input[type=range]:hover::-webkit-slider-thumb {
+            background: var(--accent-lime);
+        }
+
+        
+        .main-stage {
+            grid-column: 2;
+            grid-row: 2 / 3;
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            position: relative;
+        }
+
+        .stage-header {
+            margin-bottom: 40px;
+        }
+
+        .stage-title {
+            font-size: var(--font-size-xl);
+            font-weight: 400;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .stage-subtitle {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            max-width: 400px;
+            line-height: 1.5;
+        }
+
+        .chart-container {
+            flex-grow: 1;
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding-bottom: 30px; 
+            padding-left: 40px; 
+        }
+
+        
+        .chart-grid {
+            position: absolute;
+            top: 0;
+            left: 40px;
+            right: 0;
+            bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .chart-grid-line {
+            width: 100%;
+            height: 1px;
+            background-color: #1F1F1F;
+        }
+
+        svg {
+            overflow: visible;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .chart-line {
+            fill: none;
+            stroke: var(--accent-lime);
+            stroke-width: 1.5; 
+            vector-effect: non-scaling-stroke;
+        }
+
+        .chart-area {
+            fill: var(--accent-lime-dim);
+            stroke: none;
+        }
+
+        .axis-label {
+            fill: var(--text-tertiary);
+            font-size: 10px;
+            font-family: var(--font-family);
+        }
+
+        
+        .geo-marker {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--bg-app);
+            border: 1px solid var(--accent-lime);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        
+        .footer {
+            grid-column: 1 / -1;
+            grid-row: 3;
+            display: flex;
+            align-items: center;
+        }
+
+        .result-block {
+            flex: 1;
+            height: 100%;
+            border-right: var(--grid-border-width) solid var(--border-color);
+            padding: 0 var(--spacing-unit);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .result-label {
+            font-size: var(--font-size-xs);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        
+        .icon-square {
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-lime);
+            display: inline-block;
+        }
+        
+        .icon-square-hollow {
+            width: 10px;
+            height: 10px;
+            border: 1px solid var(--accent-lime);
+            display: inline-block;
+        }
+
+        .result-value {
+            font-size: var(--font-size-xl);
+            color: var(--text-primary);
+        }
+
+        .action-button {
+            height: 100%;
+            width: 200px;
+            background: var(--bg-panel);
+            color: var(--text-primary);
+            border: none;
+            border-right: var(--grid-border-width) solid var(--border-color);
+            font-family: var(--font-family);
+            font-size: var(--font-size-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+
+        .action-button:hover {
+            background: var(--accent-lime);
+            color: var(--bg-app);
+        }
+        
+        .action-button:hover .icon-square-hollow {
+            border-color: var(--bg-app);
+        }
+
+        
+        .wire-icon {
+            width: 24px;
+            height: 24px;
+            border: 1px solid var(--accent-lime);
+            position: relative;
+        }
+        .wire-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 8px;
+            height: 1px;
+            background: var(--accent-lime);
+        }
+
+        @media (max-width: 900px) {
+            .layout-grid {
+                grid-template-columns: 280px 1fr;
+            }
+        }
+    </style>
+</head>
+<body vid="6">
+
+    <div class="layout-grid" vid="7">
+        
+        <header class="cell header" vid="8">
+            <div class="brand" vid="9">FinStruct</div>
+            <div class="header-title" vid="10">Retirement Projector</div>
+            <div style="width: 20px;" vid="11"></div> 
+        </header>
+
+        
+        <aside class="sidebar cell" vid="12">
+            <div class="input-group" vid="13">
+                <label class="input-label" vid="14">Current Age <span vid="15">YEARS</span></label>
+                <div class="input-value-display" id="disp-age" vid="16">32</div>
+                <input type="range" min="18" max="80" value="32" id="in-age" oninput="updateSim()" vid="17">
+            </div>
+
+            <div class="input-group" vid="18">
+                <label class="input-label" vid="19">Retirement Age <span vid="20">YEARS</span></label>
+                <div class="input-value-display" id="disp-retire" vid="21">65</div>
+                <input type="range" min="40" max="90" value="65" id="in-retire" oninput="updateSim()" vid="22">
+            </div>
+
+            <div class="input-group" vid="23">
+                <label class="input-label" vid="24">Current Savings <span vid="25">USD</span></label>
+                <div class="input-value-display" vid="26"><span class="currency-symbol" vid="27">$</span><span id="disp-savings" vid="28">45,000</span></div>
+                <input type="range" min="0" max="500000" step="1000" value="45000" id="in-savings" oninput="updateSim()" vid="29">
+            </div>
+
+            <div class="input-group" vid="30">
+                <label class="input-label" vid="31">Monthly Contribution <span vid="32">USD</span></label>
+                <div class="input-value-display" vid="33"><span class="currency-symbol" vid="34">$</span><span id="disp-contrib" vid="35">1,200</span></div>
+                <input type="range" min="0" max="10000" step="100" value="1200" id="in-contrib" oninput="updateSim()" vid="36">
+            </div>
+
+            <div class="input-group" style="border-bottom: none;" vid="37">
+                <label class="input-label" vid="38">Expected Return <span vid="39">RATE</span></label>
+                <div class="input-value-display" id="disp-rate" vid="40">7%</div>
+                <input type="range" min="1" max="15" step="0.5" value="7" id="in-rate" oninput="updateSim()" vid="41">
+            </div>
+        </aside>
+
+        
+        <main class="cell main-stage" vid="42">
+            <div class="stage-header" vid="43">
+                <h1 class="stage-title" vid="44">Investment Trajectory</h1>
+                <p class="stage-subtitle" vid="45">
+                    Maecenas blandit pharetra ipsum, eget fringilla urna dignissim at. Projection assumes compound annual growth.
+                </p>
+            </div>
+
+            <div class="chart-container" vid="46">
+                
+                <div class="chart-grid" vid="47">
+                    <div class="chart-grid-line" vid="48"></div>
+                    <div class="chart-grid-line" vid="49"></div>
+                    <div class="chart-grid-line" vid="50"></div>
+                    <div class="chart-grid-line" vid="51"></div>
+                    <div class="chart-grid-line" vid="52"></div>
+                </div>
+
+                
+                <svg viewBox="0 0 800 400" preserveAspectRatio="none" id="chart-svg" vid="53">
+                    <defs vid="54">
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%" vid="55">
+                            <stop offset="0%" style="stop-color:var(--accent-lime);stop-opacity:0.2" vid="56"></stop>
+                            <stop offset="100%" style="stop-color:var(--accent-lime);stop-opacity:0" vid="57"></stop>
+                        </linearGradient>
+                    </defs>
+                    
+                    <path id="chart-area-path" class="chart-area" d="" vid="58"></path>
+                    <path id="chart-line-path" class="chart-line" d="" vid="59"></path>
+                    
+                    
+                    <text x="0" y="395" class="axis-label" id="start-year" vid="60">2023</text>
+                    <text x="770" y="395" class="axis-label" id="end-year" vid="61">2056</text>
+                </svg>
+            </div>
+        </main>
+
+        
+        <footer class="footer" vid="62">
+            <div class="result-block" vid="63">
+                <div class="result-label" vid="64"><span class="icon-square" vid="65"></span> Total Saved</div>
+                <div class="result-value" id="res-total" vid="66">$2.4M</div>
+            </div>
+            <div class="result-block" vid="67">
+                <div class="result-label" vid="68"><span class="icon-square-hollow" vid="69"></span> Monthly Income</div>
+                <div class="result-value" id="res-income" vid="70">$9,800</div>
+            </div>
+            <div class="result-block" vid="71">
+                <div class="result-label" vid="72"><span class="icon-square-hollow" vid="73"></span> Growth</div>
+                <div class="result-value" id="res-growth" vid="74">+420%</div>
+            </div>
+            <button class="action-button" vid="75">
+                <span vid="76">EXPORT REPORT</span>
+                <span class="icon-square-hollow" vid="77"></span>
+            </button>
+        </footer>
+    </div>
+
+    <script vid="78">
+        function formatMoney(num) {
+            return num.toLocaleString('en-US');
+        }
+
+        function calculate() {
+            const currentAge = parseInt(document.getElementById('in-age').value);
+            const retireAge = parseInt(document.getElementById('in-retire').value);
+            const savings = parseInt(document.getElementById('in-savings').value);
+            const monthly = parseInt(document.getElementById('in-contrib').value);
+            const rate = parseFloat(document.getElementById('in-rate').value) / 100;
+
+            const years = Math.max(1, retireAge - currentAge);
+            const months = years * 12;
+            const monthlyRate = rate / 12;
+
+            let balance = savings;
+            const dataPoints = [];
+
+            
+            const step = Math.max(1, Math.floor(months / 50)); 
+
+            for (let i = 0; i <= months; i++) {
+                if (i > 0) {
+                    balance = (balance + monthly) * (1 + monthlyRate);
+                }
+                
+                if (i % step === 0 || i === months) {
+                    dataPoints.push(balance);
+                }
+            }
+
+            return {
+                total: balance,
+                monthlyIncome: balance * 0.04 / 12, 
+                data: dataPoints,
+                growth: ((balance - (savings + (monthly * months))) / (savings + (monthly * months))) * 100
+            };
+        }
+
+        function updateSim() {
+            
+            document.getElementById('disp-age').textContent = document.getElementById('in-age').value;
+            document.getElementById('disp-retire').textContent = document.getElementById('in-retire').value;
+            document.getElementById('disp-savings').textContent = formatMoney(parseInt(document.getElementById('in-savings').value));
+            document.getElementById('disp-contrib').textContent = formatMoney(parseInt(document.getElementById('in-contrib').value));
+            document.getElementById('disp-rate').textContent = document.getElementById('in-rate').value + '%';
+
+            
+            const results = calculate();
+
+            
+            document.getElementById('res-total').textContent = '$' + (results.total / 1000000).toFixed(2) + 'M';
+            document.getElementById('res-income').textContent = '$' + formatMoney(Math.round(results.monthlyIncome));
+            document.getElementById('res-growth').textContent = '+' + Math.round(results.growth) + '%';
+            
+            
+            const currentYear = new Date().getFullYear();
+            const age = parseInt(document.getElementById('in-age').value);
+            const retire = parseInt(document.getElementById('in-retire').value);
+            document.getElementById('start-year').textContent = currentYear;
+            document.getElementById('end-year').textContent = currentYear + (retire - age);
+
+            
+            drawChart(results.data);
+        }
+
+        function drawChart(data) {
+            const svg = document.getElementById('chart-svg');
+            const width = 800;
+            const height = 400;
+            const maxVal = Math.max(...data) * 1.1; 
+
+            
+            let pathD = `M 0 ${height - (data[0] / maxVal * height)}`;
+            const xStep = width / (data.length - 1);
+
+            data.forEach((val, index) => {
+                if (index === 0) return;
+                const x = index * xStep;
+                const y = height - (val / maxVal * height);
+                
+                
+                
+                pathD += ` L ${x} ${y}`;
+            });
+
+            const linePath = document.getElementById('chart-line-path');
+            const areaPath = document.getElementById('chart-area-path');
+
+            linePath.setAttribute('d', pathD);
+            areaPath.setAttribute('d', pathD + ` L ${width} ${height} L 0 ${height} Z`);
+        }
+
+        
+        updateSim();
+
+    </script>
+
+</body></html>
