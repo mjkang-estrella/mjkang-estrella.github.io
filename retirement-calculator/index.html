@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en" vid="0"><head vid="1">
     <meta charset="UTF-8" vid="2">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
@@ -139,6 +140,11 @@
 
         input[type=range]:focus {
             outline: none;
+        }
+
+        input[type=range]:focus-visible {
+            outline: 2px solid var(--accent-lime);
+            outline-offset: 6px;
         }
 
         
@@ -322,7 +328,10 @@
             align-items: center;
             justify-content: center;
             gap: 12px;
-            transition: all 0.2s;
+            transition:
+                background-color 0.2s,
+                color 0.2s,
+                border-color 0.2s;
         }
 
         .action-button:hover {
@@ -332,6 +341,11 @@
         
         .action-button:hover .icon-square-hollow {
             border-color: var(--bg-app);
+        }
+
+        .action-button:focus-visible {
+            outline: 2px solid var(--accent-lime);
+            outline-offset: -2px;
         }
 
         
@@ -356,6 +370,76 @@
                 grid-template-columns: 280px 1fr;
             }
         }
+
+        @media (max-width: 720px) {
+            body {
+                height: auto;
+                min-height: 100dvh;
+                overflow-y: auto;
+            }
+
+            .layout-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto minmax(300px, 42dvh) auto;
+                height: auto;
+                min-height: 100dvh;
+            }
+
+            .cell {
+                border-right: none;
+            }
+
+            .header {
+                min-height: 56px;
+                padding: 0 18px;
+            }
+
+            .sidebar {
+                grid-column: 1;
+                grid-row: 2;
+            }
+
+            .main-stage {
+                grid-column: 1;
+                grid-row: 3;
+                min-height: 320px;
+                padding: 24px 18px;
+            }
+
+            .stage-header {
+                margin-bottom: 24px;
+            }
+
+            .chart-container {
+                padding-left: 20px;
+                padding-bottom: 24px;
+            }
+
+            .chart-grid {
+                left: 20px;
+                bottom: 24px;
+            }
+
+            .footer {
+                grid-column: 1;
+                grid-row: 4;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .result-block {
+                min-height: 88px;
+                border-right: none;
+                border-bottom: var(--grid-border-width) solid var(--border-color);
+                padding: 18px;
+            }
+
+            .action-button {
+                width: 100%;
+                min-height: 72px;
+                border-right: none;
+            }
+        }
     </style>
 </head>
 <body vid="6">
@@ -371,31 +455,31 @@
         
         <aside class="sidebar cell" vid="12">
             <div class="input-group" vid="13">
-                <label class="input-label" vid="14">Current Age <span vid="15">YEARS</span></label>
+                <label class="input-label" for="in-age" vid="14">Current Age <span vid="15">YEARS</span></label>
                 <div class="input-value-display" id="disp-age" vid="16">32</div>
                 <input type="range" min="18" max="80" value="32" id="in-age" oninput="updateSim()" vid="17">
             </div>
 
             <div class="input-group" vid="18">
-                <label class="input-label" vid="19">Retirement Age <span vid="20">YEARS</span></label>
+                <label class="input-label" for="in-retire" vid="19">Retirement Age <span vid="20">YEARS</span></label>
                 <div class="input-value-display" id="disp-retire" vid="21">65</div>
                 <input type="range" min="40" max="90" value="65" id="in-retire" oninput="updateSim()" vid="22">
             </div>
 
             <div class="input-group" vid="23">
-                <label class="input-label" vid="24">Current Savings <span vid="25">USD</span></label>
+                <label class="input-label" for="in-savings" vid="24">Current Savings <span vid="25">USD</span></label>
                 <div class="input-value-display" vid="26"><span class="currency-symbol" vid="27">$</span><span id="disp-savings" vid="28">45,000</span></div>
                 <input type="range" min="0" max="500000" step="1000" value="45000" id="in-savings" oninput="updateSim()" vid="29">
             </div>
 
             <div class="input-group" vid="30">
-                <label class="input-label" vid="31">Monthly Contribution <span vid="32">USD</span></label>
+                <label class="input-label" for="in-contrib" vid="31">Monthly Contribution <span vid="32">USD</span></label>
                 <div class="input-value-display" vid="33"><span class="currency-symbol" vid="34">$</span><span id="disp-contrib" vid="35">1,200</span></div>
                 <input type="range" min="0" max="10000" step="100" value="1200" id="in-contrib" oninput="updateSim()" vid="36">
             </div>
 
             <div class="input-group" style="border-bottom: none;" vid="37">
-                <label class="input-label" vid="38">Expected Return <span vid="39">RATE</span></label>
+                <label class="input-label" for="in-rate" vid="38">Expected Return <span vid="39">RATE</span></label>
                 <div class="input-value-display" id="disp-rate" vid="40">7%</div>
                 <input type="range" min="1" max="15" step="0.5" value="7" id="in-rate" oninput="updateSim()" vid="41">
             </div>
@@ -453,7 +537,7 @@
                 <div class="result-label" vid="72"><span class="icon-square-hollow" vid="73"></span> Growth</div>
                 <div class="result-value" id="res-growth" vid="74">+420%</div>
             </div>
-            <button class="action-button" vid="75">
+            <button class="action-button" id="export-report" type="button" vid="75">
                 <span vid="76">EXPORT REPORT</span>
                 <span class="icon-square-hollow" vid="77"></span>
             </button>
@@ -463,6 +547,10 @@
     <script vid="78">
         function formatMoney(num) {
             return num.toLocaleString('en-US');
+        }
+
+        function formatCurrency(num) {
+            return '$' + formatMoney(Math.round(num));
         }
 
         function calculate() {
@@ -514,7 +602,8 @@
             
             document.getElementById('res-total').textContent = '$' + (results.total / 1000000).toFixed(2) + 'M';
             document.getElementById('res-income').textContent = '$' + formatMoney(Math.round(results.monthlyIncome));
-            document.getElementById('res-growth').textContent = '+' + Math.round(results.growth) + '%';
+            const growthRounded = Math.round(results.growth);
+            document.getElementById('res-growth').textContent = (growthRounded >= 0 ? '+' : '') + growthRounded + '%';
             
             
             const currentYear = new Date().getFullYear();
@@ -554,7 +643,48 @@
             areaPath.setAttribute('d', pathD + ` L ${width} ${height} L 0 ${height} Z`);
         }
 
-        
+        function exportReport() {
+            const currentAge = parseInt(document.getElementById('in-age').value, 10);
+            const retireAge = parseInt(document.getElementById('in-retire').value, 10);
+            const savings = parseInt(document.getElementById('in-savings').value, 10);
+            const monthly = parseInt(document.getElementById('in-contrib').value, 10);
+            const rate = parseFloat(document.getElementById('in-rate').value);
+            const results = calculate();
+            const currentYear = new Date().getFullYear();
+            const growthRounded = Math.round(results.growth);
+            const reportLines = [
+                'Retirement Projection Report',
+                `Generated: ${new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}`,
+                '',
+                'Inputs',
+                `Current Age: ${currentAge}`,
+                `Retirement Age: ${retireAge}`,
+                `Current Savings: ${formatCurrency(savings)}`,
+                `Monthly Contribution: ${formatCurrency(monthly)}`,
+                `Expected Return: ${rate.toFixed(1)}%`,
+                '',
+                'Projection',
+                `Start Year: ${currentYear}`,
+                `Retirement Year: ${currentYear + Math.max(0, retireAge - currentAge)}`,
+                `Projected Savings: ${formatCurrency(results.total)}`,
+                `Estimated Monthly Income (4% rule): ${formatCurrency(results.monthlyIncome)}`,
+                `Growth: ${(growthRounded >= 0 ? '+' : '') + growthRounded}%`,
+            ];
+
+            const blob = new Blob([reportLines.join('\n')], {
+                type: 'text/plain;charset=utf-8',
+            });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+
+            link.href = url;
+            link.download = `retirement-report-${new Date().toISOString().slice(0, 10)}.txt`;
+            link.click();
+
+            URL.revokeObjectURL(url);
+        }
+
+        document.getElementById('export-report').addEventListener('click', exportReport);
         updateSim();
 
     </script>

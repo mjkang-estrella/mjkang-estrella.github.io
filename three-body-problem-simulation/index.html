@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en" vid="0"><head vid="1">
     <meta charset="UTF-8" vid="2">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
@@ -147,6 +148,11 @@
             user-select: none;
         }
 
+        .body-render:focus-visible {
+            outline: 2px solid var(--c-white);
+            outline-offset: 6px;
+        }
+
         .body-render.is-dragging {
             cursor: grabbing;
             z-index: 25;
@@ -209,6 +215,11 @@
             outline: none;
         }
 
+        .control-select:focus-visible {
+            outline: 2px solid var(--c-white);
+            outline-offset: 2px;
+        }
+
         input[type="range"] {
             -webkit-appearance: none;
             width: 100%;
@@ -216,6 +227,11 @@
             background: rgba(0,0,0,0.2);
             outline: none;
             margin-top: 8px;
+        }
+
+        input[type="range"]:focus-visible {
+            outline: 2px solid var(--c-white);
+            outline-offset: 6px;
         }
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
@@ -314,6 +330,18 @@
             pointer-events: none;
         }
 
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
         @media (max-width: 980px) {
             body {
                 width: 100%;
@@ -399,6 +427,7 @@
 
     
     <main class="simulation-view" id="sim-view" vid="7">
+        <h1 class="sr-only">Three Body Simulation</h1>
         <div class="sim-grid" vid="8"></div>
         <canvas id="trail-canvas"></canvas>
         <div class="sim-background-text t-headline" vid="9">THREE<br vid="10">BODY<br vid="11">PROB</div>
@@ -407,13 +436,13 @@
         <div class="trail trail-1" vid="12"></div>
         <div class="trail trail-2" vid="13"></div>
         
-        <div class="body-render body-1" id="body-alpha" vid="14">
+        <div class="body-render body-1" id="body-alpha" tabindex="0" data-body-label="Alpha Centauri A" aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight" aria-label="Alpha Centauri A body. Use arrow keys to reposition." vid="14">
             <span class="coord-label" id="label-alpha" style="top: 100%; left: 0;" vid="15">ALPHA [X:-9.70 Y:2.43]</span>
         </div>
-        <div class="body-render body-2" id="body-beta" vid="16">
+        <div class="body-render body-2" id="body-beta" tabindex="0" data-body-label="Alpha Centauri B" aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight" aria-label="Alpha Centauri B body. Use arrow keys to reposition." vid="16">
             <span class="coord-label" id="label-beta" style="top: 100%; left: 0;" vid="17">BETA [X:9.70 Y:-2.43]</span>
         </div>
-        <div class="body-render body-3" id="body-gamma" vid="18">
+        <div class="body-render body-3" id="body-gamma" tabindex="0" data-body-label="Proxima Centauri" aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight" aria-label="Proxima Centauri body. Use arrow keys to reposition." vid="18">
             <span class="coord-label" id="label-gamma" style="top: 100%; left: 0;" vid="19">GAMMA [X:0.00 Y:0.00]</span>
         </div>
     </main>
@@ -431,14 +460,14 @@
             
             <div class="input-grid" vid="26">
                 <div class="control-group" vid="27">
-                    <label class="t-label" vid="28">Initial Velocity X</label>
+                    <label class="t-label" for="vx-alpha" vid="28">Initial Velocity X</label>
                     <div class="value-display" vid="29">
                         <span class="t-data" id="vx-alpha-value" vid="30">4.662 u/s</span>
                     </div>
                     <input id="vx-alpha" type="range" min="-60" max="60" step="0.000001" value="4.66203685" vid="31">
                 </div>
                 <div class="control-group" vid="32">
-                    <label class="t-label" vid="33">Initial Velocity Y</label>
+                    <label class="t-label" for="vy-alpha" vid="33">Initial Velocity Y</label>
                     <div class="value-display" vid="34">
                         <span class="t-data" id="vy-alpha-value" vid="35">4.324 u/s</span>
                     </div>
@@ -468,14 +497,14 @@
             
             <div class="input-grid" vid="49">
                 <div class="control-group" vid="50">
-                    <label class="t-label" vid="51">Initial Velocity X</label>
+                    <label class="t-label" for="vx-beta" vid="51">Initial Velocity X</label>
                     <div class="value-display" vid="52">
                         <span class="t-data" id="vx-beta-value" vid="53">4.662 u/s</span>
                     </div>
                     <input id="vx-beta" type="range" min="-60" max="60" step="0.000001" value="4.66203685" vid="54">
                 </div>
                 <div class="control-group" vid="55">
-                    <label class="t-label" vid="56">Initial Velocity Y</label>
+                    <label class="t-label" for="vy-beta" vid="56">Initial Velocity Y</label>
                     <div class="value-display" vid="57">
                         <span class="t-data" id="vy-beta-value" vid="58">4.324 u/s</span>
                     </div>
@@ -505,14 +534,14 @@
             
             <div class="input-grid" vid="72">
                 <div class="control-group" vid="73">
-                    <label class="t-label" vid="74">Initial Velocity X</label>
+                    <label class="t-label" for="vx-gamma" vid="74">Initial Velocity X</label>
                     <div class="value-display" vid="75">
                         <span class="t-data" id="vx-gamma-value" vid="76">-9.324 u/s</span>
                     </div>
                     <input id="vx-gamma" type="range" min="-60" max="60" step="0.000001" value="-9.3240737" vid="77">
                 </div>
                 <div class="control-group" vid="78">
-                    <label class="t-label" vid="79">Initial Velocity Y</label>
+                    <label class="t-label" for="vy-gamma" vid="79">Initial Velocity Y</label>
                     <div class="value-display" vid="80">
                         <span class="t-data" id="vy-gamma-value" vid="81">-8.647 u/s</span>
                     </div>
@@ -556,14 +585,14 @@
             
             <div class="input-grid" vid="94">
                 <div class="control-group" vid="95">
-                    <label class="t-label" vid="96">Gravitational Constant</label>
+                    <label class="t-label" for="g-slider" vid="96">Gravitational Constant</label>
                     <div class="value-display" vid="97">
                         <span class="t-data" id="g-value" vid="98">1.00e+0</span>
                     </div>
                     <input id="g-slider" type="range" min="0.1" max="3.0" step="0.01" value="1.00" vid="99">
                 </div>
                 <div class="control-group" vid="100">
-                    <label class="t-label" vid="101">Time Speed</label>
+                    <label class="t-label" for="speed-slider" vid="101">Time Speed</label>
                     <div class="value-display" vid="102">
                         <span class="t-data" id="speed-value" vid="103">x1.00</span>
                     </div>

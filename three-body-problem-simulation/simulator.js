@@ -1253,6 +1253,9 @@
       control.body.addEventListener("pointerdown", function (event) {
         onBodyPointerDown(id, event);
       });
+      control.body.addEventListener("keydown", function (event) {
+        onBodyKeyDown(id, event);
+      });
     });
 
     ui.presetSelect.addEventListener("change", function () {
@@ -1333,6 +1336,27 @@
     body.x = world.x;
     body.y = world.y;
     body.skipTrail = true;
+    computeAccelerations(state.bodies, state.G, state.softening);
+    renderBodies();
+    updateLabelsAndStats();
+  }
+
+  function nudgeBodyPosition(id, dx, dy) {
+    const body = getBodyById(id);
+    if (!body) {
+      return;
+    }
+
+    stopDragging(false);
+    state.running = false;
+    state.accumulator = 0;
+    state.lastTs = null;
+    setRunButtonLabel();
+
+    body.x += dx;
+    body.y += dy;
+    body.skipTrail = true;
+
     computeAccelerations(state.bodies, state.G, state.softening);
     renderBodies();
     updateLabelsAndStats();
@@ -1426,6 +1450,32 @@
       return;
     }
     stopDragging(true);
+  }
+
+  function onBodyKeyDown(id, event) {
+    const step = event.shiftKey ? 0.2 : 0.08;
+    let dx = 0;
+    let dy = 0;
+
+    switch (event.key) {
+      case "ArrowLeft":
+        dx = -step;
+        break;
+      case "ArrowRight":
+        dx = step;
+        break;
+      case "ArrowUp":
+        dy = step;
+        break;
+      case "ArrowDown":
+        dy = -step;
+        break;
+      default:
+        return;
+    }
+
+    event.preventDefault();
+    nudgeBodyPosition(id, dx, dy);
   }
 
   function drawTrailSegment(body, from, to) {
@@ -1750,6 +1800,8 @@
 
   function updateLabelsAndStats() {
     state.bodies.forEach(function (body) {
+      const bodyLabel =
+        body.control.body.dataset.bodyLabel || body.name;
       body.control.label.textContent =
         body.name +
         " [X:" +
@@ -1757,6 +1809,15 @@
         " Y:" +
         formatCoord(body.y) +
         "]";
+      body.control.body.setAttribute(
+        "aria-label",
+        bodyLabel +
+          " body. X " +
+          formatCoord(body.x) +
+          ", Y " +
+          formatCoord(body.y) +
+          ". Use arrow keys to reposition."
+      );
     });
 
     ui.simTime.textContent = formatTime(state.simTime);
