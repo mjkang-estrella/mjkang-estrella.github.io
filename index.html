@@ -320,12 +320,17 @@
 
             @media (prefers-reduced-motion: reduce) {
                 .cta-banner,
-                .cta-text--primary::after {
+                .cta-text--primary::after,
+                .project-card,
+                .project-image,
+                .project-link {
                     transition: none;
                 }
 
                 .cta-banner:hover,
-                .cta-banner:focus-visible {
+                .cta-banner:focus-visible,
+                .project-card:hover,
+                .project-card:focus-visible {
                     transform: none;
                 }
 
@@ -428,10 +433,32 @@
                 flex-direction: column;
                 height: 380px;
                 position: relative;
+                background-color: var(--bg-color);
+                color: inherit;
+                text-decoration: none;
+                cursor: pointer;
+                transition:
+                    background-color 0.22s ease,
+                    transform 0.22s ease,
+                    box-shadow 0.22s ease;
             }
 
             .project-card:nth-child(4n) {
                 border-right: none;
+            }
+            .project-card:visited {
+                color: inherit;
+            }
+            .project-card:hover,
+            .project-card:focus-visible {
+                background-color: #ddcb9a;
+                transform: translateY(-2px);
+                box-shadow: inset 0 0 0 1px var(--ink-color);
+            }
+            .project-card:focus-visible {
+                outline: 2px solid var(--ink-color);
+                outline-offset: -2px;
+                z-index: 1;
             }
             .project-image {
                 width: 100%;
@@ -440,6 +467,11 @@
                 filter: grayscale(100%);
                 object-fit: cover;
                 border-bottom: 1px solid var(--ink-color);
+                transition: filter 0.22s ease;
+            }
+            .project-card:hover .project-image,
+            .project-card:focus-visible .project-image {
+                filter: grayscale(0%);
             }
             .project-info {
                 padding: 1rem;
@@ -467,6 +499,16 @@
                 border: 1px solid var(--ink-color);
                 padding: 4px 8px;
                 width: fit-content;
+                transition:
+                    background-color 0.22s ease,
+                    color 0.22s ease,
+                    transform 0.22s ease;
+            }
+            .project-card:hover .project-link,
+            .project-card:focus-visible .project-link {
+                background-color: var(--ink-color);
+                color: var(--bg-color);
+                transform: translateX(3px);
             }
 
             .footer {
@@ -877,7 +919,7 @@
             </div>
 
             <div class="projects-wrapper">
-                <div class="project-card">
+                <a href="https://resume-os.com/" class="project-card">
                     <img
                         src="images/projects/resume-os.svg"
                         class="project-image"
@@ -890,10 +932,13 @@
                             Interactive resume platform that answers questions
                             about my background.
                         </p>
-                        <a href="https://resume-os.com/" class="project-link">Launch</a>
+                        <span class="project-link">Launch</span>
                     </div>
-                </div>
-                <div class="project-card">
+                </a>
+                <a
+                    href="https://ardent-footer-45845870.figma.site/"
+                    class="project-card"
+                >
                     <img
                         src="images/projects/conditioned.svg"
                         class="project-image"
@@ -906,10 +951,13 @@
                             AI-based CrossFit performance analyzer &amp;
                             advisor.
                         </p>
-                        <a href="https://ardent-footer-45845870.figma.site/" class="project-link">View Case</a>
+                        <span class="project-link">View Case</span>
                     </div>
-                </div>
-                <div class="project-card">
+                </a>
+                <a
+                    href="https://github.com/mjkang-estrella/reflect"
+                    class="project-card"
+                >
                     <img
                         src="images/projects/reflect-ios.svg"
                         class="project-image"
@@ -922,10 +970,10 @@
                             Voice journaling application powered by NLP for
                             sentiment analysis.
                         </p>
-                        <a href="https://github.com/mjkang-estrella/reflect" class="project-link">App Store</a>
+                        <span class="project-link">App Store</span>
                     </div>
-                </div>
-                <div class="project-card">
+                </a>
+                <a href="/three-body-problem-simulation/" class="project-card">
                     <img
                         src="images/projects/three-body-simulator.svg"
                         class="project-image"
@@ -937,10 +985,10 @@
                             Interactive three-dimensional gravity simulation for
                             chaotic multi-body orbital dynamics.
                         </p>
-                        <a href="/three-body-problem-simulation/" class="project-link">Open</a>
+                        <span class="project-link">Open</span>
                     </div>
-                </div>
-                <div class="project-card">
+                </a>
+                <a href="/block-fighter/" class="project-card">
                     <img
                         src="images/projects/ping-pong.svg"
                         class="project-image"
@@ -953,10 +1001,10 @@
                             Browser-based physics mini-game built with Canvas
                             API.
                         </p>
-                        <a href="/block-fighter/" class="project-link">Play</a>
+                        <span class="project-link">Play</span>
                     </div>
-                </div>
-                <div class="project-card">
+                </a>
+                <a href="/jeonse/" class="project-card">
                     <img
                         src="images/projects/rent-calculator.svg"
                         class="project-image"
@@ -968,10 +1016,10 @@
                             Interactive Jeonse rent calculator for exploring
                             deposit, monthly rent, and conversion tradeoffs.
                         </p>
-                        <a href="/jeonse/" class="project-link">Open</a>
+                        <span class="project-link">Open</span>
                     </div>
-                </div>
-                <div class="project-card">
+                </a>
+                <a href="/retirement-calculator/" class="project-card">
                     <img
                         src="images/projects/retirement-calculator.svg"
                         class="project-image"
@@ -983,9 +1031,9 @@
                             Interactive retirement simulator for estimating
                             long-term savings growth and monthly income.
                         </p>
-                        <a href="/retirement-calculator/" class="project-link">Open</a>
+                        <span class="project-link">Open</span>
                     </div>
-                </div>
+                </a>
             </div>
 
             <footer class="footer">
