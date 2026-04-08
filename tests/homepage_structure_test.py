@@ -105,8 +105,9 @@ class HomePageParser(HTMLParser):
 
 
 def main() -> None:
+    html = INDEX_HTML.read_text(encoding="utf-8")
     parser = HomePageParser()
-    parser.feed(INDEX_HTML.read_text(encoding="utf-8"))
+    parser.feed(html)
 
     assert parser.title_text.strip() == "MJ Kang | Product Manager"
     assert parser.main_ids == ["main-content"]
@@ -122,6 +123,12 @@ def main() -> None:
     assert parser.meta["robots"].startswith("index,follow")
     assert parser.links["canonical"] == "https://mj-kang.com/"
     assert any('"@type": "Person"' in block for block in parser.structured_data_blocks)
+    assert (
+        'https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap'
+        in html
+    )
+    assert "https://fonts.gstatic.com" in html
+    assert "Typeset in Geist Sans." in html
     assert ROBOTS_TXT.read_text(encoding="utf-8").strip() == "User-agent: *\nAllow: /"
 
 
