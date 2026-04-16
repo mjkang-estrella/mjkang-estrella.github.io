@@ -12,6 +12,7 @@ class HomePageParser(HTMLParser):
         super().__init__()
         self.main_ids: list[str] = []
         self.project_card_count = 0
+        self.project_hrefs: list[str] = []
         self.timeline_item_count = 0
         self.social_link_count = 0
         self.heading_text: list[str] = []
@@ -37,6 +38,8 @@ class HomePageParser(HTMLParser):
 
         if tag == "a" and "project-card" in class_names:
             self.project_card_count += 1
+            if attr_map.get("href"):
+                self.project_hrefs.append(attr_map["href"])
 
         if tag == "li" and "timeline-item" in class_names:
             self.timeline_item_count += 1
@@ -114,7 +117,8 @@ def main() -> None:
     assert "MJ Kang" in parser.heading_text
     assert "History" in parser.heading_text
     assert "Selected Works" in parser.heading_text
-    assert parser.project_card_count == 10
+    assert parser.project_card_count == 11
+    assert parser.project_hrefs[2] == "https://reader.mj-kang.com/"
     assert parser.timeline_item_count == 5
     assert parser.social_link_count >= 4
     assert "css/homepage.css" in parser.stylesheets

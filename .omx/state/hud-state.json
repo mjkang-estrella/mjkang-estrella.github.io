@@ -1,5 +1,5 @@
 {
-  "last_turn_at": "2026-04-08T18:29:05.176Z",
-  "turn_count": 21,
-  "last_agent_output": "The homepage now uses Geist Sans.\n\nI added the Geist webfont stylesheet and preconnects in [index.ht"
+  "last_turn_at": "2026-04-16T20:39:14.981Z",
+  "turn_count": 29,
+  "last_agent_output": "Added `.omx/` to [.gitignore](/Users/mjkang/Develop/mjkang-estrella.github.io/.gitignore:27).\n\nNote:"
 }
