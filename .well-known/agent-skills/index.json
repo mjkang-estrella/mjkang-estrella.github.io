@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "site-navigation",
+      "type": "skill-md",
+      "description": "Understand and navigate MJ Kang's public portfolio site, project pages, and contact surfaces.",
+      "url": "/.well-known/agent-skills/site-navigation/SKILL.md",
+      "digest": "sha256:ce1bc37fdd30f1ba0c42b1b290ff50782110196f260780f7c395a94277da1b08"
+    }
+  ]
+}

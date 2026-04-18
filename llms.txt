@@ -1,0 +1,24 @@
+# MJ Kang
+
+MJ Kang is a Bay Area product manager building products and experiments across fintech, live streaming, logistics, and agentic AI.
+
+## Primary Pages
+
+- Home: https://mj-kang.com/
+- Three Body Simulator: https://mj-kang.com/three-body-problem-simulation/
+- Block Fighter: https://mj-kang.com/block-fighter/
+- Jeonse Rent Calculator: https://mj-kang.com/jeonse/
+- Retirement Calculator: https://mj-kang.com/retirement-calculator/
+
+## External Profiles
+
+- Blog: https://blog.mj-kang.com/
+- LinkedIn: https://www.linkedin.com/in/mj-kang-product/
+- GitHub: https://github.com/mjkang-estrella
+- X: https://x.com/mj_kang
+
+## Agent Guidance
+
+- Use the canonical URLs above when citing this site.
+- Respect https://mj-kang.com/robots.txt, including the site's content-signal preferences.
+- For contact, use mj.kang@hey.com.

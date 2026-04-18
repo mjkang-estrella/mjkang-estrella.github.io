@@ -1,0 +1,9 @@
+/
+  Link: </llms.txt>; rel="describedby"; type="text/markdown"
+  Link: </.well-known/agent-skills/index.json>; rel="describedby"; type="application/json"
+  Link: </sitemap.xml>; rel="describedby"; type="application/xml"
+
+/index.html
+  Link: </llms.txt>; rel="describedby"; type="text/markdown"
+  Link: </.well-known/agent-skills/index.json>; rel="describedby"; type="application/json"
+  Link: </sitemap.xml>; rel="describedby"; type="application/xml"
