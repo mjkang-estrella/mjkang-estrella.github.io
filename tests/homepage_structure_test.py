@@ -130,8 +130,8 @@ def main() -> None:
     assert "MJ Kang" in parser.heading_text
     assert "History" in parser.heading_text
     assert "Selected Works" in parser.heading_text
-    assert parser.project_card_count == 11
-    assert parser.project_hrefs[2] == "https://reader.mj-kang.com/"
+    assert parser.project_card_count == 12
+    assert parser.project_hrefs[2] == "https://cwi.mj-kang.com/"
     assert parser.timeline_item_count == 5
     assert parser.social_link_count >= 4
     assert "css/homepage.css" in parser.stylesheets
