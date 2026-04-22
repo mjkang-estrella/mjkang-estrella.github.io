@@ -616,7 +616,6 @@ html.has-motion [data-reveal].is-visible {
     cursor: pointer;
     transition:
         background-color var(--motion-base) var(--ease-out-quart),
-        transform var(--motion-base) var(--ease-out-quart),
         box-shadow var(--motion-base) var(--ease-out-quart);
     overflow: hidden;
 }
@@ -638,11 +637,8 @@ html.has-motion [data-reveal].is-visible {
 
 .project-card:hover,
 .project-card:focus-visible {
-    background-color: var(--surface-accent);
-    transform: translateY(-6px);
-    box-shadow:
-        inset 0 0 0 1px var(--ink-color),
-        var(--shadow-lift);
+    background-color: var(--surface-color);
+    box-shadow: inset 0 0 0 1px var(--ink-color);
 }
 
 .project-card:hover::after,
@@ -656,24 +652,37 @@ html.has-motion [data-reveal].is-visible {
     z-index: 1;
 }
 
-.project-image {
+.project-media {
     width: 100%;
     aspect-ratio: 16 / 10;
-    height: auto;
     background-color: var(--surface-media);
-    filter: grayscale(100%);
-    object-fit: cover;
     border-bottom: 1px solid var(--ink-color);
-    transform: scale(1);
-    transition:
-        filter var(--motion-base) var(--ease-out-quart),
-        transform 560ms var(--ease-out-expo);
+    display: block;
+    overflow: hidden;
+    position: relative;
 }
 
-.project-card:hover .project-image,
-.project-card:focus-visible .project-image {
-    filter: grayscale(0%);
-    transform: scale(1.04);
+.project-image {
+    inset: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    filter: grayscale(100%) contrast(0.96);
+    object-fit: cover;
+    transition: opacity var(--motion-base) var(--ease-out-quart);
+}
+
+.project-image--flat {
+    opacity: 1;
+}
+
+.project-image--detail {
+    opacity: 0;
+}
+
+.project-card:hover .project-image--detail,
+.project-card:focus-visible .project-image--detail {
+    opacity: 1;
 }
 
 .project-info {
@@ -682,13 +691,6 @@ html.has-motion [data-reveal].is-visible {
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
-    transform: translateY(0);
-    transition: transform var(--motion-base) var(--ease-out-quart);
-}
-
-.project-card:hover .project-info,
-.project-card:focus-visible .project-info {
-    transform: translateY(-4px);
 }
 
 .project-title {
@@ -719,15 +721,13 @@ html.has-motion [data-reveal].is-visible {
     width: fit-content;
     transition:
         background-color var(--motion-base) var(--ease-out-quart),
-        color var(--motion-base) var(--ease-out-quart),
-        transform var(--motion-base) var(--ease-out-quart);
+        color var(--motion-base) var(--ease-out-quart);
 }
 
 .project-card:hover .project-link,
 .project-card:focus-visible .project-link {
     background-color: var(--ink-color);
     color: var(--bg-color);
-    transform: translateX(5px);
 }
 
 .footer {
@@ -877,7 +877,7 @@ html.has-motion [data-reveal].is-visible {
         border-right: none;
     }
 
-    .project-image {
+    .project-media {
         aspect-ratio: 16 / 9;
     }
 
