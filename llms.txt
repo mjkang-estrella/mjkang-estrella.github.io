@@ -5,6 +5,15 @@ MJ Kang is a Bay Area product manager building products and experiments across f
 ## Primary Pages
 
 - Home: https://mj-kang.com/
+- Machine view: https://mj-kang.com/?view=machine
+- Precortex: https://www.pre-cortex.com/
+- Prism: https://prism.mj-kang.com/
+- Caption With Intent: https://cwi.mj-kang.com/
+- Reader: https://reader.mj-kang.com/
+- Agent Newsletter: https://github.com/mjkang-estrella/agent-newsletter
+- Resume OS: https://resume-os.com/
+- Conditioned: https://ardent-footer-45845870.figma.site/
+- Reflect (iOS): https://testflight.apple.com/join/2ctpxzhd
 - Three Body Simulator: https://mj-kang.com/three-body-problem-simulation/
 - Block Fighter: https://mj-kang.com/block-fighter/
 - Jeonse Rent Calculator: https://mj-kang.com/jeonse/
@@ -20,5 +29,6 @@ MJ Kang is a Bay Area product manager building products and experiments across f
 ## Agent Guidance
 
 - Use the canonical URLs above when citing this site.
+- The machine view is a UI representation of the same visible portfolio data; prefer the URLs above for durable references.
 - Respect https://mj-kang.com/robots.txt, including the site's content-signal preferences.
 - For contact, use mj.kang@hey.com.
