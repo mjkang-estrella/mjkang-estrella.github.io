@@ -125,12 +125,150 @@
             }
         </script>
     </head>
-    <body>
+    <body data-portfolio-view="human">
         <div class="scroll-progress" aria-hidden="true"></div>
         <a class="skip-link" href="#main-content">Skip to main content</a>
-        <main class="page-container" id="main-content">
+        <div
+            class="mode-dock"
+            aria-label="Switch portfolio representation"
+        >
+            <button
+                class="mode-dock__button is-active"
+                type="button"
+                data-view-mode="human"
+                aria-pressed="true"
+            >
+                <span class="mode-dock__dot" aria-hidden="true"></span>
+                Human
+            </button>
+            <button
+                class="mode-dock__button"
+                type="button"
+                data-view-mode="machine"
+                aria-pressed="false"
+            >
+                <span class="mode-dock__dot" aria-hidden="true"></span>
+                Machine
+            </button>
+        </div>
+        <section
+            class="machine-document"
+            aria-label="Machine-readable portfolio"
+            aria-hidden="true"
+        >
+            <button
+                class="machine-copy"
+                type="button"
+                data-copy-machine-profile
+                aria-label="Copy machine-readable Markdown"
+            >
+                Copy
+            </button>
+            <div
+                class="machine-document__block machine-document__nav"
+                data-machine-block="nav"
+            >
+                <p>MJ Kang</p>
+                <p>
+                    [Email](mailto:mj.kang@hey.com)
+                    [LinkedIn](https://www.linkedin.com/in/mj-kang-product/)
+                    [GitHub](https://github.com/mjkang-estrella)
+                    [Blog](https://blog.mj-kang.com/)
+                </p>
+                <p>
+                    [llms.txt](https://mj-kang.com/llms.txt)
+                    [agent-skills](https://mj-kang.com/.well-known/agent-skills/index.json)
+                </p>
+            </div>
+            <div class="machine-document__block" data-machine-block="hero">
+                <h1># MJ Kang</h1>
+                <p>Product Manager · Bay Area</p>
+                <p>
+                    Connecting human needs with technical possibilities.
+                </p>
+            </div>
+            <div class="machine-document__block" data-machine-block="profile">
+                <h2>## Profile</h2>
+                <p>
+                    I am a Product Manager with over 5 years of experience
+                    navigating the complexities of Fintech, Live Streaming, and
+                    Logistics. My approach is rooted in rigorous data analysis
+                    combined with an intuitive sense for user experience.
+                </p>
+                <p>
+                    When I'm not building products for companies, I build them
+                    for myself. Below is a collection of applications and
+                    experiments I've engineered to solve personal problems or
+                    explore new technologies.
+                </p>
+            </div>
+            <div class="machine-document__block" data-machine-block="history">
+                <h2>## History</h2>
+                <h3>### Experience</h3>
+                <p>
+                    - 2023-2025 · [Toss Bank](https://www.tossbank.com/) ·
+                    Product Manager (Social, Growth) · Launched social banking
+                    products and growth loops that drove 300K+ MAU in 1 month
+                    and accelerated new-account growth at scale.
+                </p>
+                <p>
+                    - 2020-2023 · [Match Group](https://www.matchgroup.com/) ·
+                    Product Manager (Live Streaming) · Owned Hakuna Live
+                    roadmap and iterative launches, driving 100K+ MAU growth
+                    while improving moderation accuracy and speed.
+                </p>
+                <h3>### Education</h3>
+                <p>
+                    - 2025-2027 · [UC Berkeley Haas](https://haas.berkeley.edu/)
+                    · Master of Business Administration (MBA) · Studying
+                    Agentic AI, AI ethics, and entrepreneurship; serving as VP
+                    roles in AI Club and Product Management Club.
+                </p>
+                <p>
+                    - 2016-2022 · [KAIST](https://www.kaist.ac.kr/en/) · B.S.
+                    Computer Science · Studied Computer Science and Business
+                    Technology Management with focus on systems, analytics, and
+                    product thinking.
+                </p>
+            </div>
+            <div class="machine-document__block" data-machine-block="works">
+                <h2>## Selected Works</h2>
+                <p>- [Precortex](https://www.pre-cortex.com/) · A personal task manager where agentic workflows help move work toward completion.</p>
+                <p>- [Prism](https://prism.mj-kang.com/) · Turns rough product ideas into clear, structured specs that AI agents can execute.</p>
+                <p>- [Caption With Intent](https://cwi.mj-kang.com/) · Caption timing and media editing prototype for intent-aware short-form video.</p>
+                <p>- [Reader](https://reader.mj-kang.com/) · Personal reader for feeds, saved articles, highlights, and a focused library.</p>
+                <p>- [Agent Newsletter](https://github.com/mjkang-estrella/agent-newsletter) · An AI agent newsletter for discovering new tools and capabilities automatically.</p>
+                <p>- [Resume OS](https://resume-os.com/) · Interactive resume platform that answers questions about my background.</p>
+                <p>- [Conditioned](https://ardent-footer-45845870.figma.site/) · AI-based CrossFit performance analyzer and advisor.</p>
+                <p>- [Reflect (iOS)](https://testflight.apple.com/join/2ctpxzhd) · Voice journaling application powered by NLP for sentiment analysis.</p>
+                <p>- [Three Body Simulator](https://mj-kang.com/three-body-problem-simulation/) · Interactive three-dimensional gravity simulation for chaotic multi-body orbital dynamics.</p>
+                <p>- [Block Fighter](https://mj-kang.com/block-fighter/) · Browser-based physics mini-game built with Canvas API.</p>
+                <p>- [Rent Calculator](https://mj-kang.com/jeonse/) · Interactive Jeonse rent calculator for exploring deposit, monthly rent, and conversion tradeoffs.</p>
+                <p>- [Retirement Calculator](https://mj-kang.com/retirement-calculator/) · Interactive retirement simulator for estimating long-term savings growth and monthly income.</p>
+            </div>
+            <div
+                class="machine-document__block machine-document__footer"
+                data-machine-block="footer"
+            >
+                <h2>## Contact</h2>
+                <p>[Email](mailto:mj.kang@hey.com) · San Francisco, CA</p>
+                <h2>## Social</h2>
+                <p>
+                    [LinkedIn](https://www.linkedin.com/in/mj-kang-product/)
+                    [X](https://x.com/mj_kang)
+                    [GitHub](https://github.com/mjkang-estrella)
+                    [Blog](https://blog.mj-kang.com/)
+                </p>
+                <h2>## Colophon</h2>
+                <p>Typeset in Geist Sans. © 2026 MJ Kang.</p>
+            </div>
+        </section>
+        <main class="page-container" id="main-content" data-human-block="page">
             <header class="grid-row" aria-labelledby="profile-title">
-                <div class="grid-cell border-right header-content">
+                <div
+                    class="grid-cell border-right header-content"
+                    data-human-block="hero"
+                >
                     <div class="profile-badge" data-reveal="hero-scale">
                         <span class="profile-fallback" aria-hidden="true">MK</span>
                         <img
@@ -156,7 +294,7 @@
                         Product Manager <br />Based in Bay Area
                     </p>
                 </div>
-                <div class="grid-cell header-content intro-panel">
+                <div class="grid-cell header-content intro-panel" data-human-block="profile">
                     <h2 class="intro-heading" data-reveal="hero-soft">
                         Connecting human needs with technical possibilities.
                     </h2>
@@ -175,7 +313,6 @@
                             solve personal problems or explore new technologies.
                         </p>
                     </div>
-
                     <a
                         href="https://blog.mj-kang.com/"
                         class="cta-banner"
@@ -192,7 +329,12 @@
                 </div>
             </header>
 
-            <section class="grid-row" aria-labelledby="history-heading">
+            <section
+                class="grid-row"
+                aria-labelledby="history-heading"
+                data-machine-section="history"
+                data-human-block="history"
+            >
                 <div class="grid-cell border-right">
                     <h2
                         class="history-title"
@@ -215,7 +357,12 @@
                         <h3 class="meta-label" id="experience-heading">Experience</h3>
 
                         <ol class="timeline-list">
-                        <li class="timeline-item" data-reveal="line">
+                        <li
+                            class="timeline-item"
+                            data-reveal="line"
+                            data-machine-kind="experience"
+                            data-machine-label="role"
+                        >
                             <div class="timeline-date">
                                 2023—<br />2025
                             </div>
@@ -246,7 +393,12 @@
                             </div>
                         </li>
 
-                        <li class="timeline-item" data-reveal="line">
+                        <li
+                            class="timeline-item"
+                            data-reveal="line"
+                            data-machine-kind="experience"
+                            data-machine-label="role"
+                        >
                             <div class="timeline-date">
                                 2020—<br />2023
                             </div>
@@ -283,7 +435,12 @@
                         <h3 class="meta-label" id="education-heading">Education</h3>
 
                         <ol class="timeline-list">
-                        <li class="timeline-item" data-reveal="line">
+                        <li
+                            class="timeline-item"
+                            data-reveal="line"
+                            data-machine-kind="education"
+                            data-machine-label="credential"
+                        >
                             <div class="timeline-date">
                                 2025~<br />2027
                             </div>
@@ -314,7 +471,12 @@
                             </div>
                         </li>
 
-                        <li class="timeline-item" data-reveal="line">
+                        <li
+                            class="timeline-item"
+                            data-reveal="line"
+                            data-machine-kind="education"
+                            data-machine-label="credential"
+                        >
                             <div class="timeline-date">
                                 2016~<br />2022
                             </div>
@@ -368,7 +530,11 @@
                 </div>
             </section>
 
-            <section aria-labelledby="works-heading">
+            <section
+                aria-labelledby="works-heading"
+                data-machine-section="projects"
+                data-human-block="works"
+            >
             <header class="works-header">
                 <h2
                     class="works-title"
@@ -385,6 +551,9 @@
                     href="https://www.pre-cortex.com/"
                     class="project-card"
                     data-reveal
+                    data-kind="product"
+                    data-domain="agentic workflows"
+                    data-status="live"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -420,6 +589,9 @@
                     href="https://prism.mj-kang.com/"
                     class="project-card"
                     data-reveal
+                    data-kind="product"
+                    data-domain="product specification"
+                    data-status="live"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -455,6 +627,9 @@
                     href="https://cwi.mj-kang.com/"
                     class="project-card"
                     data-reveal
+                    data-kind="prototype"
+                    data-domain="media tooling"
+                    data-status="live"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -490,6 +665,9 @@
                     href="https://reader.mj-kang.com/"
                     class="project-card"
                     data-reveal
+                    data-kind="product"
+                    data-domain="reading workflow"
+                    data-status="live"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -525,6 +703,9 @@
                     href="https://github.com/mjkang-estrella/agent-newsletter"
                     class="project-card"
                     data-reveal
+                    data-kind="repository"
+                    data-domain="agent discovery"
+                    data-status="source"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -560,6 +741,9 @@
                     href="https://resume-os.com/"
                     class="project-card"
                     data-reveal
+                    data-kind="product"
+                    data-domain="interactive resume"
+                    data-status="live"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -595,6 +779,9 @@
                     href="https://ardent-footer-45845870.figma.site/"
                     class="project-card"
                     data-reveal
+                    data-kind="case study"
+                    data-domain="fitness analytics"
+                    data-status="case"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -630,6 +817,9 @@
                     href="https://testflight.apple.com/join/2ctpxzhd"
                     class="project-card"
                     data-reveal
+                    data-kind="ios app"
+                    data-domain="voice journaling"
+                    data-status="testflight"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -661,7 +851,14 @@
                 </a>
                 </li>
                 <li class="project-item">
-                <a href="/three-body-problem-simulation/" class="project-card" data-reveal>
+                <a
+                    href="/three-body-problem-simulation/"
+                    class="project-card"
+                    data-reveal
+                    data-kind="simulation"
+                    data-domain="physics"
+                    data-status="live"
+                >
                     <span class="project-media">
                         <img
                             src="images/projects/three-body-simulator-minimal.jpg"
@@ -690,7 +887,14 @@
                 </a>
                 </li>
                 <li class="project-item">
-                <a href="/block-fighter/" class="project-card" data-reveal>
+                <a
+                    href="/block-fighter/"
+                    class="project-card"
+                    data-reveal
+                    data-kind="game"
+                    data-domain="canvas physics"
+                    data-status="live"
+                >
                     <span class="project-media">
                         <img
                             src="images/projects/block-fighter-minimal.jpg"
@@ -719,7 +923,14 @@
                 </a>
                 </li>
                 <li class="project-item">
-                <a href="/jeonse/" class="project-card" data-reveal>
+                <a
+                    href="/jeonse/"
+                    class="project-card"
+                    data-reveal
+                    data-kind="calculator"
+                    data-domain="housing finance"
+                    data-status="live"
+                >
                     <span class="project-media">
                         <img
                             src="images/projects/rent-calculator-minimal.jpg"
@@ -748,7 +959,14 @@
                 </a>
                 </li>
                 <li class="project-item">
-                <a href="/retirement-calculator/" class="project-card" data-reveal>
+                <a
+                    href="/retirement-calculator/"
+                    class="project-card"
+                    data-reveal
+                    data-kind="calculator"
+                    data-domain="financial planning"
+                    data-status="live"
+                >
                     <span class="project-media">
                         <img
                             src="images/projects/retirement-calculator-minimal.jpg"
@@ -779,7 +997,7 @@
             </ul>
             </section>
 
-            <footer class="footer">
+            <footer class="footer" data-human-block="footer">
                 <div class="footer-grid">
                     <div class="footer-block" data-reveal="hero-soft">
                         <strong class="footer-heading">Contact</strong>
@@ -821,6 +1039,18 @@
                         <strong class="footer-heading">Colophon</strong>
                         Typeset in Geist Sans.<br />
                         © 2026 MJ Kang.
+                    </div>
+                    <div
+                        class="footer-block machine-discovery"
+                        data-machine
+                        aria-hidden="true"
+                        data-reveal="hero-soft"
+                    >
+                        <strong class="footer-heading">Machine Discovery</strong>
+                        <a href="/llms.txt">/llms.txt</a><br />
+                        <a href="/.well-known/agent-skills/index.json">
+                            /.well-known/agent-skills/index.json
+                        </a>
                     </div>
                 </div>
             </footer>
