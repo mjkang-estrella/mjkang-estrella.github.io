@@ -1,34 +1,52 @@
 <!doctype html>
 <html lang="en">
     <head>
+        <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Block Fighter | MJ Kang</title>
-        <meta name="description" content="PVP pong" />
+        <meta name="description" content="Block Fighter: a two-player Pong Wars variant where paddles battle to paint the board. Keyboard and touch controls." />
         <link rel="canonical" href="https://mj-kang.com/block-fighter/" />
         <link rel="author" href="https://mj-kang.com/" />
         <meta name="theme-color" content="#172B36" />
-        <meta name="creator" content="MJ Kang" />
-        <script src="script.js"></script>
+        <meta name="author" content="MJ Kang" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Block Fighter" />
+        <meta property="og:description" content="A two-player Pong Wars variant where paddles battle to paint the board." />
+        <meta property="og:url" content="https://mj-kang.com/block-fighter/" />
+        <meta property="og:image" content="https://mj-kang.com/images/projects/block-fighter-thumbnail.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Block Fighter" />
+        <meta name="twitter:description" content="A two-player Pong Wars variant where paddles battle to paint the board." />
+        <meta name="twitter:image" content="https://mj-kang.com/images/projects/block-fighter-thumbnail.jpg" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/logo/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/logo/favicon-16x16.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/logo/apple-icon-180x180.png" />
+        <link rel="manifest" href="/images/logo/manifest.json" />
         <link rel="stylesheet" href="style.css" />
     </head>
 
     <body>
         <div id="container">
+            <h1 class="sr-only">Block Fighter</h1>
             <div id="hud">
                 <span id="dayInfo"></span>
                 <span id="timer"></span>
                 <span id="nightInfo"></span>
             </div>
-            <canvas id="pongCanvas" width="600" height="600"></canvas>
-            <div id="overlay"></div>
+            <canvas id="pongCanvas" width="600" height="600" role="img" aria-label="Block Fighter playfield: two balls and two paddles battle to paint the board for Day or Night.">
+                Block Fighter is a two-player Pong variant. Day moves with W/S,
+                Night with the arrow keys; on touch screens each half of the
+                board drags its own paddle. Paint over half the board or hold
+                the most territory when the timer ends to win.
+            </canvas>
+            <div id="overlay" role="status" aria-live="polite"></div>
             <div id="overlayLeft" class="side-overlay hidden">3</div>
             <div id="overlayRight" class="side-overlay hidden">3</div>
             <p id="made">
-                made by MJ | Inspired by
+                made by <a href="https://mj-kang.com/">MJ</a> | Inspired by
                 <a href="https://github.com/vnglst/pong-wars">Pong Wars</a>
             </p>
         </div>
-    </body>
 
     <script>
         // Source palette: https://twitter.com/AlexCristache/status/1738610343499157872
@@ -64,7 +82,6 @@
         const PADDLE_WIDTH = 12;
         const PADDLE_HEIGHT = 100;
         const PADDLE_SPEED = 8;
-        const FRAME_RATE = 100;
         const COUNTDOWN_MS = 3000;
         const GAME_TIME_MS = 60_000;
         const WIN_PERCENT = 0.6;
@@ -434,14 +451,25 @@
         }
 
         function clampBallSpeed(b) {
-            b.dx = Math.min(Math.max(b.dx, -MAX_SPEED), MAX_SPEED);
-            b.dy = Math.min(Math.max(b.dy, -MAX_SPEED), MAX_SPEED);
-
-            if (Math.abs(b.dx) < MIN_SPEED) {
-                b.dx = b.dx > 0 ? MIN_SPEED : -MIN_SPEED;
+            // Clamp the speed magnitude, not each component, so launch and
+            // deflection angles survive the clamp.
+            const speed = Math.hypot(b.dx, b.dy);
+            if (speed === 0) {
+                b.dx = MIN_SPEED;
+                b.dy = 0;
+                return;
             }
-            if (Math.abs(b.dy) < MIN_SPEED) {
-                b.dy = b.dy > 0 ? MIN_SPEED : -MIN_SPEED;
+
+            const scale = clamp(speed, MIN_SPEED, MAX_SPEED) / speed;
+            b.dx *= scale;
+            b.dy *= scale;
+
+            // Keep some horizontal drive so a ball cannot bounce vertically
+            // between the walls forever, out of both paddles' reach.
+            const minHorizontal = 1;
+            if (Math.abs(b.dx) < minHorizontal) {
+                const sign = b.dx === 0 ? 1 : Math.sign(b.dx);
+                b.dx = sign * minHorizontal;
             }
         }
 
@@ -504,15 +532,19 @@
             b.dx *= scale;
             b.dy *= scale;
 
-            b.x += b.dx;
-            b.y += b.dy;
+            // Speeds are tuned against a 60fps baseline; scale by dt so the
+            // game plays identically on 120Hz+ displays.
+            const f = dtMs / (1000 / 60);
+            b.x += b.dx * f;
+            b.y += b.dy * f;
         }
 
-        function movePaddles() {
-            if (keysDown.has("w")) paddles.day.y -= PADDLE_SPEED;
-            if (keysDown.has("s")) paddles.day.y += PADDLE_SPEED;
-            if (keysDown.has("ArrowUp")) paddles.night.y -= PADDLE_SPEED;
-            if (keysDown.has("ArrowDown")) paddles.night.y += PADDLE_SPEED;
+        function movePaddles(dtMs) {
+            const f = dtMs / (1000 / 60);
+            if (keysDown.has("w")) paddles.day.y -= PADDLE_SPEED * f;
+            if (keysDown.has("s")) paddles.day.y += PADDLE_SPEED * f;
+            if (keysDown.has("ArrowUp")) paddles.night.y -= PADDLE_SPEED * f;
+            if (keysDown.has("ArrowDown")) paddles.night.y += PADDLE_SPEED * f;
 
             paddles.day.y = Math.max(
                 0,
@@ -544,9 +576,11 @@
         function endGame(winnerKey) {
             state = GAME_STATE.GAME_OVER;
             overlay.classList.remove("hidden");
-            overlay.textContent = `${
-                winnerKey === "day" ? "Day" : "Night"
-            } wins! Press Space to restart`;
+            overlay.textContent = winnerKey
+                ? `${
+                      winnerKey === "day" ? "Day" : "Night"
+                  } wins! Tap to restart (or press Space)`
+                : "Draw! Tap to restart (or press Space)";
         }
 
         function updateTimer(dtMs) {
@@ -555,7 +589,7 @@
                 if (remainingTimeMs === 0) {
                     const winnerKey =
                         dayScore === nightScore
-                            ? "day"
+                            ? null
                             : dayScore > nightScore
                               ? "day"
                               : "night";
@@ -589,7 +623,9 @@
 
         function gameLoop() {
             const now = performance.now();
-            const dtMs = now - lastTimestamp;
+            // Clamp dt so a background-tab pause cannot teleport the balls
+            // and per-step travel stays inside the paddle collision window.
+            const dtMs = Math.min(now - lastTimestamp, 33);
             lastTimestamp = now;
 
             // Ensure main overlay only shows for idle/game-over
@@ -606,7 +642,7 @@
                 state === GAME_STATE.PLAYING ||
                 state === GAME_STATE.COUNTDOWN
             ) {
-                movePaddles();
+                movePaddles(dtMs);
             }
 
             if (state === GAME_STATE.PLAYING) {
@@ -676,4 +712,5 @@
             }
         }
     </script>
+    </body>
 </html>

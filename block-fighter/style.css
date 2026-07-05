@@ -34,13 +34,25 @@ canvas {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 #hud {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-family: monospace;
-    font-size: 24px;
+    font-size: clamp(14px, 4.5vmin, 24px);
     color: #114c5a;
     background: rgba(241, 246, 244, 0.85);
     border: 1px solid rgba(23, 43, 54, 0.1);
@@ -52,7 +64,7 @@ canvas {
 }
 
 #timer {
-    font-size: 40px;
+    font-size: clamp(24px, 7vmin, 40px);
     font-weight: 700;
 }
 

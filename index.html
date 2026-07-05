@@ -56,8 +56,10 @@
         <meta property="og:url" content="https://mj-kang.com/" />
         <meta
             property="og:image"
-            content="https://mj-kang.com/images/profile/mj-profile.jpg"
+            content="https://mj-kang.com/images/profile/mj-profile-og.jpg"
         />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="MJ Kang | Product Manager" />
         <meta
@@ -66,13 +68,13 @@
         />
         <meta
             name="twitter:image"
-            content="https://mj-kang.com/images/profile/mj-profile.jpg"
+            content="https://mj-kang.com/images/profile/mj-profile-og.jpg"
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
             rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Geist:wght@400;700&display=swap"
         />
         <script>
             if (
@@ -130,6 +132,7 @@
         <a class="skip-link" href="#main-content">Skip to main content</a>
         <div
             class="mode-dock"
+            role="group"
             aria-label="Switch portfolio representation"
         >
             <button
@@ -153,6 +156,7 @@
         </div>
         <section
             class="machine-document"
+            id="machine-content"
             aria-label="Machine-readable portfolio"
             aria-hidden="true"
         >
@@ -241,7 +245,7 @@
                 <p>- [Resume OS](https://resume-os.com/) · Interactive resume platform that answers questions about my background.</p>
                 <p>- [Conditioned](https://ardent-footer-45845870.figma.site/) · AI-based CrossFit performance analyzer and advisor.</p>
                 <p>- [Reflect (iOS)](https://testflight.apple.com/join/2ctpxzhd) · Voice journaling application powered by NLP for sentiment analysis.</p>
-                <p>- [Three Body Simulator](https://mj-kang.com/three-body-problem-simulation/) · Interactive three-dimensional gravity simulation for chaotic multi-body orbital dynamics.</p>
+                <p>- [Three Body Simulator](https://mj-kang.com/three-body-problem-simulation/) · Interactive two-dimensional gravity simulation for chaotic multi-body orbital dynamics.</p>
                 <p>- [Block Fighter](https://mj-kang.com/block-fighter/) · Browser-based physics mini-game built with Canvas API.</p>
                 <p>- [Rent Calculator](https://mj-kang.com/jeonse/) · Interactive Jeonse rent calculator for exploring deposit, monthly rent, and conversion tradeoffs.</p>
                 <p>- [Retirement Calculator](https://mj-kang.com/retirement-calculator/) · Interactive retirement simulator for estimating long-term savings growth and monthly income.</p>
@@ -272,9 +276,11 @@
                     <div class="profile-badge" data-reveal="hero-scale">
                         <span class="profile-fallback" aria-hidden="true">MK</span>
                         <img
-                            src="images/profile/mj-profile.jpg"
+                            src="images/profile/mj-profile-badge.jpg"
                             alt="Myeongjin Kang profile photo"
                             class="profile-photo"
+                            width="224"
+                            height="224"
                             fetchpriority="high"
                             decoding="async"
                         />
@@ -377,7 +383,9 @@
                                         <img
                                             class="company-logo"
                                             src="images/logos/viva-republica.png"
-                                            alt="Toss Bank logo"
+                                            alt=""
+                                            loading="lazy"
+                                            decoding="async"
                                         />
                                     </div>
                                     <span class="company-name">Toss Bank</span>
@@ -413,7 +421,9 @@
                                         <img
                                             class="company-logo company-logo--cover"
                                             src="images/logos/match-group.jpg"
-                                            alt="Match Group logo"
+                                            alt=""
+                                            loading="lazy"
+                                            decoding="async"
                                         />
                                     </div>
                                     <span class="company-name">Match Group</span>
@@ -454,8 +464,10 @@
                                     <div class="company-logo-frame is-logo">
                                         <img
                                             class="company-logo"
-                                            src="images/logos/uc-berkeley-seal.svg"
-                                            alt="UC Berkeley Haas logo"
+                                            src="images/logos/uc-berkeley-seal.png"
+                                            alt=""
+                                            loading="lazy"
+                                            decoding="async"
                                         />
                                     </div>
                                     <span class="company-name">UC Berkeley Haas</span>
@@ -491,7 +503,9 @@
                                         <img
                                             class="company-logo"
                                             src="images/logos/kaist.svg"
-                                            alt="KAIST logo"
+                                            alt=""
+                                            loading="lazy"
+                                            decoding="async"
                                         />
                                     </div>
                                     <span class="company-name">KAIST</span>
@@ -561,21 +575,25 @@
                         <img
                             src="images/projects/precortex-minimal.jpg"
                             class="project-image project-image--flat"
-                            alt="Precortex"
+                            alt=""
+                            width="720"
+                            height="450"
                             loading="lazy"
                             decoding="async"
                         />
                         <img
-                            src="images/projects/precortex-thumbnail.jpg"
+                            data-detail-src="images/projects/precortex-thumbnail.jpg"
                             class="project-image project-image--detail"
                             alt=""
                             aria-hidden="true"
+                            width="720"
+                            height="460"
                             loading="lazy"
                             decoding="async"
                         />
                     </span>
                     <div class="project-info">
-                        <h4 class="project-title">Precortex</h4>
+                        <h3 class="project-title">Precortex</h3>
                         <p class="project-desc">
                             A personal task manager where agentic workflows
                             help move work toward completion.
@@ -599,21 +617,25 @@
                         <img
                             src="images/projects/prism-minimal.jpg"
                             class="project-image project-image--flat"
-                            alt="Prism"
+                            alt=""
+                            width="720"
+                            height="450"
                             loading="lazy"
                             decoding="async"
                         />
                         <img
-                            src="images/projects/prism-thumbnail.jpg"
+                            data-detail-src="images/projects/prism-thumbnail.jpg"
                             class="project-image project-image--detail"
                             alt=""
                             aria-hidden="true"
+                            width="720"
+                            height="460"
                             loading="lazy"
                             decoding="async"
                         />
                     </span>
                     <div class="project-info">
-                        <h4 class="project-title">Prism</h4>
+                        <h3 class="project-title">Prism</h3>
                         <p class="project-desc">
                             Turns rough product ideas into clear, structured
                             specs that AI agents can execute.
@@ -637,21 +659,25 @@
                         <img
                             src="images/projects/cwi-minimal.jpg"
                             class="project-image project-image--flat"
-                            alt="Caption With Intent"
+                            alt=""
+                            width="720"
+                            height="450"
                             loading="lazy"
                             decoding="async"
                         />
                         <img
-                            src="images/projects/cwi-thumbnail.jpg"
+                            data-detail-src="images/projects/cwi-thumbnail.jpg"
                             class="project-image project-image--detail"
                             alt=""
                             aria-hidden="true"
+                            width="720"
+                            height="460"
                             loading="lazy"
                             decoding="async"
                         />
                     </span>
                     <div class="project-info">
-                        <h4 class="project-title">Caption With Intent</h4>
+                        <h3 class="project-title">Caption With Intent</h3>
                         <p class="project-desc">
                             Caption timing and media editing prototype for
                             intent-aware short-form video.
@@ -675,21 +701,25 @@
                         <img
                             src="images/projects/reader-minimal.jpg"
                             class="project-image project-image--flat"
-                            alt="Reader"
+                            alt=""
+                            width="720"
+                            height="450"
                             loading="lazy"
                             decoding="async"
                         />
                         <img
-                            src="images/projects/reader-thumbnail.jpg"
+                            data-detail-src="images/projects/reader-thumbnail.jpg"
                             class="project-image project-image--detail"
                             alt=""
                             aria-hidden="true"
+                            width="720"
+                            height="460"
                             loading="lazy"
                             decoding="async"
                         />
                     </span>
                     <div class="project-info">
-                        <h4 class="project-title">Reader</h4>
+                        <h3 class="project-title">Reader</h3>
                         <p class="project-desc">
                             Personal reader for feeds, saved articles,
                             highlights, and a focused library.
@@ -713,21 +743,25 @@
                         <img
                             src="images/projects/agent-newsletter-minimal.jpg"
                             class="project-image project-image--flat"
-                            alt="Agent Newsletter"
+                            alt=""
+                            width="720"
+                            height="450"
                             loading="lazy"
                             decoding="async"
                         />
                         <img
-                            src="images/projects/agent-newsletter-thumbnail.jpg"
+                            data-detail-src="images/projects/agent-newsletter-thumbnail.jpg"
                             class="project-image project-image--detail"
                             alt=""
                             aria-hidden="true"
+                            width="720"
+                            height="460"
                             loading="lazy"
                             decoding="async"
                         />
                     </span>
                     <div class="project-info">
-                        <h4 class="project-title">Agent Newsletter</h4>
+                        <h3 class="project-title">Agent Newsletter</h3>
                         <p class="project-desc">
                             An AI agent newsletter for discovering new tools
                             and capabilities automatically.
@@ -751,21 +785,25 @@
                         <img
                             src="images/projects/resume-os-minimal.jpg"
                             class="project-image project-image--flat"
-                            alt="Resume OS"
+                            alt=""
+                            width="720"
+                            height="450"
                             loading="lazy"
                             decoding="async"
                         />
                         <img
-                            src="images/projects/resume-os-thumbnail.jpg"
+                            data-detail-src="images/projects/resume-os-thumbnail.jpg"
                             class="project-image project-image--detail"
                             alt=""
                             aria-hidden="true"
+                            width="720"
+                            height="450"
                             loading="lazy"
                             decoding="async"
                         />
                     </span>
                     <div class="project-info">
-                        <h4 class="project-title">Resume OS</h4>
+                        <h3 class="project-title">Resume OS</h3>
                         <p class="project-desc">
                             Interactive resume platform that answers questions
                             about my background.
@@ -789,21 +827,25 @@
                         <img
                             src="images/projects/conditioned-minimal.jpg"
                             class="project-image project-image--flat"
-                            alt="Conditioned"
+                            alt=""
+                            width="720"
+                            height="450"
                             loading="lazy"
                             decoding="async"
                         />
                         <img
-                            src="images/projects/conditioned-thumbnail.jpg"
+                            data-detail-src="images/projects/conditioned-thumbnail.jpg"
                             class="project-image project-image--detail"
                             alt=""
                             aria-hidden="true"
+                            width="720"
+                            height="460"
                             loading="lazy"
                             decoding="async"
                         />
                     </span>
                     <div class="project-info">
-                        <h4 class="project-title">Conditioned</h4>
+                        <h3 class="project-title">Conditioned</h3>
                         <p class="project-desc">
                             AI-based CrossFit performance analyzer &amp;
                             advisor.
@@ -827,21 +869,25 @@
                         <img
                             src="images/projects/reflect-ios-minimal.jpg"
                             class="project-image project-image--flat"
-                            alt="Reflect"
+                            alt=""
+                            width="720"
+                            height="450"
                             loading="lazy"
                             decoding="async"
                         />
                         <img
-                            src="images/projects/reflect-ios-thumbnail.jpg"
+                            data-detail-src="images/projects/reflect-ios-thumbnail.jpg"
                             class="project-image project-image--detail"
                             alt=""
                             aria-hidden="true"
+                            width="720"
+                            height="460"
                             loading="lazy"
                             decoding="async"
                         />
                     </span>
                     <div class="project-info">
-                        <h4 class="project-title">Reflect (iOS)</h4>
+                        <h3 class="project-title">Reflect (iOS)</h3>
                         <p class="project-desc">
                             Voice journaling application powered by NLP for
                             sentiment analysis.
@@ -863,23 +909,27 @@
                         <img
                             src="images/projects/three-body-simulator-minimal.jpg"
                             class="project-image project-image--flat"
-                            alt="Three Body Simulator"
+                            alt=""
+                            width="720"
+                            height="450"
                             loading="lazy"
                             decoding="async"
                         />
                         <img
-                            src="images/projects/three-body-simulator-thumbnail.jpg"
+                            data-detail-src="images/projects/three-body-simulator-thumbnail.jpg"
                             class="project-image project-image--detail"
                             alt=""
                             aria-hidden="true"
+                            width="720"
+                            height="460"
                             loading="lazy"
                             decoding="async"
                         />
                     </span>
                     <div class="project-info">
-                        <h4 class="project-title">Three Body Simulator</h4>
+                        <h3 class="project-title">Three Body Simulator</h3>
                         <p class="project-desc">
-                            Interactive three-dimensional gravity simulation for
+                            Interactive two-dimensional gravity simulation for
                             chaotic multi-body orbital dynamics.
                         </p>
                         <span class="project-link">Open</span>
@@ -899,21 +949,25 @@
                         <img
                             src="images/projects/block-fighter-minimal.jpg"
                             class="project-image project-image--flat"
-                            alt="Block Fighter"
+                            alt=""
+                            width="720"
+                            height="450"
                             loading="lazy"
                             decoding="async"
                         />
                         <img
-                            src="images/projects/block-fighter-thumbnail.jpg"
+                            data-detail-src="images/projects/block-fighter-thumbnail.jpg"
                             class="project-image project-image--detail"
                             alt=""
                             aria-hidden="true"
+                            width="720"
+                            height="460"
                             loading="lazy"
                             decoding="async"
                         />
                     </span>
                     <div class="project-info">
-                        <h4 class="project-title">Block Fighter</h4>
+                        <h3 class="project-title">Block Fighter</h3>
                         <p class="project-desc">
                             Browser-based physics mini-game built with Canvas
                             API.
@@ -935,21 +989,25 @@
                         <img
                             src="images/projects/rent-calculator-minimal.jpg"
                             class="project-image project-image--flat"
-                            alt="Rent Calculator"
+                            alt=""
+                            width="720"
+                            height="450"
                             loading="lazy"
                             decoding="async"
                         />
                         <img
-                            src="images/projects/rent-calculator-thumbnail.jpg"
+                            data-detail-src="images/projects/rent-calculator-thumbnail.jpg"
                             class="project-image project-image--detail"
                             alt=""
                             aria-hidden="true"
+                            width="720"
+                            height="460"
                             loading="lazy"
                             decoding="async"
                         />
                     </span>
                     <div class="project-info">
-                        <h4 class="project-title">Rent Calculator</h4>
+                        <h3 class="project-title">Rent Calculator</h3>
                         <p class="project-desc">
                             Interactive Jeonse rent calculator for exploring
                             deposit, monthly rent, and conversion tradeoffs.
@@ -971,21 +1029,25 @@
                         <img
                             src="images/projects/retirement-calculator-minimal.jpg"
                             class="project-image project-image--flat"
-                            alt="Retirement Calculator"
+                            alt=""
+                            width="720"
+                            height="450"
                             loading="lazy"
                             decoding="async"
                         />
                         <img
-                            src="images/projects/retirement-calculator-thumbnail.jpg"
+                            data-detail-src="images/projects/retirement-calculator-thumbnail.jpg"
                             class="project-image project-image--detail"
                             alt=""
                             aria-hidden="true"
+                            width="720"
+                            height="460"
                             loading="lazy"
                             decoding="async"
                         />
                     </span>
                     <div class="project-info">
-                        <h4 class="project-title">Retirement Calculator</h4>
+                        <h3 class="project-title">Retirement Calculator</h3>
                         <p class="project-desc">
                             Interactive retirement simulator for estimating
                             long-term savings growth and monthly income.
