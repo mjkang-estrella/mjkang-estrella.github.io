@@ -909,6 +909,7 @@
     absTolerance: config.defaultAbsTolerance,
     accumulator: 0,
     lastTs: null,
+    lastStatsTs: 0,
     currentPreset: config.defaultPreset,
     defaultMasses: {},
     defaultPositions: {},
@@ -1312,6 +1313,7 @@
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, ui.trailCanvas.width, ui.trailCanvas.height);
     ctx.restore();
+    resetTrailBatches();
   }
 
   function worldToScreen(x, y) {
@@ -1353,6 +1355,11 @@
     state.lastTs = null;
     setRunButtonLabel();
 
+    // Hand-placed configurations get the default softening so a body dropped
+    // onto another cannot drive the force term singular; presets restore
+    // exact Newtonian gravity via applyPresetNumerics.
+    state.softening = config.defaultSoftening;
+
     body.x += dx;
     body.y += dy;
     body.skipTrail = true;
@@ -1381,6 +1388,9 @@
     state.accumulator = 0;
     state.lastTs = null;
     setRunButtonLabel();
+
+    // See nudgeBodyPosition: dragged configurations run with softening.
+    state.softening = config.defaultSoftening;
 
     body.control.body.classList.add("is-dragging");
     if (body.control.body.setPointerCapture) {
@@ -1478,16 +1488,38 @@
     nudgeBodyPosition(id, dx, dy);
   }
 
-  function drawTrailSegment(body, from, to) {
-    const ctx = state.trailsCtx;
-    ctx.beginPath();
-    ctx.globalAlpha = 0.35;
-    ctx.strokeStyle = config.colors[body.id];
-    ctx.lineWidth = 1.2;
-    ctx.moveTo(from.x, from.y);
-    ctx.lineTo(to.x, to.y);
-    ctx.stroke();
-    ctx.globalAlpha = 1;
+  // Trail points accumulate per body and are stroked as one polyline per
+  // frame (flushTrailBatches in tick) instead of one stroke per substep.
+  const trailBatches = [[], [], []];
+
+  function strokeTrailBatch(index) {
+    const batch = trailBatches[index];
+    if (batch.length >= 4) {
+      const ctx = state.trailsCtx;
+      ctx.beginPath();
+      ctx.globalAlpha = 0.35;
+      ctx.strokeStyle = config.colors[state.bodies[index].id];
+      ctx.lineWidth = 1.2;
+      ctx.moveTo(batch[0], batch[1]);
+      for (let i = 2; i < batch.length; i += 2) {
+        ctx.lineTo(batch[i], batch[i + 1]);
+      }
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+    batch.length = 0;
+  }
+
+  function flushTrailBatches() {
+    for (let i = 0; i < trailBatches.length; i += 1) {
+      strokeTrailBatch(i);
+    }
+  }
+
+  function resetTrailBatches() {
+    for (let i = 0; i < trailBatches.length; i += 1) {
+      trailBatches[i].length = 0;
+    }
   }
 
   function computeAccelerations(bodies, G, softening) {
@@ -1521,24 +1553,73 @@
     }
   }
 
-  function captureSnapshot() {
+  // Preallocated integrator buffers: the adaptive RK4 loop runs thousands of
+  // evaluations per second, so per-evaluation array allocation is pure GC churn.
+  function newSnapshotBuffer(n) {
     return {
-      x: state.bodies.map(function (body) {
-        return body.x;
-      }),
-      y: state.bodies.map(function (body) {
-        return body.y;
-      }),
-      vx: state.bodies.map(function (body) {
-        return body.vx;
-      }),
-      vy: state.bodies.map(function (body) {
-        return body.vy;
-      }),
-      mass: state.bodies.map(function (body) {
-        return body.mass;
-      }),
+      x: new Array(n).fill(0),
+      y: new Array(n).fill(0),
+      vx: new Array(n).fill(0),
+      vy: new Array(n).fill(0),
+      mass: new Array(n).fill(0),
     };
+  }
+
+  function newDerivativeBuffer(n) {
+    return {
+      dx: new Array(n).fill(0),
+      dy: new Array(n).fill(0),
+      dvx: new Array(n).fill(0),
+      dvy: new Array(n).fill(0),
+    };
+  }
+
+  const integratorScratch = {
+    current: newSnapshotBuffer(3),
+    full: newSnapshotBuffer(3),
+    half: newSnapshotBuffer(3),
+    twoHalf: newSnapshotBuffer(3),
+    mid: newSnapshotBuffer(3),
+    k1: newDerivativeBuffer(3),
+    k2: newDerivativeBuffer(3),
+    k3: newDerivativeBuffer(3),
+    k4: newDerivativeBuffer(3),
+  };
+
+  function captureSnapshotInto(target) {
+    state.bodies.forEach(function (body, index) {
+      target.x[index] = body.x;
+      target.y[index] = body.y;
+      target.vx[index] = body.vx;
+      target.vy[index] = body.vy;
+      target.mass[index] = body.mass;
+    });
+  }
+
+  function copySnapshotInto(source, target) {
+    const n = source.x.length;
+    for (let i = 0; i < n; i += 1) {
+      target.x[i] = source.x[i];
+      target.y[i] = source.y[i];
+      target.vx[i] = source.vx[i];
+      target.vy[i] = source.vy[i];
+      target.mass[i] = source.mass[i];
+    }
+  }
+
+  function isSnapshotFinite(snapshot) {
+    const n = snapshot.x.length;
+    for (let i = 0; i < n; i += 1) {
+      if (
+        !Number.isFinite(snapshot.x[i]) ||
+        !Number.isFinite(snapshot.y[i]) ||
+        !Number.isFinite(snapshot.vx[i]) ||
+        !Number.isFinite(snapshot.vy[i])
+      ) {
+        return false;
+      }
+    }
+    return true;
   }
 
   function applySnapshot(snapshot) {
@@ -1550,11 +1631,14 @@
     });
   }
 
-  function computeAccelerationsForSnapshot(snapshot, G, softening) {
+  function computeAccelerationsForSnapshotInto(snapshot, outAx, outAy) {
     const n = snapshot.x.length;
-    const effectiveSoftening = Math.max(softening, 0);
-    const ax = new Array(n).fill(0);
-    const ay = new Array(n).fill(0);
+    const effectiveSoftening = Math.max(state.softening, 0);
+
+    for (let i = 0; i < n; i += 1) {
+      outAx[i] = 0;
+      outAy[i] = 0;
+    }
 
     for (let i = 0; i < n; i += 1) {
       for (let j = i + 1; j < n; j += 1) {
@@ -1565,79 +1649,65 @@
         const inverseDistance = 1 / Math.sqrt(safeDistanceSquared);
         const inverseDistanceCubed = inverseDistance * inverseDistance * inverseDistance;
 
-        const aiFactor = G * snapshot.mass[j] * inverseDistanceCubed;
-        const ajFactor = G * snapshot.mass[i] * inverseDistanceCubed;
+        const aiFactor = state.G * snapshot.mass[j] * inverseDistanceCubed;
+        const ajFactor = state.G * snapshot.mass[i] * inverseDistanceCubed;
 
-        ax[i] += dx * aiFactor;
-        ay[i] += dy * aiFactor;
-        ax[j] -= dx * ajFactor;
-        ay[j] -= dy * ajFactor;
+        outAx[i] += dx * aiFactor;
+        outAy[i] += dy * aiFactor;
+        outAx[j] -= dx * ajFactor;
+        outAy[j] -= dy * ajFactor;
       }
     }
-
-    return { ax: ax, ay: ay };
   }
 
-  function derivativesForSnapshot(snapshot) {
-    const acc = computeAccelerationsForSnapshot(snapshot, state.G, state.softening);
-    return {
-      dx: snapshot.vx.slice(),
-      dy: snapshot.vy.slice(),
-      dvx: acc.ax,
-      dvy: acc.ay,
-    };
-  }
-
-  function addScaledSnapshot(base, derivative, scale) {
-    const n = base.x.length;
-    const next = {
-      x: new Array(n),
-      y: new Array(n),
-      vx: new Array(n),
-      vy: new Array(n),
-      mass: base.mass,
-    };
-
-    for (let i = 0; i < n; i += 1) {
-      next.x[i] = base.x[i] + derivative.dx[i] * scale;
-      next.y[i] = base.y[i] + derivative.dy[i] * scale;
-      next.vx[i] = base.vx[i] + derivative.dvx[i] * scale;
-      next.vy[i] = base.vy[i] + derivative.dvy[i] * scale;
-    }
-
-    return next;
-  }
-
-  function rk4AdvanceSnapshot(snapshot, dt) {
+  function derivativesForSnapshotInto(snapshot, out) {
     const n = snapshot.x.length;
-    const k1 = derivativesForSnapshot(snapshot);
-    const k2 = derivativesForSnapshot(addScaledSnapshot(snapshot, k1, dt * 0.5));
-    const k3 = derivativesForSnapshot(addScaledSnapshot(snapshot, k2, dt * 0.5));
-    const k4 = derivativesForSnapshot(addScaledSnapshot(snapshot, k3, dt));
+    for (let i = 0; i < n; i += 1) {
+      out.dx[i] = snapshot.vx[i];
+      out.dy[i] = snapshot.vy[i];
+    }
+    computeAccelerationsForSnapshotInto(snapshot, out.dvx, out.dvy);
+  }
 
-    const next = {
-      x: new Array(n),
-      y: new Array(n),
-      vx: new Array(n),
-      vy: new Array(n),
-      mass: snapshot.mass,
-    };
+  function addScaledSnapshotInto(base, derivative, scale, out) {
+    const n = base.x.length;
+    for (let i = 0; i < n; i += 1) {
+      out.x[i] = base.x[i] + derivative.dx[i] * scale;
+      out.y[i] = base.y[i] + derivative.dy[i] * scale;
+      out.vx[i] = base.vx[i] + derivative.dvx[i] * scale;
+      out.vy[i] = base.vy[i] + derivative.dvy[i] * scale;
+      out.mass[i] = base.mass[i];
+    }
+  }
+
+  function rk4AdvanceSnapshotInto(snapshot, dt, out) {
+    const s = integratorScratch;
+    const n = snapshot.x.length;
+
+    derivativesForSnapshotInto(snapshot, s.k1);
+    addScaledSnapshotInto(snapshot, s.k1, dt * 0.5, s.mid);
+    derivativesForSnapshotInto(s.mid, s.k2);
+    addScaledSnapshotInto(snapshot, s.k2, dt * 0.5, s.mid);
+    derivativesForSnapshotInto(s.mid, s.k3);
+    addScaledSnapshotInto(snapshot, s.k3, dt, s.mid);
+    derivativesForSnapshotInto(s.mid, s.k4);
 
     const weight = dt / 6;
     for (let i = 0; i < n; i += 1) {
-      next.x[i] =
-        snapshot.x[i] + weight * (k1.dx[i] + 2 * k2.dx[i] + 2 * k3.dx[i] + k4.dx[i]);
-      next.y[i] =
-        snapshot.y[i] + weight * (k1.dy[i] + 2 * k2.dy[i] + 2 * k3.dy[i] + k4.dy[i]);
-      next.vx[i] =
+      out.x[i] =
+        snapshot.x[i] +
+        weight * (s.k1.dx[i] + 2 * s.k2.dx[i] + 2 * s.k3.dx[i] + s.k4.dx[i]);
+      out.y[i] =
+        snapshot.y[i] +
+        weight * (s.k1.dy[i] + 2 * s.k2.dy[i] + 2 * s.k3.dy[i] + s.k4.dy[i]);
+      out.vx[i] =
         snapshot.vx[i] +
-        weight * (k1.dvx[i] + 2 * k2.dvx[i] + 2 * k3.dvx[i] + k4.dvx[i]);
-      next.vy[i] =
+        weight * (s.k1.dvx[i] + 2 * s.k2.dvx[i] + 2 * s.k3.dvx[i] + s.k4.dvx[i]);
+      out.vy[i] =
         snapshot.vy[i] +
-        weight * (k1.dvy[i] + 2 * k2.dvy[i] + 2 * k3.dvy[i] + k4.dvy[i]);
+        weight * (s.k1.dvy[i] + 2 * s.k2.dvy[i] + 2 * s.k3.dvy[i] + s.k4.dvy[i]);
+      out.mass[i] = snapshot.mass[i];
     }
-
-    return next;
   }
 
   function estimateRkErrorRatio(fullStep, twoHalfSteps) {
@@ -1663,26 +1733,49 @@
     return maxRatio;
   }
 
-  function drawTrailSegmentsFromSnapshots(previousSnapshot, nextSnapshot) {
+  function appendTrailPoints(previousSnapshot, nextSnapshot) {
     state.bodies.forEach(function (body, index) {
       const from = worldToScreen(previousSnapshot.x[index], previousSnapshot.y[index]);
       const to = worldToScreen(nextSnapshot.x[index], nextSnapshot.y[index]);
       const segmentLength = Math.hypot(to.x - from.x, to.y - from.y);
+      const batch = trailBatches[index];
 
       if (body.skipTrail || segmentLength > config.maxTrailSegmentPx) {
         body.skipTrail = false;
-      } else {
-        drawTrailSegment(body, from, to);
+        // Break the polyline: stroke what has accumulated, start fresh.
+        strokeTrailBatch(index);
+        return;
       }
+
+      if (batch.length === 0) {
+        batch.push(from.x, from.y);
+      }
+      batch.push(to.x, to.y);
     });
   }
 
+  // Numerical breakdown (NaN/Infinity from a forced min-step acceptance
+  // during a near-singular close encounter) must never reach the DOM:
+  // keep the last finite snapshot and pause instead.
+  function haltOnNumericalBreakdown(lastGoodSnapshot) {
+    applySnapshot(lastGoodSnapshot);
+    computeAccelerations(state.bodies, state.G, state.softening);
+    state.running = false;
+    state.accumulator = 0;
+    state.bodies.forEach(function (body) {
+      body.control.status.textContent = "SINGULAR";
+    });
+    setRunButtonLabel();
+  }
+
   function step(dt) {
+    const s = integratorScratch;
     let remaining = dt;
     let acceptedSubsteps = 0;
     let attempts = 0;
     let h = Math.min(state.fixedTimeStep, remaining);
-    let snapshot = captureSnapshot();
+    captureSnapshotInto(s.current);
+    const snapshot = s.current;
 
     while (
       remaining > 1e-12 &&
@@ -1693,17 +1786,22 @@
       h = Math.min(h, remaining);
       h = Math.max(h, config.rkMinStep);
 
-      const fullStep = rk4AdvanceSnapshot(snapshot, h);
-      const halfStep = rk4AdvanceSnapshot(snapshot, h * 0.5);
-      const twoHalfSteps = rk4AdvanceSnapshot(halfStep, h * 0.5);
+      rk4AdvanceSnapshotInto(snapshot, h, s.full);
+      rk4AdvanceSnapshotInto(snapshot, h * 0.5, s.half);
+      rk4AdvanceSnapshotInto(s.half, h * 0.5, s.twoHalf);
 
-      const rawErrorRatio = estimateRkErrorRatio(fullStep, twoHalfSteps);
+      const rawErrorRatio = estimateRkErrorRatio(s.full, s.twoHalf);
       const errorRatio = Number.isFinite(rawErrorRatio) ? rawErrorRatio : Number.POSITIVE_INFINITY;
       const accepted = errorRatio <= 1 || h <= config.rkMinStep * 1.001;
 
       if (accepted) {
-        drawTrailSegmentsFromSnapshots(snapshot, twoHalfSteps);
-        snapshot = twoHalfSteps;
+        if (!isSnapshotFinite(s.twoHalf)) {
+          haltOnNumericalBreakdown(snapshot);
+          return;
+        }
+
+        appendTrailPoints(snapshot, s.twoHalf);
+        copySnapshotInto(s.twoHalf, snapshot);
         remaining -= h;
         state.simTime += h;
         acceptedSubsteps += 1;
@@ -1725,9 +1823,15 @@
     }
 
     if (remaining > 1e-12) {
-      const finalStep = rk4AdvanceSnapshot(snapshot, remaining);
-      drawTrailSegmentsFromSnapshots(snapshot, finalStep);
-      snapshot = finalStep;
+      rk4AdvanceSnapshotInto(snapshot, remaining, s.full);
+
+      if (!isSnapshotFinite(s.full)) {
+        haltOnNumericalBreakdown(snapshot);
+        return;
+      }
+
+      appendTrailPoints(snapshot, s.full);
+      copySnapshotInto(s.full, snapshot);
       state.simTime += remaining;
     }
 
@@ -1798,7 +1902,11 @@
     });
   }
 
-  function updateLabelsAndStats() {
+  // skipAria: while the simulation free-runs, rewriting aria-labels on the
+  // focusable bodies every update churns the accessibility tree; labels are
+  // refreshed with positions whenever an interaction settles (drag end,
+  // key nudge, preset, reset, pause).
+  function updateLabelsAndStats(skipAria) {
     state.bodies.forEach(function (body) {
       const bodyLabel =
         body.control.body.dataset.bodyLabel || body.name;
@@ -1809,20 +1917,22 @@
         " Y:" +
         formatCoord(body.y) +
         "]";
-      body.control.body.setAttribute(
-        "aria-label",
-        bodyLabel +
-          " body. X " +
-          formatCoord(body.x) +
-          ", Y " +
-          formatCoord(body.y) +
-          ". Use arrow keys to reposition."
-      );
+
+      if (!skipAria) {
+        body.control.body.setAttribute(
+          "aria-label",
+          bodyLabel +
+            " body. X " +
+            formatCoord(body.x) +
+            ", Y " +
+            formatCoord(body.y) +
+            ". Use arrow keys to reposition."
+        );
+      }
     });
 
     ui.simTime.textContent = formatTime(state.simTime);
     ui.frameValue.textContent = "Frame: " + state.frame;
-    ui.modeValue.textContent = "MODE: 2D N-BODY RK4";
     ui.gValue.textContent = formatG(state.G);
     ui.speedValue.textContent = formatSpeed(state.timeSpeed);
 
@@ -1892,6 +2002,10 @@
       return;
     }
 
+    // Reset returns to the preset configuration, so the preset numerics
+    // (notably zero softening for exact periodic orbits) must return too —
+    // a prior drag may have switched to the softened free-form mode.
+    applyPresetNumerics();
     readControlsIntoState();
 
     state.bodies.forEach(function (body) {
@@ -1921,6 +2035,10 @@
     state.accumulator = 0;
     state.lastTs = null;
     setRunButtonLabel();
+
+    if (!state.running) {
+      updateLabelsAndStats();
+    }
   }
 
   function getRandomPresetKey() {
@@ -1944,7 +2062,11 @@
       state.accumulator += elapsedSeconds * state.timeSpeed;
 
       let substeps = 0;
-      while (state.accumulator >= state.fixedTimeStep && substeps < state.maxSubsteps) {
+      while (
+        state.running &&
+        state.accumulator >= state.fixedTimeStep &&
+        substeps < state.maxSubsteps
+      ) {
         step(state.fixedTimeStep);
         state.accumulator -= state.fixedTimeStep;
         substeps += 1;
@@ -1954,8 +2076,16 @@
         state.accumulator = Math.min(state.accumulator, state.fixedTimeStep * 4);
       }
 
+      flushTrailBatches();
       renderBodies();
-      updateLabelsAndStats();
+
+      // Stat text at ~5 Hz is plenty; per-frame rewrites are DOM churn.
+      // Re-check running: a numerical-breakdown halt mid-frame writes a
+      // SINGULAR status that this update must not overwrite.
+      if (state.running && timestamp - state.lastStatsTs >= 200) {
+        state.lastStatsTs = timestamp;
+        updateLabelsAndStats(true);
+      }
     }
 
     requestAnimationFrame(tick);
@@ -1968,9 +2098,12 @@
     bindControls();
     handleResize();
     applyPreset(getRandomPresetKey());
-    state.running = true;
+    // Start paused: the adaptive integrator is heavy, and spinning it up
+    // before the visitor asks for it burns CPU/battery for nothing.
+    state.running = false;
     state.accumulator = 0;
     state.lastTs = null;
+    ui.modeValue.textContent = "MODE: 2D N-BODY RK4";
     setRunButtonLabel();
     requestAnimationFrame(tick);
   }

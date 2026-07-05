@@ -1,12 +1,19 @@
+// Shared with the reveal-motion setup at the bottom of this file so the mode
+// toggle can re-arm scroll reveals after stripping .is-visible.
+let homepageRevealObserver = null;
+
 (() => {
     const body = document.body;
     const modeButtons = document.querySelectorAll("[data-view-mode]");
-    const modeLine = document.querySelector("[data-mode-line]");
+    const skipLink = document.querySelector(".skip-link");
     const machineDocument = document.querySelector(".machine-document");
     const copyMachineProfileButton = document.querySelector(
         "[data-copy-machine-profile]"
     );
     const viewModes = new Set(["human", "machine"]);
+    let machineEnterTimer = 0;
+    let humanExitTimer = 0;
+    let modeWashTimer = 0;
     const machineSourceSelectors = {
         nav: "footer",
         hero: '[data-human-block="hero"]',
@@ -52,6 +59,28 @@
     };
 
     const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+    const syncSkipLinkTarget = (mode) => {
+        if (skipLink) {
+            skipLink.setAttribute(
+                "href",
+                mode === "machine" ? "#machine-content" : "#main-content"
+            );
+        }
+    };
+
+    const cancelPendingModeTransitions = () => {
+        window.clearTimeout(machineEnterTimer);
+        window.clearTimeout(humanExitTimer);
+        window.clearTimeout(modeWashTimer);
+        body.classList.remove("is-mode-transitioning");
+        body.classList.remove("is-exiting-machine");
+
+        if (machineDocument) {
+            machineDocument.classList.remove("is-entering");
+            machineDocument.classList.remove("is-exiting");
+        }
+    };
 
     const captureMachineSourceRects = () => {
         const rects = {};
@@ -119,7 +148,7 @@
             machineDocument.classList.add("is-entering");
         });
 
-        window.setTimeout(() => {
+        machineEnterTimer = window.setTimeout(() => {
             machineDocument.classList.remove("is-entering");
         }, 760);
     };
@@ -173,6 +202,21 @@
                         element.classList.add("is-visible");
                     }
                 });
+
+                // The reveal observer unobserves elements once shown, so
+                // anything stripped above must be re-armed or it would stay
+                // hidden forever after a machine -> human round trip.
+                revealElements.forEach((element) => {
+                    if (element.classList.contains("is-visible")) {
+                        return;
+                    }
+
+                    if (homepageRevealObserver) {
+                        homepageRevealObserver.observe(element);
+                    } else {
+                        element.classList.add("is-visible");
+                    }
+                });
             });
         });
     };
@@ -183,6 +227,7 @@
             return;
         }
 
+        cancelPendingModeTransitions();
         const targetRects = captureHumanTargetRects();
         setBlockMotionVars(targetRects);
         body.classList.add("is-mode-transitioning");
@@ -202,8 +247,9 @@
 
         requestAnimationFrame(() => {
             body.dataset.portfolioView = "human";
+            syncSkipLinkTarget("human");
             machineDocument.setAttribute("aria-hidden", "true");
-            document.querySelectorAll("[data-human]").forEach((element) => {
+            document.querySelectorAll("[data-human-block]").forEach((element) => {
                 element.setAttribute("aria-hidden", "false");
             });
 
@@ -212,7 +258,7 @@
             }
         });
 
-        window.setTimeout(() => {
+        humanExitTimer = window.setTimeout(() => {
             machineDocument.classList.remove("is-exiting");
             body.classList.remove("is-mode-transitioning");
             body.classList.remove("is-exiting-machine");
@@ -221,6 +267,7 @@
 
     const updateMode = (mode, shouldPersist = true, sourceRects = null) => {
         body.dataset.portfolioView = mode;
+        syncSkipLinkTarget(mode);
 
         modeButtons.forEach((button) => {
             const isActive = button.dataset.viewMode === mode;
@@ -232,7 +279,7 @@
             element.setAttribute("aria-hidden", String(mode !== "machine"));
         });
 
-        document.querySelectorAll("[data-human]").forEach((element) => {
+        document.querySelectorAll("[data-human-block]").forEach((element) => {
             element.setAttribute("aria-hidden", String(mode === "machine"));
         });
 
@@ -241,13 +288,6 @@
         }
 
         setMachineDocumentTransition(mode, sourceRects);
-
-        if (modeLine) {
-            modeLine.textContent =
-                mode === "machine"
-                    ? "view=machine · same DOM data · markdown export ready"
-                    : "view=human · narrative portfolio · visual scan";
-        }
 
         if (shouldPersist) {
             setStoredMode(mode);
@@ -311,16 +351,66 @@
             href: item.querySelector(".company-link")?.getAttribute("href") || "",
         }));
 
+    const getSocialEntries = () =>
+        Array.from(document.querySelectorAll(".social-links a")).map((link) => ({
+            label: link.textContent.trim(),
+            href: link.href,
+        }));
+
     const getSocialMarkdownLinks = () =>
-        Array.from(document.querySelectorAll(".social-links a")).map((link) =>
-            markdownLink(link.textContent.trim(), link.href)
-        );
+        getSocialEntries().map((entry) => markdownLink(entry.label, entry.href));
+
+    const getContactEmail = () => {
+        const emailLink = document.querySelector('.footer-contact a[href^="mailto:"]');
+        return emailLink ? emailLink.textContent.trim() : "mj.kang@hey.com";
+    };
 
     const getEmailMarkdownLink = () => {
         const emailLink = document.querySelector('.footer-contact a[href^="mailto:"]');
         return emailLink
             ? markdownLink(emailLink.textContent.trim(), emailLink.href)
             : "[Email](mailto:mj.kang@hey.com)";
+    };
+
+    const getFooterLocation = () => {
+        const contact = document.querySelector(".footer-contact");
+
+        if (!contact) {
+            return "San Francisco, CA";
+        }
+
+        const clone = contact.cloneNode(true);
+        clone.querySelectorAll("a").forEach((link) => link.remove());
+        return clone.textContent.trim().replace(/\s+/g, " ");
+    };
+
+    const getColophonText = () => {
+        const block = Array.from(document.querySelectorAll(".footer-block")).find(
+            (candidate) => textOf(candidate, ".footer-heading") === "Colophon"
+        );
+
+        if (!block) {
+            return "© MJ Kang.";
+        }
+
+        const clone = block.cloneNode(true);
+        const heading = clone.querySelector(".footer-heading");
+
+        if (heading) {
+            heading.remove();
+        }
+
+        return clone.textContent.trim().replace(/\s+/g, " ");
+    };
+
+    const getProfileFacts = () => {
+        const subtitle = textOf(document, ".profile-subtitle");
+        const [role, location] = subtitle.split(/\s*Based in\s*/);
+
+        return {
+            role: role ? role.trim() : "Product Manager",
+            location: location ? location.trim() : "Bay Area",
+        };
     };
 
     const renderMachineNav = (socialLinks, emailMarkdownLink) => {
@@ -406,12 +496,12 @@
             createMachineElement("h2", "## Contact"),
             createMachineElement(
                 "p",
-                `${emailMarkdownLink} · San Francisco, CA`
+                `${emailMarkdownLink} · ${getFooterLocation()}`
             ),
             createMachineElement("h2", "## Social"),
             createMachineElement("p", socialLinks.join(" ")),
             createMachineElement("h2", "## Colophon"),
-            createMachineElement("p", "Typeset in Geist Sans. © 2026 MJ Kang."),
+            createMachineElement("p", getColophonText()),
         ]);
     };
 
@@ -436,6 +526,7 @@
     const buildMachineProfileMarkdown = () => {
         const projects = getProjectData();
         const timelineItems = getTimelineData();
+        const profileFacts = getProfileFacts();
 
         const lines = [
             "# MJ Kang",
@@ -444,10 +535,10 @@
             "",
             "## Profile",
             "",
-            "- Role: Product Manager",
-            "- Location: Bay Area",
+            `- Role: ${profileFacts.role}`,
+            `- Location: ${profileFacts.location}`,
             "- Focus: fintech, live streaming, logistics, agentic AI, product systems",
-            "- Contact: mj.kang@hey.com",
+            `- Contact: ${getContactEmail()}`,
             "",
             "## Selected Works",
             "",
@@ -483,75 +574,128 @@
             "",
             "## Contact",
             "",
-            "- Email: mj.kang@hey.com",
-            "- Location: San Francisco, CA",
+            `- Email: ${getContactEmail()}`,
+            `- Location: ${getFooterLocation()}`,
             "",
             "## Social",
-            "",
-            "- LinkedIn: https://www.linkedin.com/in/mj-kang-product/",
-            "- X: https://x.com/mj_kang",
-            "- GitHub: https://github.com/mjkang-estrella",
-            "- Blog: https://blog.mj-kang.com/",
-            "",
-            "## Colophon",
-            "",
-            "- Typeset in Geist Sans.",
-            "- © 2026 MJ Kang."
+            ""
         );
 
+        getSocialEntries().forEach((entry) => {
+            lines.push(`- ${entry.label}: ${entry.href}`);
+        });
+
+        lines.push("", "## Colophon", "", `- ${getColophonText()}`);
+
         return lines.join("\n");
-    };
-
-    const copyMachineProfile = async () => {
-        if (!copyMachineProfileButton || !navigator.clipboard) {
-            return;
-        }
-
-        const originalText = copyMachineProfileButton.textContent;
-        await navigator.clipboard.writeText(buildMachineProfileMarkdown());
-        copyMachineProfileButton.textContent = "Copied";
-
-        window.setTimeout(() => {
-            copyMachineProfileButton.textContent = originalText;
-        }, 1400);
     };
 
     modeButtons.forEach((button) => {
         button.addEventListener("click", () => {
             const mode = button.dataset.viewMode;
 
-            if (viewModes.has(mode)) {
-                if (
-                    mode === "human" &&
-                    body.dataset.portfolioView === "machine"
-                ) {
-                    transitionToHuman();
-                    return;
-                }
-
-                const sourceRects =
-                    mode === "machine" ? captureMachineSourceRects() : null;
-
-                body.classList.add("is-mode-transitioning");
-                updateMode(mode, true, sourceRects);
-                window.setTimeout(() => {
-                    body.classList.remove("is-mode-transitioning");
-                }, 820);
+            if (!viewModes.has(mode) || mode === body.dataset.portfolioView) {
+                return;
             }
+
+            if (mode === "human") {
+                transitionToHuman();
+                return;
+            }
+
+            cancelPendingModeTransitions();
+            const sourceRects = captureMachineSourceRects();
+
+            body.classList.add("is-mode-transitioning");
+            updateMode(mode, true, sourceRects);
+            modeWashTimer = window.setTimeout(() => {
+                body.classList.remove("is-mode-transitioning");
+            }, 820);
         });
     });
 
     if (copyMachineProfileButton) {
-        copyMachineProfileButton.addEventListener("click", () => {
-            copyMachineProfile().catch(() => {
-                copyMachineProfileButton.textContent = "Copy failed";
+        if (!navigator.clipboard) {
+            // Clipboard API is unavailable (e.g. non-secure contexts);
+            // showing a button that silently does nothing is worse than none.
+            copyMachineProfileButton.hidden = true;
+        } else {
+            const defaultCopyLabel = copyMachineProfileButton.textContent;
+            let copyLabelTimer = 0;
+
+            const flashCopyLabel = (label) => {
+                copyMachineProfileButton.textContent = label;
+                window.clearTimeout(copyLabelTimer);
+                copyLabelTimer = window.setTimeout(() => {
+                    copyMachineProfileButton.textContent = defaultCopyLabel;
+                }, 1400);
+            };
+
+            copyMachineProfileButton.addEventListener("click", () => {
+                navigator.clipboard
+                    .writeText(buildMachineProfileMarkdown())
+                    .then(() => flashCopyLabel("Copied"))
+                    .catch(() => flashCopyLabel("Copy failed"));
             });
-        });
+        }
     }
 
     renderMachineDocumentFromPage();
     updateMode(getModeFromUrl() || getStoredMode() || "human", false);
 })();
+
+// Detail screenshots are only revealed by hover/focus-visible, so their src
+// lives in data-detail-src and is attached only on hover-capable devices —
+// touch devices never pay for images they cannot reveal.
+const initProjectDetailImages = () => {
+    const detailImages = document.querySelectorAll(
+        ".project-card img[data-detail-src]"
+    );
+
+    if (!detailImages.length) {
+        return;
+    }
+
+    if (!(window.matchMedia && window.matchMedia("(hover: hover)").matches)) {
+        return;
+    }
+
+    const attachDetailSource = (img) => {
+        if (img.dataset.detailSrc) {
+            img.src = img.dataset.detailSrc;
+            delete img.dataset.detailSrc;
+        }
+    };
+
+    document.querySelectorAll(".project-card").forEach((card) => {
+        const loadCardDetail = () => {
+            card.querySelectorAll("img[data-detail-src]").forEach(
+                attachDetailSource
+            );
+        };
+
+        card.addEventListener("mouseenter", loadCardDetail, { once: true });
+        card.addEventListener("focus", loadCardDetail, { once: true });
+    });
+
+    // Prefetch the rest once the page is idle so the first hover crossfade
+    // is instant; loading="lazy" still defers offscreen fetches.
+    const prefetchAll = () => {
+        detailImages.forEach(attachDetailSource);
+    };
+
+    window.addEventListener(
+        "load",
+        () => {
+            if ("requestIdleCallback" in window) {
+                window.requestIdleCallback(prefetchAll, { timeout: 4000 });
+            } else {
+                window.setTimeout(prefetchAll, 2500);
+            }
+        },
+        { once: true }
+    );
+};
 
 const initProfilePhotoFallback = () => {
     const profilePhoto = document.querySelector(".profile-photo");
@@ -644,6 +788,7 @@ const initRevealMotion = (root) => {
             }
         );
 
+        homepageRevealObserver = revealObserver;
         revealVisibleItems(revealObserver);
     } catch (error) {
         root.classList.remove("has-motion");
@@ -691,6 +836,7 @@ const initScrollProgress = (root) => {
 
 (() => {
     const root = document.documentElement;
+    initProjectDetailImages();
     initProfilePhotoFallback();
     initRevealMotion(root);
     initScrollProgress(root);

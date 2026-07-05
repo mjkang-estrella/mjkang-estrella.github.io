@@ -4,27 +4,27 @@ MJ Kang is a Bay Area product manager building products and experiments across f
 
 ## Primary Pages
 
-- Home: https://mj-kang.com/
-- Machine view: https://mj-kang.com/?view=machine
-- Precortex: https://www.pre-cortex.com/
-- Prism: https://prism.mj-kang.com/
-- Caption With Intent: https://cwi.mj-kang.com/
-- Reader: https://reader.mj-kang.com/
-- Agent Newsletter: https://github.com/mjkang-estrella/agent-newsletter
-- Resume OS: https://resume-os.com/
-- Conditioned: https://ardent-footer-45845870.figma.site/
-- Reflect (iOS): https://testflight.apple.com/join/2ctpxzhd
-- Three Body Simulator: https://mj-kang.com/three-body-problem-simulation/
-- Block Fighter: https://mj-kang.com/block-fighter/
-- Jeonse Rent Calculator: https://mj-kang.com/jeonse/
-- Retirement Calculator: https://mj-kang.com/retirement-calculator/
+- [Home](https://mj-kang.com/)
+- [Machine view](https://mj-kang.com/?view=machine): UI representation of the same visible portfolio data
+- [Precortex](https://www.pre-cortex.com/): personal task manager with agentic workflows
+- [Prism](https://prism.mj-kang.com/): turns rough product ideas into structured specs for AI agents
+- [Caption With Intent](https://cwi.mj-kang.com/): caption timing and media editing prototype
+- [Reader](https://reader.mj-kang.com/): personal reader for feeds, saved articles, and highlights
+- [Agent Newsletter](https://github.com/mjkang-estrella/agent-newsletter): AI agent newsletter for discovering new tools
+- [Resume OS](https://resume-os.com/): interactive resume platform
+- [Conditioned](https://ardent-footer-45845870.figma.site/): AI-based CrossFit performance analyzer
+- [Reflect (iOS)](https://testflight.apple.com/join/2ctpxzhd): voice journaling application
+- [Three Body Simulator](https://mj-kang.com/three-body-problem-simulation/): interactive 2D gravity simulation
+- [Block Fighter](https://mj-kang.com/block-fighter/): browser-based physics mini-game
+- [Jeonse Rent Calculator](https://mj-kang.com/jeonse/): Korean jeonse vs. monthly rent comparison
+- [Retirement Calculator](https://mj-kang.com/retirement-calculator/): long-term savings projection
 
 ## External Profiles
 
-- Blog: https://blog.mj-kang.com/
-- LinkedIn: https://www.linkedin.com/in/mj-kang-product/
-- GitHub: https://github.com/mjkang-estrella
-- X: https://x.com/mj_kang
+- [Blog](https://blog.mj-kang.com/)
+- [LinkedIn](https://www.linkedin.com/in/mj-kang-product/)
+- [GitHub](https://github.com/mjkang-estrella)
+- [X](https://x.com/mj_kang)
 
 ## Agent Guidance
 

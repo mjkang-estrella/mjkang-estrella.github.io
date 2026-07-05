@@ -1,33 +1,46 @@
-# Repository Guidelines
+# Block Fighter
 
-## Project Structure & Module Organization
-- Root contains a single entry point: `index.html` with HTML, CSS, and vanilla JS for the Pong-style visualizer. No external build tools or asset folders are used.
-- `.env.local` is present for private environment values; it is not needed to run the page and should stay out of commits.
+Two-player Pong Wars variant living at `/block-fighter/` on mj-kang.com, a
+subdirectory of the portfolio repo (mjkang-estrella.github.io). Inspired by
+[Pong Wars](https://github.com/vnglst/pong-wars).
+
+## Project Structure
+
+- `index.html` — the page plus the entire game as one inline `<script>` at the
+  end of `<body>`. No build step; edit and reload.
+- `style.css` — layout, HUD, and overlay styles.
+
+There is no analytics script, no environment file, and no dependency on
+anything outside this directory except the shared favicons under
+`/images/logo/`.
 
 ## Build, Test, and Development Commands
-- Local preview (no build step): `python3 -m http.server 8000` then open `http://localhost:8000`. Any simple static server works (e.g., `npx serve`).
-- Direct open: double-click `index.html` if you only need a quick visual check; use a server when testing analytics or fetches to avoid CORS surprises.
 
-## Coding Style & Naming Conventions
-- Language: plain ES6 inlined in `index.html`; prefer `const`/`let`, arrow functions where appropriate, and early returns for clarity.
-- Indentation: 4 spaces in HTML/JS; keep CSS properties aligned as in the current file.
-- Constants use `SCREAMING_SNAKE_CASE` (e.g., `SQUARE_SIZE`, `FRAME_RATE`); other variables use `camelCase`.
-- Keep everything in `index.html` unless a new asset has a clear separation need; if you add files, mirror the simple root layout and reference with relative paths.
+- Local preview (no build step): `python3 -m http.server 8000` from the repo
+  root, then open `http://localhost:8000/block-fighter/`. Any static server
+  works (e.g., `npx serve`).
+- No automated test harness. Manual checks in a browser: page loads without
+  console errors, balls animate, squares repaint on collisions, HUD/timer
+  update, and touch controls drag each paddle on its half of the board.
 
-## Testing Guidelines
-- No automated test harness is set up. Perform manual checks in a browser: page loads without console errors, balls animate, score updates, and colors flip on collisions.
-- If you change physics or rendering, test at multiple viewport sizes and verify performance stays smooth (target 100 FPS interval). Document manual steps in the PR description.
+## Gameplay Rules Encoded in the Script
 
-## Commit & Pull Request Guidelines
-- Repo has no established history; follow Conventional Commits (`feat:`, `fix:`, `chore:`) with imperative, concise scopes, e.g., `feat: tweak ball speed limits`.
-- PRs should include: short summary of intent, list of changes, manual test notes, and screenshots/GIFs when visuals change. Link related issues if they exist.
-- Keep diffs tight; avoid unrelated formatting churn since everything lives in one file.
+- Day paddle: `W`/`S`. Night paddle: `ArrowUp`/`ArrowDown`. On touch screens
+  each half of the board drags its own paddle; a tap starts or restarts.
+- Balls repaint squares to their owner's color; paint `WIN_PERCENT` (60%) of
+  the board or hold the most territory when the 60s timer ends. A tie at
+  timer expiry is a draw.
+- Movement is dt-scaled against a 60fps baseline so higher-refresh displays
+  play at the same speed. Ball speed is clamped by vector magnitude
+  (`clampBallSpeed`) to preserve launch angles.
 
-## Security & Configuration Tips
-- Treat `.env.local` as sensitive; do not commit keys. Rotate any exposed tokens and prefer placeholders (`YOUR_KEY_HERE`) in shared examples.
-- The page loads a remote analytics script (`plausible.koenvangilst.nl`); if you fork, confirm you are allowed to send events there or swap in your own endpoint.
+## Coding Style & Conventions
 
-## Quick Reference
-- Edit: `index.html`
-- Run: `python3 -m http.server 8000`
-- Lint (optional if you add tooling): `npx prettier --check index.html`
+- Plain ES6 inlined in `index.html`; prefer `const`/`let`, arrow functions,
+  and early returns. Indentation: 4 spaces in HTML/JS.
+- Constants use `SCREAMING_SNAKE_CASE` (e.g., `SQUARE_SIZE`, `MIN_SPEED`);
+  other variables use `camelCase`.
+- Keep everything in `index.html`/`style.css` unless a new asset has a clear
+  separation need.
+- Commit messages and PRs follow the parent repo's conventions; this
+  directory has no separate tooling.

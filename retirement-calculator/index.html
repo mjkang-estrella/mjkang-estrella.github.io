@@ -1,9 +1,26 @@
 <!DOCTYPE html>
-<html lang="en" vid="0"><head vid="1">
-    <meta charset="UTF-8" vid="2">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
-    <title vid="4">Retirement Plan Simulator</title>
-    <style vid="5">
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retirement Plan Simulator</title>
+    <meta name="description" content="Interactive retirement calculator projecting long-term savings growth and monthly income from your age, savings, contributions, and expected return.">
+    <meta name="author" content="MJ Kang">
+    <link rel="canonical" href="https://mj-kang.com/retirement-calculator/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Retirement Plan Simulator">
+    <meta property="og:description" content="Interactive retirement calculator projecting long-term savings growth and monthly income.">
+    <meta property="og:url" content="https://mj-kang.com/retirement-calculator/">
+    <meta property="og:image" content="https://mj-kang.com/images/projects/retirement-calculator-thumbnail.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Retirement Plan Simulator">
+    <meta name="twitter:description" content="Interactive retirement calculator projecting long-term savings growth and monthly income.">
+    <meta name="twitter:image" content="https://mj-kang.com/images/projects/retirement-calculator-thumbnail.jpg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/logo/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/logo/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/logo/apple-icon-180x180.png">
+    <link rel="manifest" href="/images/logo/manifest.json">
+    <meta name="theme-color" content="#0D0D0D">
+    <style>
         :root {
             
             --bg-app: #0D0D0D;
@@ -13,10 +30,10 @@
             --accent-lime-dim: rgba(203, 230, 86, 0.1);
             --text-primary: #FFFFFF;
             --text-secondary: #888888;
-            --text-tertiary: #444444;
-            
-            
-            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --text-tertiary: #7A7A7A;
+
+
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             --font-size-xs: 11px;
             --font-size-sm: 13px;
             --font-size-md: 15px;
@@ -85,6 +102,25 @@
             font-weight: 400;
         }
 
+        .home-link {
+            font-size: var(--font-size-xs);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .home-link:focus-visible {
+            outline: 2px solid var(--accent-lime);
+            outline-offset: 4px;
+        }
+
+        @media (hover: hover) {
+            .home-link:hover {
+                color: var(--text-primary);
+            }
+        }
+
         
         .sidebar {
             grid-row: 2 / 3;
@@ -103,8 +139,10 @@
             transition: background-color 0.2s;
         }
 
-        .input-group:hover {
-            background-color: #161616;
+        @media (hover: hover) {
+            .input-group:hover {
+                background-color: #161616;
+            }
         }
 
         .input-label {
@@ -131,10 +169,11 @@
         
         input[type=range] {
             -webkit-appearance: none;
+            appearance: none;
             width: 100%;
             background: transparent;
             cursor: pointer;
-            height: 20px;
+            height: 28px;
             margin-top: 4px;
         }
 
@@ -154,20 +193,58 @@
             background: var(--text-tertiary);
             border: none;
         }
-        
-        
+
+
         input[type=range]::-webkit-slider-thumb {
             height: 12px;
             width: 12px;
             background: var(--bg-app);
             border: 1px solid var(--accent-lime);
             -webkit-appearance: none;
-            margin-top: -5.5px; 
+            margin-top: -5.5px;
             border-radius: 0;
         }
 
-        input[type=range]:hover::-webkit-slider-thumb {
-            background: var(--accent-lime);
+        input[type=range]::-moz-range-track {
+            width: 100%;
+            height: 1px;
+            background: var(--text-tertiary);
+            border: none;
+        }
+
+        input[type=range]::-moz-range-thumb {
+            height: 12px;
+            width: 12px;
+            background: var(--bg-app);
+            border: 1px solid var(--accent-lime);
+            border-radius: 0;
+        }
+
+        @media (hover: hover) {
+            input[type=range]:hover::-webkit-slider-thumb {
+                background: var(--accent-lime);
+            }
+
+            input[type=range]:hover::-moz-range-thumb {
+                background: var(--accent-lime);
+            }
+        }
+
+        @media (pointer: coarse) {
+            input[type=range] {
+                height: 44px;
+            }
+
+            input[type=range]::-webkit-slider-thumb {
+                height: 20px;
+                width: 20px;
+                margin-top: -9.5px;
+            }
+
+            input[type=range]::-moz-range-thumb {
+                height: 20px;
+                width: 20px;
+            }
         }
 
         
@@ -334,13 +411,15 @@
                 border-color 0.2s;
         }
 
-        .action-button:hover {
-            background: var(--accent-lime);
-            color: var(--bg-app);
-        }
-        
-        .action-button:hover .icon-square-hollow {
-            border-color: var(--bg-app);
+        @media (hover: hover) {
+            .action-button:hover {
+                background: var(--accent-lime);
+                color: var(--bg-app);
+            }
+
+            .action-button:hover .icon-square-hollow {
+                border-color: var(--bg-app);
+            }
         }
 
         .action-button:focus-visible {
@@ -442,115 +521,121 @@
         }
     </style>
 </head>
-<body vid="6">
+<body>
 
-    <div class="layout-grid" vid="7">
+    <div class="layout-grid">
         
-        <header class="cell header" vid="8">
-            <div class="brand" vid="9">FinStruct</div>
-            <div class="header-title" vid="10">Retirement Projector</div>
-            <div style="width: 20px;" vid="11"></div> 
+        <header class="cell header">
+            <div class="brand">FinStruct</div>
+            <div class="header-title">Retirement Projector</div>
+            <a class="home-link" href="https://mj-kang.com/">mj-kang.com</a>
         </header>
 
         
-        <aside class="sidebar cell" vid="12">
-            <div class="input-group" vid="13">
-                <label class="input-label" for="in-age" vid="14">Current Age <span vid="15">YEARS</span></label>
-                <div class="input-value-display" id="disp-age" vid="16">32</div>
-                <input type="range" min="18" max="80" value="32" id="in-age" oninput="updateSim()" vid="17">
+        <aside class="sidebar cell">
+            <div class="input-group">
+                <label class="input-label" for="in-age">Current Age <span>YEARS</span></label>
+                <div class="input-value-display" id="disp-age">32</div>
+                <input type="range" min="18" max="80" value="32" id="in-age" oninput="updateSim()">
             </div>
 
-            <div class="input-group" vid="18">
-                <label class="input-label" for="in-retire" vid="19">Retirement Age <span vid="20">YEARS</span></label>
-                <div class="input-value-display" id="disp-retire" vid="21">65</div>
-                <input type="range" min="40" max="90" value="65" id="in-retire" oninput="updateSim()" vid="22">
+            <div class="input-group">
+                <label class="input-label" for="in-retire">Retirement Age <span>YEARS</span></label>
+                <div class="input-value-display" id="disp-retire">65</div>
+                <input type="range" min="40" max="90" value="65" id="in-retire" oninput="updateSim()">
             </div>
 
-            <div class="input-group" vid="23">
-                <label class="input-label" for="in-savings" vid="24">Current Savings <span vid="25">USD</span></label>
-                <div class="input-value-display" vid="26"><span class="currency-symbol" vid="27">$</span><span id="disp-savings" vid="28">45,000</span></div>
-                <input type="range" min="0" max="500000" step="1000" value="45000" id="in-savings" oninput="updateSim()" vid="29">
+            <div class="input-group">
+                <label class="input-label" for="in-savings">Current Savings <span>USD</span></label>
+                <div class="input-value-display"><span class="currency-symbol">$</span><span id="disp-savings">45,000</span></div>
+                <input type="range" min="0" max="500000" step="1000" value="45000" id="in-savings" oninput="updateSim()">
             </div>
 
-            <div class="input-group" vid="30">
-                <label class="input-label" for="in-contrib" vid="31">Monthly Contribution <span vid="32">USD</span></label>
-                <div class="input-value-display" vid="33"><span class="currency-symbol" vid="34">$</span><span id="disp-contrib" vid="35">1,200</span></div>
-                <input type="range" min="0" max="10000" step="100" value="1200" id="in-contrib" oninput="updateSim()" vid="36">
+            <div class="input-group">
+                <label class="input-label" for="in-contrib">Monthly Contribution <span>USD</span></label>
+                <div class="input-value-display"><span class="currency-symbol">$</span><span id="disp-contrib">1,200</span></div>
+                <input type="range" min="0" max="10000" step="100" value="1200" id="in-contrib" oninput="updateSim()">
             </div>
 
-            <div class="input-group" style="border-bottom: none;" vid="37">
-                <label class="input-label" for="in-rate" vid="38">Expected Return <span vid="39">RATE</span></label>
-                <div class="input-value-display" id="disp-rate" vid="40">7%</div>
-                <input type="range" min="1" max="15" step="0.5" value="7" id="in-rate" oninput="updateSim()" vid="41">
+            <div class="input-group" style="border-bottom: none;">
+                <label class="input-label" for="in-rate">Expected Return <span>RATE</span></label>
+                <div class="input-value-display" id="disp-rate">7%</div>
+                <input type="range" min="1" max="15" step="0.5" value="7" id="in-rate" oninput="updateSim()">
             </div>
         </aside>
 
         
-        <main class="cell main-stage" vid="42">
-            <div class="stage-header" vid="43">
-                <h1 class="stage-title" vid="44">Investment Trajectory</h1>
-                <p class="stage-subtitle" vid="45">
-                    Maecenas blandit pharetra ipsum, eget fringilla urna dignissim at. Projection assumes compound annual growth.
+        <main class="cell main-stage">
+            <div class="stage-header">
+                <h1 class="stage-title">Investment Trajectory</h1>
+                <p class="stage-subtitle">
+                    Projected balance from your current savings and monthly contributions. Projection assumes compound annual growth.
                 </p>
             </div>
 
-            <div class="chart-container" vid="46">
+            <div class="chart-container">
                 
-                <div class="chart-grid" vid="47">
-                    <div class="chart-grid-line" vid="48"></div>
-                    <div class="chart-grid-line" vid="49"></div>
-                    <div class="chart-grid-line" vid="50"></div>
-                    <div class="chart-grid-line" vid="51"></div>
-                    <div class="chart-grid-line" vid="52"></div>
+                <div class="chart-grid">
+                    <div class="chart-grid-line"></div>
+                    <div class="chart-grid-line"></div>
+                    <div class="chart-grid-line"></div>
+                    <div class="chart-grid-line"></div>
+                    <div class="chart-grid-line"></div>
                 </div>
 
                 
-                <svg viewBox="0 0 800 400" preserveAspectRatio="none" id="chart-svg" vid="53">
-                    <defs vid="54">
-                        <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%" vid="55">
-                            <stop offset="0%" style="stop-color:var(--accent-lime);stop-opacity:0.2" vid="56"></stop>
-                            <stop offset="100%" style="stop-color:var(--accent-lime);stop-opacity:0" vid="57"></stop>
+                <svg viewBox="0 0 800 400" preserveAspectRatio="none" id="chart-svg">
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:var(--accent-lime);stop-opacity:0.2"></stop>
+                            <stop offset="100%" style="stop-color:var(--accent-lime);stop-opacity:0"></stop>
                         </linearGradient>
                     </defs>
                     
-                    <path id="chart-area-path" class="chart-area" d="" vid="58"></path>
-                    <path id="chart-line-path" class="chart-line" d="" vid="59"></path>
+                    <path id="chart-area-path" class="chart-area" d=""></path>
+                    <path id="chart-line-path" class="chart-line" d=""></path>
                     
                     
-                    <text x="0" y="395" class="axis-label" id="start-year" vid="60">2023</text>
-                    <text x="770" y="395" class="axis-label" id="end-year" vid="61">2056</text>
+                    <text x="0" y="395" class="axis-label" id="start-year">2023</text>
+                    <text x="770" y="395" class="axis-label" id="end-year">2056</text>
                 </svg>
             </div>
         </main>
 
         
-        <footer class="footer" vid="62">
-            <div class="result-block" vid="63">
-                <div class="result-label" vid="64"><span class="icon-square" vid="65"></span> Total Saved</div>
-                <div class="result-value" id="res-total" vid="66">$2.4M</div>
+        <footer class="footer">
+            <div class="result-block">
+                <div class="result-label"><span class="icon-square"></span> Total Saved</div>
+                <div class="result-value" id="res-total" aria-live="polite">$2.4M</div>
             </div>
-            <div class="result-block" vid="67">
-                <div class="result-label" vid="68"><span class="icon-square-hollow" vid="69"></span> Monthly Income</div>
-                <div class="result-value" id="res-income" vid="70">$9,800</div>
+            <div class="result-block">
+                <div class="result-label"><span class="icon-square-hollow"></span> Monthly Income</div>
+                <div class="result-value" id="res-income" aria-live="polite">$9,800</div>
             </div>
-            <div class="result-block" vid="71">
-                <div class="result-label" vid="72"><span class="icon-square-hollow" vid="73"></span> Growth</div>
-                <div class="result-value" id="res-growth" vid="74">+420%</div>
+            <div class="result-block">
+                <div class="result-label"><span class="icon-square-hollow"></span> Growth</div>
+                <div class="result-value" id="res-growth" aria-live="polite">+420%</div>
             </div>
-            <button class="action-button" id="export-report" type="button" vid="75">
-                <span vid="76">EXPORT REPORT</span>
-                <span class="icon-square-hollow" vid="77"></span>
+            <button class="action-button" id="export-report" type="button">
+                <span>EXPORT REPORT</span>
+                <span class="icon-square-hollow"></span>
             </button>
         </footer>
     </div>
 
-    <script vid="78">
+    <script>
         function formatMoney(num) {
             return num.toLocaleString('en-US');
         }
 
         function formatCurrency(num) {
             return '$' + formatMoney(Math.round(num));
+        }
+
+        function formatResultAmount(num) {
+            return num >= 1000000
+                ? '$' + (num / 1000000).toFixed(2) + 'M'
+                : formatCurrency(num);
         }
 
         function calculate() {
@@ -580,16 +665,25 @@
                 }
             }
 
+            const contributed = savings + (monthly * months);
+
             return {
                 total: balance,
-                monthlyIncome: balance * 0.04 / 12, 
+                monthlyIncome: balance * 0.04 / 12,
                 data: dataPoints,
-                growth: ((balance - (savings + (monthly * months))) / (savings + (monthly * months))) * 100
+                years: years,
+                growth: contributed > 0 ? ((balance - contributed) / contributed) * 100 : 0
             };
         }
 
         function updateSim() {
-            
+            // Keep the horizon coherent: retirement age can never trail current age.
+            const ageInput = document.getElementById('in-age');
+            const retireInput = document.getElementById('in-retire');
+            if (parseInt(retireInput.value) < parseInt(ageInput.value)) {
+                retireInput.value = ageInput.value;
+            }
+
             document.getElementById('disp-age').textContent = document.getElementById('in-age').value;
             document.getElementById('disp-retire').textContent = document.getElementById('in-retire').value;
             document.getElementById('disp-savings').textContent = formatMoney(parseInt(document.getElementById('in-savings').value));
@@ -600,17 +694,15 @@
             const results = calculate();
 
             
-            document.getElementById('res-total').textContent = '$' + (results.total / 1000000).toFixed(2) + 'M';
+            document.getElementById('res-total').textContent = formatResultAmount(results.total);
             document.getElementById('res-income').textContent = '$' + formatMoney(Math.round(results.monthlyIncome));
             const growthRounded = Math.round(results.growth);
             document.getElementById('res-growth').textContent = (growthRounded >= 0 ? '+' : '') + growthRounded + '%';
-            
-            
+
+
             const currentYear = new Date().getFullYear();
-            const age = parseInt(document.getElementById('in-age').value);
-            const retire = parseInt(document.getElementById('in-retire').value);
             document.getElementById('start-year').textContent = currentYear;
-            document.getElementById('end-year').textContent = currentYear + (retire - age);
+            document.getElementById('end-year').textContent = currentYear + results.years;
 
             
             drawChart(results.data);
@@ -620,7 +712,8 @@
             const svg = document.getElementById('chart-svg');
             const width = 800;
             const height = 400;
-            const maxVal = Math.max(...data) * 1.1; 
+            // Floor of 1 keeps the path finite when every point is 0.
+            const maxVal = Math.max(1, Math.max(...data)) * 1.1;
 
             
             let pathD = `M 0 ${height - (data[0] / maxVal * height)}`;
@@ -665,8 +758,8 @@
                 '',
                 'Projection',
                 `Start Year: ${currentYear}`,
-                `Retirement Year: ${currentYear + Math.max(0, retireAge - currentAge)}`,
-                `Projected Savings: ${formatCurrency(results.total)}`,
+                `Retirement Year: ${currentYear + results.years}`,
+                `Projected Savings: ${formatResultAmount(results.total)}`,
                 `Estimated Monthly Income (4% rule): ${formatCurrency(results.monthlyIncome)}`,
                 `Growth: ${(growthRounded >= 0 ? '+' : '') + growthRounded}%`,
             ];
