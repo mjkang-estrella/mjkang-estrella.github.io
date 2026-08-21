@@ -22,6 +22,13 @@ Use this skill when an agent needs a concise map of MJ Kang's public site.
 - GitHub: https://github.com/mjkang-estrella
 - X: https://x.com/mj_kang
 
+## Selected External Projects
+
+- Akashic Computer: https://akashic-computer.vercel.app/
+- Poincare Lean: https://github.com/mjkang-estrella/poincare-lean
+- Personal AI Lab: https://blog.mj-kang.com/my-ai-homelab/
+- Soma: https://github.com/mjkang-estrella/soma-context
+
 ## Contact
 
 Use mj.kang@hey.com for direct contact.

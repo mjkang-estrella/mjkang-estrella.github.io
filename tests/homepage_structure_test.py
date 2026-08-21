@@ -257,9 +257,15 @@ def test_document_structure() -> None:
     assert "MJ Kang" in parser.heading_text
     assert "History" in parser.heading_text
     assert "Selected Works" in parser.heading_text
-    assert parser.project_card_count == 12
-    assert parser.project_metadata_count == 12
-    assert len(parser.project_titles) == 12
+    assert parser.project_card_count == 16
+    assert parser.project_metadata_count == 16
+    assert len(parser.project_titles) == 16
+    assert parser.project_hrefs[:4] == [
+        "https://akashic-computer.vercel.app/",
+        "https://github.com/mjkang-estrella/poincare-lean",
+        "https://blog.mj-kang.com/my-ai-homelab/",
+        "https://github.com/mjkang-estrella/soma-context",
+    ]
     assert "https://cwi.mj-kang.com/" in parser.project_hrefs
     assert parser.timeline_item_count == 5
     assert parser.machine_timeline_count == 4
@@ -360,8 +366,8 @@ def test_referenced_assets_exist_on_disk() -> None:
     for content_path in parser.meta_content_paths:
         assert_local_asset_exists(content_path)
 
-    # 12 flat card images + 12 hover-detail images + profile badge + 4 logos.
-    assert len(parser.image_sources) == 29
+    # 16 flat card images + 16 hover-detail images + profile badge + 4 logos.
+    assert len(parser.image_sources) == 37
     for image in parser.image_sources:
         assert_local_asset_exists(image)
 
