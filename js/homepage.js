@@ -60,6 +60,15 @@ let homepageRevealObserver = null;
 
     const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
+    // Registered <time> tokens resolve to e.g. "760ms", so the JS timers that
+    // clean up after the CSS animations stay in sync with the stylesheet.
+    const motionMs = (token) =>
+        parseFloat(
+            getComputedStyle(document.documentElement).getPropertyValue(token)
+        ) || 0;
+    // Longest block stagger in the enter/exit keyframe delays.
+    const MACHINE_BLOCK_STAGGER_MS = 190;
+
     const syncSkipLinkTarget = (mode) => {
         if (skipLink) {
             skipLink.setAttribute(
@@ -150,7 +159,7 @@ let homepageRevealObserver = null;
 
         machineEnterTimer = window.setTimeout(() => {
             machineDocument.classList.remove("is-entering");
-        }, 760);
+        }, motionMs("--motion-page") + MACHINE_BLOCK_STAGGER_MS);
     };
 
     const getRevealElements = () => ({
@@ -194,11 +203,11 @@ let homepageRevealObserver = null;
                         return;
                     }
 
+                    // Anything at or above the lower reveal margin, including
+                    // content already scrolled past, shows immediately.
                     const rect = element.getBoundingClientRect();
-                    const isNearViewport =
-                        rect.top < window.innerHeight * 1.22 && rect.bottom > 0;
 
-                    if (isNearViewport) {
+                    if (rect.top < window.innerHeight * 1.22) {
                         element.classList.add("is-visible");
                     }
                 });
@@ -262,7 +271,7 @@ let homepageRevealObserver = null;
             machineDocument.classList.remove("is-exiting");
             body.classList.remove("is-mode-transitioning");
             body.classList.remove("is-exiting-machine");
-        }, 840);
+        }, motionMs("--motion-page") + MACHINE_BLOCK_STAGGER_MS);
     };
 
     const updateMode = (mode, shouldPersist = true, sourceRects = null) => {
@@ -610,7 +619,7 @@ let homepageRevealObserver = null;
             updateMode(mode, true, sourceRects);
             modeWashTimer = window.setTimeout(() => {
                 body.classList.remove("is-mode-transitioning");
-            }, 820);
+            }, motionMs("--motion-page") + MACHINE_BLOCK_STAGGER_MS);
         });
     });
 
@@ -784,7 +793,10 @@ const initRevealMotion = (root) => {
             },
             {
                 threshold: 0.05,
-                rootMargin: "0px 0px 22% 0px",
+                // The huge top margin makes anything already scrolled past
+                // count as intersecting, so an instant jump (skip link, End
+                // key, scroll restoration) cannot strand an element hidden.
+                rootMargin: "100000px 0px 22% 0px",
             }
         );
 

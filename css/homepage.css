@@ -1,5 +1,4 @@
 :root {
-    --bg-color: #f3f0e6;
     --surface-color: #f3f0e6;
     --surface-elevated: #f8f5ed;
     --surface-contrast: #050505;
@@ -34,10 +33,53 @@
     --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
     --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-    --motion-fast: 120ms;
-    --motion-base: 220ms;
-    --motion-slow: 460ms;
+    /* Every duration, delay and hover offset is multiplied by this, so
+       reduced motion is a single override below rather than a list of
+       selectors that has to be kept in sync with the rest of the file. */
+    --motion-scale: 1;
+    --motion-fast: calc(120ms * var(--motion-scale));
+    --motion-base: calc(220ms * var(--motion-scale));
+    --motion-slow: calc(460ms * var(--motion-scale));
+    --motion-page: calc(760ms * var(--motion-scale));
     --scroll-progress: 0;
+}
+
+/* Registered so the calc() above resolves to a real <time>, which lets
+   scripts read the tokens back and keeps animation-duration valid. */
+@property --motion-scale {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 1;
+}
+
+@property --motion-fast {
+    syntax: "<time>";
+    inherits: true;
+    initial-value: 0ms;
+}
+
+@property --motion-base {
+    syntax: "<time>";
+    inherits: true;
+    initial-value: 0ms;
+}
+
+@property --motion-slow {
+    syntax: "<time>";
+    inherits: true;
+    initial-value: 0ms;
+}
+
+@property --motion-page {
+    syntax: "<time>";
+    inherits: true;
+    initial-value: 0ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --motion-scale: 0;
+    }
 }
 
 * {
@@ -70,7 +112,7 @@ body[data-portfolio-view="machine"] {
 }
 
 body.is-mode-transitioning::before {
-    animation: portfolio-wash 620ms var(--ease-out-quart) both;
+    animation: portfolio-wash var(--motion-page) var(--ease-out-quart) both;
     background: var(--machine-overlay);
     content: "";
     inset: 0;
@@ -98,7 +140,7 @@ body[data-portfolio-view="machine"].is-preparing-human .page-container {
 }
 
 body[data-portfolio-view="machine"] .machine-document {
-    animation: machine-page-in 520ms var(--ease-out-quart) both;
+    animation: machine-page-in var(--motion-slow) var(--ease-out-quart) both;
     display: block;
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
     font-size: 0.92rem;
@@ -129,55 +171,53 @@ body[data-portfolio-view="human"].is-exiting-machine .machine-document {
 }
 
 body[data-portfolio-view="machine"] .machine-document.is-entering .machine-document__block {
-    animation: machine-block-in 760ms var(--ease-out-expo) both;
+    animation: machine-block-in var(--motion-page) var(--ease-out-expo) both;
     transform-origin: left top;
-    will-change: opacity, transform;
 }
 
 body .machine-document.is-exiting .machine-document__block {
-    animation: machine-block-out 720ms var(--ease-out-expo) both;
+    animation: machine-block-out var(--motion-page) var(--ease-out-expo) both;
     transform-origin: left top;
-    will-change: opacity, transform;
 }
 
 body[data-portfolio-view="machine"] .machine-document.is-entering [data-machine-block="hero"] {
-    animation-delay: 30ms;
+    animation-delay: calc(30ms * var(--motion-scale));
 }
 
 body[data-portfolio-view="machine"] .machine-document.is-entering [data-machine-block="profile"] {
-    animation-delay: 70ms;
+    animation-delay: calc(70ms * var(--motion-scale));
 }
 
 body[data-portfolio-view="machine"] .machine-document.is-entering [data-machine-block="history"] {
-    animation-delay: 110ms;
+    animation-delay: calc(110ms * var(--motion-scale));
 }
 
 body[data-portfolio-view="machine"] .machine-document.is-entering [data-machine-block="works"] {
-    animation-delay: 150ms;
+    animation-delay: calc(150ms * var(--motion-scale));
 }
 
 body[data-portfolio-view="machine"] .machine-document.is-entering [data-machine-block="footer"] {
-    animation-delay: 190ms;
+    animation-delay: calc(190ms * var(--motion-scale));
 }
 
 body .machine-document.is-exiting [data-machine-block="footer"] {
-    animation-delay: 20ms;
+    animation-delay: calc(20ms * var(--motion-scale));
 }
 
 body .machine-document.is-exiting [data-machine-block="works"] {
-    animation-delay: 55ms;
+    animation-delay: calc(55ms * var(--motion-scale));
 }
 
 body .machine-document.is-exiting [data-machine-block="history"] {
-    animation-delay: 90ms;
+    animation-delay: calc(90ms * var(--motion-scale));
 }
 
 body .machine-document.is-exiting [data-machine-block="profile"] {
-    animation-delay: 125ms;
+    animation-delay: calc(125ms * var(--motion-scale));
 }
 
 body .machine-document.is-exiting [data-machine-block="hero"] {
-    animation-delay: 160ms;
+    animation-delay: calc(160ms * var(--motion-scale));
 }
 
 body[data-portfolio-view="machine"] .machine-document::before,
@@ -458,9 +498,8 @@ html.has-motion [data-reveal] {
     transform: translate3d(0, var(--reveal-distance), 0);
     transition:
         transform var(--motion-slow) var(--ease-out-expo),
-        opacity 360ms var(--ease-out-quint);
+        opacity var(--motion-slow) var(--ease-out-quint);
     transition-delay: var(--reveal-delay);
-    will-change: transform, opacity;
 }
 
 html.has-motion.is-resetting-human-reveal [data-reveal] {
@@ -621,7 +660,7 @@ html.has-motion [data-reveal].is-visible {
 
 .meta-action-link:focus-visible {
     opacity: 1;
-    transform: translateX(2px);
+    transform: translateX(calc(2px * var(--motion-scale)));
 }
 
 .body-text {
@@ -700,15 +739,11 @@ html.has-motion [data-reveal].is-visible {
         color var(--motion-base) var(--ease-out-quart),
         transform var(--motion-base) var(--ease-out-quart),
         box-shadow var(--motion-base) var(--ease-out-quart);
-    will-change: background-color, color;
 }
 
 .cta-banner:focus-visible {
-    transform: translateY(-1px);
+    transform: translateY(calc(-1px * var(--motion-scale)));
     box-shadow: inset 0 0 0 1px var(--ink-color);
-}
-
-.cta-banner:focus-visible {
     outline: 2px solid var(--ink-color);
     outline-offset: 2px;
 }
@@ -740,74 +775,21 @@ html.has-motion [data-reveal].is-visible {
     border-left: 0.55em solid currentColor;
     display: inline-block;
     transform: translateX(0);
-    will-change: transform;
     transition: transform var(--motion-fast) var(--ease-out-quart);
 }
 
 .cta-banner:focus-visible .cta-triangle {
-    transform: translateX(5px);
+    transform: translateX(calc(5px * var(--motion-scale)));
 }
 
+/* --motion-scale: 0 already zeroes every duration, delay and hover offset.
+   The reveal system additionally starts elements hidden, and has-motion is
+   only added when the user allows motion, so this covers a preference that
+   flips after load. */
 @media (prefers-reduced-motion: reduce) {
-    body[data-portfolio-view="machine"] .machine-document,
-    body[data-portfolio-view="machine"] .machine-document.is-entering .machine-document__block,
-    body .machine-document.is-exiting .machine-document__block,
-    body.is-mode-transitioning::before {
-        animation: none;
-    }
-
-    .scroll-progress,
-    .cta-banner,
-    .cta-text--primary::after,
-    .timeline-item,
-    .company-logo-frame,
-    .company-name,
-    .footer a,
-    .project-card,
-    .project-card::after,
-    .project-info,
-    .project-image,
-    .project-link {
-        transition: none;
-    }
-
-    .cta-banner:hover,
-    .cta-banner:focus-visible,
-    .project-card:hover,
-    .project-card:focus-visible {
+    html.has-motion [data-reveal] {
+        opacity: 1;
         transform: none;
-    }
-
-    [data-reveal],
-    .cta-triangle {
-        opacity: 1 !important;
-        transform: none;
-    }
-
-    .project-card::after {
-        display: none;
-    }
-
-    .cta-banner:hover .cta-triangle,
-    .cta-banner:focus-visible .cta-triangle,
-    .timeline-item:hover,
-    .timeline-item:focus-within,
-    .company-link:hover .company-logo-frame,
-    .company-link:focus-visible .company-logo-frame,
-    .project-card:hover .project-image,
-    .project-card:focus-visible .project-image,
-    .project-card:hover .project-info,
-    .project-card:focus-visible .project-info,
-    .project-card:hover .project-link,
-    .project-card:focus-visible .project-link {
-        transform: none;
-    }
-
-    .company-link:hover .company-name,
-    .company-link:focus-visible .company-name,
-    .footer a:hover,
-    .footer a:focus-visible {
-        text-underline-offset: 4px;
     }
 }
 
@@ -820,7 +802,7 @@ html.has-motion [data-reveal].is-visible {
 }
 
 .timeline-item:focus-within {
-    transform: translateX(6px);
+    transform: translateX(calc(6px * var(--motion-scale)));
 }
 
 .timeline-item--cta {
@@ -926,7 +908,7 @@ html.has-motion [data-reveal].is-visible {
 }
 
 .company-link:focus-visible .company-logo-frame {
-    transform: translateY(-2px);
+    transform: translateY(calc(-2px * var(--motion-scale)));
     box-shadow: var(--shadow-soft);
 }
 
@@ -977,7 +959,7 @@ html.has-motion [data-reveal].is-visible {
     background: var(--ink-color);
     transform: scaleX(0);
     transform-origin: left center;
-    transition: transform 380ms var(--ease-out-expo);
+    transition: transform var(--motion-slow) var(--ease-out-expo);
 }
 
 .project-card:visited {
@@ -987,16 +969,13 @@ html.has-motion [data-reveal].is-visible {
 .project-card:focus-visible {
     background-color: var(--surface-color);
     box-shadow: inset 0 0 0 1px var(--ink-color);
+    outline: 2px solid var(--ink-color);
+    outline-offset: -2px;
+    z-index: 1;
 }
 
 .project-card:focus-visible::after {
     transform: scaleX(1);
-}
-
-.project-card:focus-visible {
-    outline: 2px solid var(--ink-color);
-    outline-offset: -2px;
-    z-index: 1;
 }
 
 .project-media {
@@ -1360,20 +1339,20 @@ html.has-motion [data-reveal].is-visible {
 
     .meta-action-link:hover {
         opacity: 1;
-        transform: translateX(2px);
+        transform: translateX(calc(2px * var(--motion-scale)));
     }
 
     .cta-banner:hover {
-        transform: translateY(-1px);
+        transform: translateY(calc(-1px * var(--motion-scale)));
         box-shadow: inset 0 0 0 1px var(--ink-color);
     }
 
     .cta-banner:hover .cta-triangle {
-        transform: translateX(5px);
+        transform: translateX(calc(5px * var(--motion-scale)));
     }
 
     .timeline-item:hover {
-        transform: translateX(6px);
+        transform: translateX(calc(6px * var(--motion-scale)));
     }
 
     .company-link:hover .company-name {
@@ -1382,7 +1361,7 @@ html.has-motion [data-reveal].is-visible {
     }
 
     .company-link:hover .company-logo-frame {
-        transform: translateY(-2px);
+        transform: translateY(calc(-2px * var(--motion-scale)));
         box-shadow: var(--shadow-soft);
     }
 
@@ -1438,14 +1417,5 @@ html.has-motion [data-reveal].is-visible {
         opacity: 1 !important;
         transform: none !important;
         transition: none !important;
-    }
-}
-
-/* Must follow the (hover: hover) block: reduced-motion users keep a static
-   CTA banner even on hover, matching the pre-refactor cascade order. */
-@media (prefers-reduced-motion: reduce) {
-    .cta-banner:hover,
-    .cta-banner:hover .cta-triangle {
-        transform: none;
     }
 }
