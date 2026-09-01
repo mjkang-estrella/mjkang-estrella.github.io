@@ -16,6 +16,14 @@ outside them is hand-written. Image `width`/`height` attributes are read from
 the JPEG files at build time. CI fails if `index.html` drifts from the data
 (`npm run check:generated`).
 
+## Shared styles
+
+`css/base.css` is linked from every page. It carries only what must behave
+the same site-wide: the `--motion-*` duration tokens, easing curves, and the
+`prefers-reduced-motion` fallback. Each project page keeps its own palette and
+type. Page-local transitions should use `var(--motion-base)` and friends rather
+than literal durations so reduced motion works without extra rules.
+
 ## Tests
 
 ```sh

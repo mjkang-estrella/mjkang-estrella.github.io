@@ -3,22 +3,10 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="apple-touch-icon" sizes="57x57" href="../images/logo/apple-icon-57x57.png">
-        <link rel="apple-touch-icon" sizes="60x60" href="../images/logo/apple-icon-60x60.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="../images/logo/apple-icon-72x72.png">
-        <link rel="apple-touch-icon" sizes="76x76" href="../images/logo/apple-icon-76x76.png">
-        <link rel="apple-touch-icon" sizes="114x114" href="../images/logo/apple-icon-114x114.png">
-        <link rel="apple-touch-icon" sizes="120x120" href="../images/logo/apple-icon-120x120.png">
-        <link rel="apple-touch-icon" sizes="144x144" href="../images/logo/apple-icon-144x144.png">
-        <link rel="apple-touch-icon" sizes="152x152" href="../images/logo/apple-icon-152x152.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="../images/logo/apple-icon-180x180.png">
-        <link rel="icon" type="image/png" sizes="192x192" href="../images/logo/android-icon-192x192.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="../images/logo/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="96x96" href="../images/logo/favicon-96x96.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="../images/logo/favicon-16x16.png">
-        <link rel="manifest" href="../images/logo/manifest.json">
-        <meta name="msapplication-TileColor" content="#0a1210">
-        <meta name="msapplication-TileImage" content="../images/logo/ms-icon-144x144.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/logo/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/logo/favicon-16x16.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/logo/apple-icon-180x180.png" />
+        <link rel="manifest" href="/images/logo/manifest.json" />
         <meta name="theme-color" content="#0a1210">
         <title>전세 vs 월세(임대인) 비교 계산기</title>
         <meta name="description" content="임대인 입장에서 전세와 월세를 월 기준 현금흐름으로 비교하는 계산기. 보증금, 대출 상환, 예금이자, 이자소득세를 반영합니다." />
@@ -38,6 +26,7 @@
             href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
             rel="stylesheet"
         />
+        <link rel="stylesheet" href="/css/base.css" />
         <style>
             :root {
                 --bg: #0a1210;
@@ -231,7 +220,9 @@
                 border: 1px solid var(--border);
                 border-radius: var(--radius-sm);
                 padding: 12px 14px;
-                transition: all 0.2s ease;
+                transition:
+                    border-color var(--motion-base) ease,
+                    box-shadow var(--motion-base) ease;
             }
             .input:focus-within {
                 border-color: var(--accent);
@@ -278,7 +269,10 @@
                 font-size: 13px;
                 font-family: inherit;
                 font-weight: 500;
-                transition: all 0.2s ease;
+                transition:
+                    background-color var(--motion-base) ease,
+                    border-color var(--motion-base) ease,
+                    transform var(--motion-base) ease;
             }
             button:hover {
                 background: rgba(45, 212, 160, 0.15);
@@ -451,7 +445,7 @@
 
             /* Smooth number transitions */
             .v {
-                transition: color 0.3s ease;
+                transition: color var(--motion-slow) ease;
             }
 
             /* Scrollbar styling */
