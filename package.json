@@ -6,7 +6,9 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "python3 tests/homepage_structure_test.py && playwright test",
+    "build": "node scripts/build.mjs",
+    "check:generated": "node scripts/build.mjs --check",
+    "test": "npm run check:generated && npm run test:structure && npm run test:e2e",
     "test:e2e": "playwright test",
     "test:structure": "python3 tests/homepage_structure_test.py"
   },

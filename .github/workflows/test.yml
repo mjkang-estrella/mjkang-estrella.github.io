@@ -28,6 +28,9 @@ jobs:
           npm ci
           npx playwright install --with-deps chromium
 
+      - name: Check generated markup matches data/portfolio.json
+        run: npm run check:generated
+
       - name: Run browser smoke tests
         run: npx playwright test
 

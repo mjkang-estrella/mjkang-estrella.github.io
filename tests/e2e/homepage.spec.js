@@ -73,7 +73,7 @@ test.describe("view mode toggle", () => {
         expect(await page.evaluate(() => typeof document.startViewTransition)).toBe("function");
         await expectHumanView(page);
 
-        await page.getByRole("button", { name: "Machine" }).click();
+        await page.getByRole("button", { name: "Machine", exact: true }).click();
         await expectMachineView(page);
         await expect(page).toHaveURL(/\?view=machine$/);
         await expectTransitionSettled(page);
@@ -86,7 +86,7 @@ test.describe("view mode toggle", () => {
             expect(machineText).toContain(title);
         }
 
-        await page.getByRole("button", { name: "Human" }).click();
+        await page.getByRole("button", { name: "Human", exact: true }).click();
         await expectHumanView(page);
         await expect(page).not.toHaveURL(/view=/);
         await expectTransitionSettled(page);
@@ -113,13 +113,13 @@ test.describe("view mode toggle", () => {
     test("persists an explicit toggle across reloads", async ({ page }) => {
         const errors = trackErrors(page);
         await page.goto("/");
-        await page.getByRole("button", { name: "Machine" }).click();
+        await page.getByRole("button", { name: "Machine", exact: true }).click();
         await expectMachineView(page);
 
         await page.goto("/");
         await expectMachineView(page);
 
-        await page.getByRole("button", { name: "Human" }).click();
+        await page.getByRole("button", { name: "Human", exact: true }).click();
         await expectHumanView(page);
         await page.goto("/");
         await expectHumanView(page);
@@ -129,9 +129,9 @@ test.describe("view mode toggle", () => {
     test("rapid double toggle settles in the last requested mode", async ({ page }) => {
         const errors = trackErrors(page);
         await page.goto("/");
-        await page.getByRole("button", { name: "Machine" }).click();
-        await page.getByRole("button", { name: "Human" }).click();
-        await page.getByRole("button", { name: "Machine" }).click();
+        await page.getByRole("button", { name: "Machine", exact: true }).click();
+        await page.getByRole("button", { name: "Human", exact: true }).click();
+        await page.getByRole("button", { name: "Machine", exact: true }).click();
         await expectMachineView(page);
         await expectTransitionSettled(page);
         expect(errors).toEqual([]);
@@ -193,9 +193,9 @@ test.describe("motion", () => {
             await expect(element).toHaveCSS("opacity", "1");
         }
 
-        await page.getByRole("button", { name: "Machine" }).click();
+        await page.getByRole("button", { name: "Machine", exact: true }).click();
         await expectMachineView(page);
-        await page.getByRole("button", { name: "Human" }).click();
+        await page.getByRole("button", { name: "Human", exact: true }).click();
         await expectHumanView(page);
         for (const element of await page.locator("[data-reveal]:not([data-machine])").all()) {
             await expect(element).toHaveCSS("opacity", "1");
