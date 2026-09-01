@@ -111,28 +111,8 @@ body[data-portfolio-view="machine"] {
     color: var(--machine-ink);
 }
 
-body.is-mode-transitioning::before {
-    animation: portfolio-wash var(--motion-page) var(--ease-out-quart) both;
-    background: var(--machine-overlay);
-    content: "";
-    inset: 0;
-    opacity: 0;
-    pointer-events: none;
-    position: fixed;
-    z-index: 40;
-}
-
-body.is-exiting-machine::before {
-    background: var(--human-transition-overlay);
-}
-
 body[data-portfolio-view="machine"] .page-container {
     display: none;
-}
-
-body[data-portfolio-view="machine"].is-preparing-human .page-container {
-    display: flex;
-    visibility: hidden;
 }
 
 .machine-document {
@@ -140,90 +120,20 @@ body[data-portfolio-view="machine"].is-preparing-human .page-container {
 }
 
 body[data-portfolio-view="machine"] .machine-document {
-    animation: machine-page-in var(--motion-slow) var(--ease-out-quart) both;
     display: block;
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
     font-size: 0.92rem;
     line-height: 1.45;
     margin: 0 auto;
     max-width: 720px;
-    min-height: 100vh;
+    min-height: 100dvh;
     padding: 16px 40px 96px;
     position: relative;
     z-index: 80;
 }
 
-body[data-portfolio-view="human"].is-exiting-machine .machine-document {
-    display: block;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-    font-size: 0.92rem;
-    left: 50%;
-    line-height: 1.45;
-    margin: 0;
-    max-width: 720px;
-    min-height: 100vh;
-    padding: 16px 40px 96px;
-    position: fixed;
-    top: 0;
-    transform: translateX(-50%);
-    width: min(720px, 100vw);
-    z-index: 90;
-}
-
-body[data-portfolio-view="machine"] .machine-document.is-entering .machine-document__block {
-    animation: machine-block-in var(--motion-page) var(--ease-out-expo) both;
-    transform-origin: left top;
-}
-
-body .machine-document.is-exiting .machine-document__block {
-    animation: machine-block-out var(--motion-page) var(--ease-out-expo) both;
-    transform-origin: left top;
-}
-
-body[data-portfolio-view="machine"] .machine-document.is-entering [data-machine-block="hero"] {
-    animation-delay: calc(30ms * var(--motion-scale));
-}
-
-body[data-portfolio-view="machine"] .machine-document.is-entering [data-machine-block="profile"] {
-    animation-delay: calc(70ms * var(--motion-scale));
-}
-
-body[data-portfolio-view="machine"] .machine-document.is-entering [data-machine-block="history"] {
-    animation-delay: calc(110ms * var(--motion-scale));
-}
-
-body[data-portfolio-view="machine"] .machine-document.is-entering [data-machine-block="works"] {
-    animation-delay: calc(150ms * var(--motion-scale));
-}
-
-body[data-portfolio-view="machine"] .machine-document.is-entering [data-machine-block="footer"] {
-    animation-delay: calc(190ms * var(--motion-scale));
-}
-
-body .machine-document.is-exiting [data-machine-block="footer"] {
-    animation-delay: calc(20ms * var(--motion-scale));
-}
-
-body .machine-document.is-exiting [data-machine-block="works"] {
-    animation-delay: calc(55ms * var(--motion-scale));
-}
-
-body .machine-document.is-exiting [data-machine-block="history"] {
-    animation-delay: calc(90ms * var(--motion-scale));
-}
-
-body .machine-document.is-exiting [data-machine-block="profile"] {
-    animation-delay: calc(125ms * var(--motion-scale));
-}
-
-body .machine-document.is-exiting [data-machine-block="hero"] {
-    animation-delay: calc(160ms * var(--motion-scale));
-}
-
 body[data-portfolio-view="machine"] .machine-document::before,
-body[data-portfolio-view="machine"] .machine-document::after,
-body[data-portfolio-view="human"].is-exiting-machine .machine-document::before,
-body[data-portfolio-view="human"].is-exiting-machine .machine-document::after {
+body[data-portfolio-view="machine"] .machine-document::after {
     content: "";
     position: fixed;
     top: 0;
@@ -239,15 +149,6 @@ body[data-portfolio-view="machine"] .machine-document::before {
 body[data-portfolio-view="machine"] .machine-document::after {
     right: calc(50% - 360px);
 }
-
-body[data-portfolio-view="human"].is-exiting-machine .machine-document::before {
-    left: 0;
-}
-
-body[data-portfolio-view="human"].is-exiting-machine .machine-document::after {
-    right: 0;
-}
-
 .machine-document__block {
     margin: 0 0 5.8rem;
     padding: 0 24px;
@@ -370,57 +271,76 @@ body[data-portfolio-view="human"].is-exiting-machine .machine-document::after {
     width: 4px;
 }
 
-@keyframes portfolio-wash {
-    0% {
-        opacity: 0;
-    }
-    45% {
-        opacity: 0.8;
-    }
-    100% {
-        opacity: 0;
-    }
+/* Mode switch. Each human section and its machine counterpart share a
+   view-transition-name. Only one of each pair is rendered at a time, so the
+   browser snapshots the old block, morphs it into the new one, and
+   crossfades the root (paper <-> dark) underneath. Browsers without the
+   API, and visitors who prefer reduced motion, get an instant swap. */
+[data-human-block="hero"],
+[data-machine-block="hero"] {
+    view-transition-name: hero;
 }
 
-@keyframes machine-page-in {
-    from {
-        background-color: var(--machine-surface-raised);
-    }
-    to {
-        background-color: var(--machine-surface);
-    }
+[data-human-block="profile"],
+[data-machine-block="profile"] {
+    view-transition-name: profile;
 }
 
-@keyframes machine-block-in {
-    from {
-        opacity: 0;
-        transform: translate3d(var(--machine-x, 0), var(--machine-y, 18px), 0)
-            scale(var(--machine-scale-x, 1), var(--machine-scale-y, 1));
-    }
-    18% {
-        opacity: 0.82;
-    }
-    to {
-        opacity: 1;
-        transform: translate3d(0, 0, 0);
-    }
+[data-human-block="history"],
+[data-machine-block="history"] {
+    view-transition-name: history;
 }
 
-@keyframes machine-block-out {
-    from {
-        opacity: 1;
-        transform: translate3d(0, 0, 0);
-    }
-    35% {
-        opacity: 0.18;
-    }
-    to {
-        opacity: 0;
-        transform: translate3d(var(--machine-x, 0), var(--machine-y, 18px), 0)
-            scale(var(--machine-scale-x, 1), var(--machine-scale-y, 1));
-    }
+[data-human-block="works"],
+[data-machine-block="works"] {
+    view-transition-name: works;
 }
 
+[data-human-block="footer"],
+[data-machine-block="footer"] {
+    view-transition-name: footer;
+}
+
+/* Fixed chrome keeps its own group so it does not crossfade with the page. */
+.mode-dock {
+    view-transition-name: mode-dock;
+}
+
+.scroll-progress {
+    view-transition-name: scroll-progress;
+}
+
+::view-transition-group(*) {
+    animation-duration: var(--motion-page);
+    animation-timing-function: var(--ease-out-expo);
+}
+
+::view-transition-group(root) {
+    animation-duration: var(--motion-slow);
+    animation-timing-function: var(--ease-out-quart);
+}
+
+::view-transition-group(mode-dock),
+::view-transition-group(scroll-progress) {
+    animation-duration: 0s;
+}
+
+/* Blocks leave and arrive top to bottom. */
+::view-transition-group(profile) {
+    animation-delay: calc(40ms * var(--motion-scale));
+}
+
+::view-transition-group(history) {
+    animation-delay: calc(80ms * var(--motion-scale));
+}
+
+::view-transition-group(works) {
+    animation-delay: calc(120ms * var(--motion-scale));
+}
+
+::view-transition-group(footer) {
+    animation-delay: calc(160ms * var(--motion-scale));
+}
 .scroll-progress {
     position: fixed;
     top: 0;
@@ -500,10 +420,6 @@ html.has-motion [data-reveal] {
         transform var(--motion-slow) var(--ease-out-expo),
         opacity var(--motion-slow) var(--ease-out-quint);
     transition-delay: var(--reveal-delay);
-}
-
-html.has-motion.is-resetting-human-reveal [data-reveal] {
-    transition: none;
 }
 
 html.has-motion [data-reveal="hero-soft"] {

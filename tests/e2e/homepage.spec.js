@@ -36,16 +36,41 @@ const expectMachineView = async (page) => {
     await expect(page.locator(".skip-link")).toHaveAttribute("href", "#machine-content");
 };
 
-/** Waits until no mode-transition bookkeeping classes remain on <body>. */
+/** Waits until the mode switch's view transition and any reveal motion finish. */
 const expectTransitionSettled = async (page) => {
-    await expect(page.locator("body")).not.toHaveClass(/is-mode-transitioning|is-exiting-machine/);
-    await expect(page.locator(".machine-document")).not.toHaveClass(/is-entering|is-exiting/);
+    await page.waitForFunction(() => {
+        let active = false;
+        try {
+            active = document.documentElement.matches(":active-view-transition");
+        } catch (error) {
+            // Older engines lack the pseudo-class; getAnimations() still covers them.
+        }
+        return !active && document.getAnimations().length === 0;
+    });
 };
 
+/**
+ * Counts document.startViewTransition() calls so tests can prove the animated
+ * path is taken when motion is allowed and skipped when it is not.
+ */
+const countViewTransitions = (context) =>
+    context.addInitScript(() => {
+        window.__viewTransitions = 0;
+        const original = document.startViewTransition;
+        if (typeof original === "function") {
+            document.startViewTransition = function (...args) {
+                window.__viewTransitions += 1;
+                return original.apply(this, args);
+            };
+        }
+    });
+
 test.describe("view mode toggle", () => {
-    test("round-trips human -> machine -> human without errors", async ({ page }) => {
+    test("round-trips human -> machine -> human without errors", async ({ page, context }) => {
+        await countViewTransitions(context);
         const errors = trackErrors(page);
         await page.goto("/");
+        expect(await page.evaluate(() => typeof document.startViewTransition)).toBe("function");
         await expectHumanView(page);
 
         await page.getByRole("button", { name: "Machine" }).click();
@@ -70,6 +95,7 @@ test.describe("view mode toggle", () => {
         await expect(page.locator("#profile-title")).toHaveClass(/is-visible/);
         await expect(page.locator("#profile-title")).toHaveCSS("opacity", "1");
 
+        expect(await page.evaluate(() => window.__viewTransitions)).toBe(2);
         expect(errors).toEqual([]);
     });
 
@@ -148,6 +174,7 @@ test.describe("motion", () => {
 
     test("reduced motion renders a static, fully visible page", async ({ browser }) => {
         const context = await browser.newContext({ reducedMotion: "reduce" });
+        await countViewTransitions(context);
         const page = await context.newPage();
         const errors = trackErrors(page);
         await page.goto("/");
@@ -174,6 +201,7 @@ test.describe("motion", () => {
             await expect(element).toHaveCSS("opacity", "1");
         }
 
+        expect(await page.evaluate(() => window.__viewTransitions)).toBe(0);
         expect(errors).toEqual([]);
         await context.close();
     });

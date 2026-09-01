@@ -1,9 +1,6 @@
-// Shared with the reveal-motion setup at the bottom of this file so the mode
-// toggle can re-arm scroll reveals after stripping .is-visible.
-let homepageRevealObserver = null;
-
 (() => {
     const body = document.body;
+    const root = document.documentElement;
     const modeButtons = document.querySelectorAll("[data-view-mode]");
     const skipLink = document.querySelector(".skip-link");
     const machineDocument = document.querySelector(".machine-document");
@@ -11,17 +8,6 @@ let homepageRevealObserver = null;
         "[data-copy-machine-profile]"
     );
     const viewModes = new Set(["human", "machine"]);
-    let machineEnterTimer = 0;
-    let humanExitTimer = 0;
-    let modeWashTimer = 0;
-    const machineSourceSelectors = {
-        nav: "footer",
-        hero: '[data-human-block="hero"]',
-        profile: '[data-human-block="profile"]',
-        history: '[data-human-block="history"]',
-        works: '[data-human-block="works"]',
-        footer: '[data-human-block="footer"]',
-    };
 
     const getModeFromUrl = () => {
         const params = new URLSearchParams(window.location.search);
@@ -58,17 +44,6 @@ let homepageRevealObserver = null;
         window.history.replaceState({}, "", url);
     };
 
-    const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-
-    // Registered <time> tokens resolve to e.g. "760ms", so the JS timers that
-    // clean up after the CSS animations stay in sync with the stylesheet.
-    const motionMs = (token) =>
-        parseFloat(
-            getComputedStyle(document.documentElement).getPropertyValue(token)
-        ) || 0;
-    // Longest block stagger in the enter/exit keyframe delays.
-    const MACHINE_BLOCK_STAGGER_MS = 190;
-
     const syncSkipLinkTarget = (mode) => {
         if (skipLink) {
             skipLink.setAttribute(
@@ -78,203 +53,9 @@ let homepageRevealObserver = null;
         }
     };
 
-    const cancelPendingModeTransitions = () => {
-        window.clearTimeout(machineEnterTimer);
-        window.clearTimeout(humanExitTimer);
-        window.clearTimeout(modeWashTimer);
-        body.classList.remove("is-mode-transitioning");
-        body.classList.remove("is-exiting-machine");
-
-        if (machineDocument) {
-            machineDocument.classList.remove("is-entering");
-            machineDocument.classList.remove("is-exiting");
-        }
-    };
-
-    const captureMachineSourceRects = () => {
-        const rects = {};
-
-        Object.entries(machineSourceSelectors).forEach(([key, selector]) => {
-            const element = document.querySelector(selector);
-
-            if (!element) {
-                return;
-            }
-
-            rects[key] = element.getBoundingClientRect();
-        });
-
-        return rects;
-    };
-
-    const captureHumanTargetRects = () => {
-        body.classList.add("is-preparing-human");
-        const rects = captureMachineSourceRects();
-        body.classList.remove("is-preparing-human");
-        return rects;
-    };
-
-    const setBlockMotionVars = (targetRects) => {
-        if (!machineDocument) {
-            return;
-        }
-
-        machineDocument.querySelectorAll("[data-machine-block]").forEach((block) => {
-            const key = block.dataset.machineBlock;
-            const targetRect = targetRects ? targetRects[key] : null;
-            const blockRect = block.getBoundingClientRect();
-            const x = targetRect ? targetRect.left - blockRect.left : 0;
-            const y = targetRect ? targetRect.top - blockRect.top : 18;
-            const scaleX = targetRect
-                ? clamp(targetRect.width / Math.max(blockRect.width, 1), 0.72, 1.2)
-                : 1;
-            const scaleY = targetRect
-                ? clamp(targetRect.height / Math.max(blockRect.height, 1), 0.72, 1.2)
-                : 1;
-
-            block.style.setProperty("--machine-x", `${Math.round(x)}px`);
-            block.style.setProperty("--machine-y", `${Math.round(y)}px`);
-            block.style.setProperty("--machine-scale-x", scaleX.toFixed(3));
-            block.style.setProperty("--machine-scale-y", scaleY.toFixed(3));
-        });
-    };
-
-    const setMachineDocumentTransition = (mode, sourceRects = null) => {
-        if (!machineDocument) {
-            return;
-        }
-
-        machineDocument.classList.remove("is-entering");
-        machineDocument.classList.remove("is-exiting");
-
-        if (mode !== "machine") {
-            return;
-        }
-
-        setBlockMotionVars(sourceRects);
-
-        requestAnimationFrame(() => {
-            machineDocument.classList.add("is-entering");
-        });
-
-        machineEnterTimer = window.setTimeout(() => {
-            machineDocument.classList.remove("is-entering");
-        }, motionMs("--motion-page") + MACHINE_BLOCK_STAGGER_MS);
-    };
-
-    const getRevealElements = () => ({
-        all: document.querySelectorAll("[data-reveal]"),
-        hero: document.querySelectorAll(".header-content [data-reveal]"),
-    });
-
-    const resetHumanPageLoadReveal = () => {
-        const root = document.documentElement;
-
-        if (!root.classList.contains("has-motion")) {
-            return false;
-        }
-
-        const { all: revealElements } = getRevealElements();
-
-        root.classList.add("is-resetting-human-reveal");
-        revealElements.forEach((element) => {
-            element.classList.remove("is-visible");
-        });
-
-        // Flush the hidden reveal state before re-applying page-load motion.
-        document.body.offsetHeight;
-        return true;
-    };
-
-    const playHumanPageLoadReveal = () => {
-        const root = document.documentElement;
-        const { all: revealElements, hero: heroElements } = getRevealElements();
-
-        requestAnimationFrame(() => {
-            root.classList.remove("is-resetting-human-reveal");
-
-            requestAnimationFrame(() => {
-                heroElements.forEach((element) => {
-                    element.classList.add("is-visible");
-                });
-
-                revealElements.forEach((element) => {
-                    if (element.closest(".header-content")) {
-                        return;
-                    }
-
-                    // Anything at or above the lower reveal margin, including
-                    // content already scrolled past, shows immediately.
-                    const rect = element.getBoundingClientRect();
-
-                    if (rect.top < window.innerHeight * 1.22) {
-                        element.classList.add("is-visible");
-                    }
-                });
-
-                // The reveal observer unobserves elements once shown, so
-                // anything stripped above must be re-armed or it would stay
-                // hidden forever after a machine -> human round trip.
-                revealElements.forEach((element) => {
-                    if (element.classList.contains("is-visible")) {
-                        return;
-                    }
-
-                    if (homepageRevealObserver) {
-                        homepageRevealObserver.observe(element);
-                    } else {
-                        element.classList.add("is-visible");
-                    }
-                });
-            });
-        });
-    };
-
-    const transitionToHuman = () => {
-        if (!machineDocument) {
-            updateMode("human");
-            return;
-        }
-
-        cancelPendingModeTransitions();
-        const targetRects = captureHumanTargetRects();
-        setBlockMotionVars(targetRects);
-        body.classList.add("is-mode-transitioning");
-        body.classList.add("is-exiting-machine");
-        machineDocument.classList.remove("is-entering");
-        machineDocument.classList.add("is-exiting");
-
-        modeButtons.forEach((button) => {
-            const isActive = button.dataset.viewMode === "human";
-            button.classList.toggle("is-active", isActive);
-            button.setAttribute("aria-pressed", String(isActive));
-        });
-
-        setStoredMode("human");
-        setUrlMode("human");
-        const shouldReplayHumanReveal = resetHumanPageLoadReveal();
-
-        requestAnimationFrame(() => {
-            body.dataset.portfolioView = "human";
-            syncSkipLinkTarget("human");
-            machineDocument.setAttribute("aria-hidden", "true");
-            document.querySelectorAll("[data-human-block]").forEach((element) => {
-                element.setAttribute("aria-hidden", "false");
-            });
-
-            if (shouldReplayHumanReveal) {
-                playHumanPageLoadReveal();
-            }
-        });
-
-        humanExitTimer = window.setTimeout(() => {
-            machineDocument.classList.remove("is-exiting");
-            body.classList.remove("is-mode-transitioning");
-            body.classList.remove("is-exiting-machine");
-        }, motionMs("--motion-page") + MACHINE_BLOCK_STAGGER_MS);
-    };
-
-    const updateMode = (mode, shouldPersist = true, sourceRects = null) => {
+    // Applies a mode synchronously. This is the only place view state is
+    // written, so both the instant swap and the animated switch go through it.
+    const updateMode = (mode, shouldPersist = true) => {
         body.dataset.portfolioView = mode;
         syncSkipLinkTarget(mode);
 
@@ -296,12 +77,28 @@ let homepageRevealObserver = null;
             machineDocument.setAttribute("aria-hidden", String(mode !== "machine"));
         }
 
-        setMachineDocumentTransition(mode, sourceRects);
-
         if (shouldPersist) {
             setStoredMode(mode);
             setUrlMode(mode);
         }
+    };
+
+    // The morph between human sections and machine blocks is a View
+    // Transition driven by the ::view-transition rules in homepage.css. The
+    // browser snapshots both states, so no rects, timers or cleanup classes
+    // are needed here. Starting a new transition while one is running
+    // skips the old one, which is exactly the right behaviour for a rapid
+    // double toggle.
+    const switchMode = (mode) => {
+        if (
+            typeof document.startViewTransition !== "function" ||
+            !root.classList.contains("has-motion")
+        ) {
+            updateMode(mode);
+            return;
+        }
+
+        document.startViewTransition(() => updateMode(mode));
     };
 
     const textOf = (element, selector) => {
@@ -607,19 +404,7 @@ let homepageRevealObserver = null;
                 return;
             }
 
-            if (mode === "human") {
-                transitionToHuman();
-                return;
-            }
-
-            cancelPendingModeTransitions();
-            const sourceRects = captureMachineSourceRects();
-
-            body.classList.add("is-mode-transitioning");
-            updateMode(mode, true, sourceRects);
-            modeWashTimer = window.setTimeout(() => {
-                body.classList.remove("is-mode-transitioning");
-            }, motionMs("--motion-page") + MACHINE_BLOCK_STAGGER_MS);
+            switchMode(mode);
         });
     });
 
@@ -800,7 +585,6 @@ const initRevealMotion = (root) => {
             }
         );
 
-        homepageRevealObserver = revealObserver;
         revealVisibleItems(revealObserver);
     } catch (error) {
         root.classList.remove("has-motion");
