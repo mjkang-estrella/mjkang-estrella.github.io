@@ -18,6 +18,27 @@ jobs:
       - name: Run site structure tests
         run: python3 tests/homepage_structure_test.py
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install browser test dependencies
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Run browser smoke tests
+        run: npx playwright test
+
+      - name: Upload Playwright traces on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: test-results/
+          retention-days: 7
+
       - name: Syntax-check JavaScript
         run: |
           node --check js/homepage.js

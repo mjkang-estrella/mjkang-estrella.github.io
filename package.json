@@ -1,0 +1,26 @@
+{
+  "name": "mj-kang-site",
+  "version": "1.0.0",
+  "description": "Static portfolio site for mj-kang.com",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "python3 tests/homepage_structure_test.py && playwright test",
+    "test:e2e": "playwright test",
+    "test:structure": "python3 tests/homepage_structure_test.py"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjkang-estrella/mjkang-estrella.github.io.git"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/mjkang-estrella/mjkang-estrella.github.io/issues"
+  },
+  "homepage": "https://github.com/mjkang-estrella/mjkang-estrella.github.io#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1"
+  },
+  "private": true
+}
