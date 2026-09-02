@@ -1,0 +1,228 @@
+{
+  "$comment": "Single source of truth for the Selected Works grid, the History timeline, and their machine-readable blocks in index.html. Run `npm run build` after editing.",
+  "timeline": [
+    {
+      "kind": "experience",
+      "label": "role",
+      "from": "2023",
+      "to": "2025",
+      "organization": "Toss Bank",
+      "href": "https://www.tossbank.com/",
+      "logo": "images/logos/viva-republica.png",
+      "title": "Product Manager (Social, Growth)",
+      "description": "Launched social banking products and growth loops that drove 300K+ MAU in 1 month and accelerated new-account growth at scale."
+    },
+    {
+      "kind": "experience",
+      "label": "role",
+      "from": "2020",
+      "to": "2023",
+      "organization": "Match Group",
+      "href": "https://www.matchgroup.com/",
+      "logo": "images/logos/match-group.jpg",
+      "logoFit": "cover",
+      "title": "Product Manager (Live Streaming)",
+      "description": "Owned Hakuna Live roadmap and iterative launches, driving 100K+ MAU growth while improving moderation accuracy and speed."
+    },
+    {
+      "kind": "education",
+      "label": "credential",
+      "from": "2025",
+      "to": "2027",
+      "organization": "UC Berkeley Haas",
+      "href": "https://haas.berkeley.edu/",
+      "logo": "images/logos/uc-berkeley-seal.png",
+      "title": "Master of Business Administration (MBA)",
+      "description": "Studying Agentic AI, AI ethics, and entrepreneurship; serving as VP roles in AI Club and Product Management Club."
+    },
+    {
+      "kind": "education",
+      "label": "credential",
+      "from": "2016",
+      "to": "2022",
+      "organization": "KAIST",
+      "href": "https://www.kaist.ac.kr/en/",
+      "logo": "images/logos/kaist.svg",
+      "title": "B.S. Computer Science",
+      "description": "Studied Computer Science and Business Technology Management with focus on systems, analytics, and product thinking."
+    }
+  ],
+  "projects": [
+    {
+      "title": "Akashic Computer",
+      "description": "An open-weight model atlas for comparing families, artifacts, runtimes, benchmarks, and hardware fit.",
+      "href": "https://akashic-computer.vercel.app/",
+      "cta": "Launch",
+      "kind": "product",
+      "domain": "model catalog",
+      "status": "live",
+      "image": "images/projects/akashic-simple.jpg",
+      "detailImage": "images/projects/akashic-thumbnail.jpg"
+    },
+    {
+      "title": "Poincaré Lean",
+      "description": "An ongoing Lean 4 formalization of the Poincaré conjecture with proof-agent workflows.",
+      "href": "https://github.com/mjkang-estrella/poincare-lean",
+      "cta": "View Repo",
+      "kind": "research",
+      "domain": "formal verification",
+      "status": "ongoing",
+      "image": "images/projects/poincare-lean-simple.jpg",
+      "detailImage": "images/projects/poincare-lean-thumbnail.jpg"
+    },
+    {
+      "title": "Personal AI Lab",
+      "description": "A personal AI platform spanning applications, dual-DGX inference, storage, and observability.",
+      "href": "https://blog.mj-kang.com/my-ai-homelab/",
+      "cta": "Read",
+      "kind": "case study",
+      "domain": "AI infrastructure",
+      "status": "article",
+      "image": "images/projects/personal-ai-lab-simple.jpg",
+      "detailImage": "images/projects/personal-ai-lab-thumbnail.jpg"
+    },
+    {
+      "title": "Soma",
+      "description": "A local-first health context and reporting system for private, evidence-grounded AI workflows.",
+      "href": "https://github.com/mjkang-estrella/soma-context",
+      "cta": "View Repo",
+      "kind": "repository",
+      "domain": "personal health data",
+      "status": "source",
+      "image": "images/projects/soma-simple.jpg",
+      "detailImage": "images/projects/soma-thumbnail.jpg"
+    },
+    {
+      "title": "Precortex",
+      "description": "A personal task manager where agentic workflows help move work toward completion.",
+      "href": "https://www.pre-cortex.com/",
+      "cta": "Open",
+      "kind": "product",
+      "domain": "agentic workflows",
+      "status": "live",
+      "image": "images/projects/precortex-minimal.jpg",
+      "detailImage": "images/projects/precortex-thumbnail.jpg"
+    },
+    {
+      "title": "Prism",
+      "description": "Turns rough product ideas into clear, structured specs that AI agents can execute.",
+      "href": "https://prism.mj-kang.com/",
+      "cta": "Launch",
+      "kind": "product",
+      "domain": "product specification",
+      "status": "live",
+      "image": "images/projects/prism-minimal.jpg",
+      "detailImage": "images/projects/prism-thumbnail.jpg"
+    },
+    {
+      "title": "Caption With Intent",
+      "description": "Caption timing and media editing prototype for intent-aware short-form video.",
+      "href": "https://cwi.mj-kang.com/",
+      "cta": "Launch",
+      "kind": "prototype",
+      "domain": "media tooling",
+      "status": "live",
+      "image": "images/projects/cwi-minimal.jpg",
+      "detailImage": "images/projects/cwi-thumbnail.jpg"
+    },
+    {
+      "title": "Reader",
+      "description": "Personal reader for feeds, saved articles, highlights, and a focused library.",
+      "href": "https://reader.mj-kang.com/",
+      "cta": "Launch",
+      "kind": "product",
+      "domain": "reading workflow",
+      "status": "live",
+      "image": "images/projects/reader-minimal.jpg",
+      "detailImage": "images/projects/reader-thumbnail.jpg"
+    },
+    {
+      "title": "Agent Newsletter",
+      "description": "An AI agent newsletter for discovering new tools and capabilities automatically.",
+      "href": "https://github.com/mjkang-estrella/agent-newsletter",
+      "cta": "View Repo",
+      "kind": "repository",
+      "domain": "agent discovery",
+      "status": "source",
+      "image": "images/projects/agent-newsletter-minimal.jpg",
+      "detailImage": "images/projects/agent-newsletter-thumbnail.jpg"
+    },
+    {
+      "title": "Resume OS",
+      "description": "Interactive resume platform that answers questions about my background.",
+      "href": "https://resume-os.com/",
+      "cta": "Launch",
+      "kind": "product",
+      "domain": "interactive resume",
+      "status": "live",
+      "image": "images/projects/resume-os-minimal.jpg",
+      "detailImage": "images/projects/resume-os-thumbnail.jpg"
+    },
+    {
+      "title": "Conditioned",
+      "description": "AI-based CrossFit performance analyzer & advisor.",
+      "href": "https://ardent-footer-45845870.figma.site/",
+      "cta": "View Case",
+      "kind": "case study",
+      "domain": "fitness analytics",
+      "status": "case",
+      "image": "images/projects/conditioned-minimal.jpg",
+      "detailImage": "images/projects/conditioned-thumbnail.jpg"
+    },
+    {
+      "title": "Reflect (iOS)",
+      "description": "Voice journaling application powered by NLP for sentiment analysis.",
+      "href": "https://testflight.apple.com/join/2ctpxzhd",
+      "cta": "TestFlight",
+      "kind": "ios app",
+      "domain": "voice journaling",
+      "status": "testflight",
+      "image": "images/projects/reflect-ios-minimal.jpg",
+      "detailImage": "images/projects/reflect-ios-thumbnail.jpg"
+    },
+    {
+      "title": "Three Body Simulator",
+      "description": "Interactive two-dimensional gravity simulation for chaotic multi-body orbital dynamics.",
+      "href": "/three-body-problem-simulation/",
+      "cta": "Open",
+      "kind": "simulation",
+      "domain": "physics",
+      "status": "live",
+      "image": "images/projects/three-body-simulator-minimal.jpg",
+      "detailImage": "images/projects/three-body-simulator-thumbnail.jpg"
+    },
+    {
+      "title": "Block Fighter",
+      "description": "Browser-based physics mini-game built with Canvas API.",
+      "href": "/block-fighter/",
+      "cta": "Play",
+      "kind": "game",
+      "domain": "canvas physics",
+      "status": "live",
+      "image": "images/projects/block-fighter-minimal.jpg",
+      "detailImage": "images/projects/block-fighter-thumbnail.jpg"
+    },
+    {
+      "title": "Rent Calculator",
+      "description": "Interactive Jeonse rent calculator for exploring deposit, monthly rent, and conversion tradeoffs.",
+      "href": "/jeonse/",
+      "cta": "Open",
+      "kind": "calculator",
+      "domain": "housing finance",
+      "status": "live",
+      "image": "images/projects/rent-calculator-minimal.jpg",
+      "detailImage": "images/projects/rent-calculator-thumbnail.jpg"
+    },
+    {
+      "title": "Retirement Calculator",
+      "description": "Interactive retirement simulator for estimating long-term savings growth and monthly income.",
+      "href": "/retirement-calculator/",
+      "cta": "Open",
+      "kind": "calculator",
+      "domain": "financial planning",
+      "status": "live",
+      "image": "images/projects/retirement-calculator-minimal.jpg",
+      "detailImage": "images/projects/retirement-calculator-thumbnail.jpg"
+    }
+  ]
+}

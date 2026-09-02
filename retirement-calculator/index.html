@@ -15,11 +15,12 @@
     <meta name="twitter:title" content="Retirement Plan Simulator">
     <meta name="twitter:description" content="Interactive retirement calculator projecting long-term savings growth and monthly income.">
     <meta name="twitter:image" content="https://mj-kang.com/images/projects/retirement-calculator-thumbnail.jpg">
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/logo/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/logo/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/logo/apple-icon-180x180.png">
-    <link rel="manifest" href="/images/logo/manifest.json">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/logo/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/logo/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/logo/apple-icon-180x180.png" />
+    <link rel="manifest" href="/images/logo/manifest.json" />
     <meta name="theme-color" content="#0D0D0D">
+    <link rel="stylesheet" href="/css/base.css">
     <style>
         :root {
             
@@ -136,7 +137,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            transition: background-color 0.2s;
+            transition: background-color var(--motion-base);
         }
 
         @media (hover: hover) {
@@ -406,9 +407,9 @@
             justify-content: center;
             gap: 12px;
             transition:
-                background-color 0.2s,
-                color 0.2s,
-                border-color 0.2s;
+                background-color var(--motion-base),
+                color var(--motion-base),
+                border-color var(--motion-base);
         }
 
         @media (hover: hover) {

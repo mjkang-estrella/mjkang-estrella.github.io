@@ -1,0 +1,67 @@
+/* Shared by every page on mj-kang.com. Each project keeps its own palette and
+   type, so this file only carries what must behave the same everywhere:
+   the motion scale, easing curves, and the reduced-motion fallback. */
+
+:root {
+    /* 1 = full motion, 0 = static. Every duration, delay and hover offset in
+       the site's stylesheets is multiplied by this, so honouring
+       prefers-reduced-motion is a single override rather than a list of
+       selectors that has to be kept in sync. */
+    --motion-scale: 1;
+    --motion-fast: calc(120ms * var(--motion-scale));
+    --motion-base: calc(220ms * var(--motion-scale));
+    --motion-slow: calc(460ms * var(--motion-scale));
+    --motion-page: calc(760ms * var(--motion-scale));
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Registered so the calc() above resolves to a real <time>, which lets
+   scripts read the tokens back and keeps animation-duration valid. */
+@property --motion-scale {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 1;
+}
+
+@property --motion-fast {
+    syntax: "<time>";
+    inherits: true;
+    initial-value: 0ms;
+}
+
+@property --motion-base {
+    syntax: "<time>";
+    inherits: true;
+    initial-value: 0ms;
+}
+
+@property --motion-slow {
+    syntax: "<time>";
+    inherits: true;
+    initial-value: 0ms;
+}
+
+@property --motion-page {
+    syntax: "<time>";
+    inherits: true;
+    initial-value: 0ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --motion-scale: 0;
+    }
+
+    /* Safety net for page-local styles that still use literal durations.
+       Near-zero rather than zero so transitionend/animationend still fire. */
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
