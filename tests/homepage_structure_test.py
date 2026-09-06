@@ -356,7 +356,7 @@ def test_referenced_assets_exist_on_disk() -> None:
     parser, _ = parse_homepage()
 
     assert "css/homepage.css" in parser.stylesheets
-    assert parser.scripts == ["js/homepage.js"]
+    assert parser.scripts == ["js/homepage.js", "js/ask-ai.js"]
     for stylesheet in parser.stylesheets:
         assert_local_asset_exists(stylesheet)
     for script in parser.scripts:
@@ -367,7 +367,7 @@ def test_referenced_assets_exist_on_disk() -> None:
         assert_local_asset_exists(content_path)
 
     # 16 flat card images + 16 hover-detail images + profile badge + 4 logos.
-    assert len(parser.image_sources) == 37
+    assert len(parser.image_sources) == 40
     for image in parser.image_sources:
         assert_local_asset_exists(image)
 

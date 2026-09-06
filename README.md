@@ -39,6 +39,18 @@ sub-project page).
 
 ## Agent readiness
 
+The homepage's “Ask an AI” button opens ChatGPT, Claude, or Google AI Mode
+with a shared introduction prompt. Gemini is labeled with its Google AI Mode
+destination. Edit the prompt in `js/ask-ai.js`; keep public background in
+`llms.txt` consistent with the portfolio. The menu also supports copying the
+prompt, with a selectable text fallback if clipboard access is unavailable.
+No API keys or backend are required.
+
+The widget follows the design at https://lnkiai.com/, including its provider
+SVGs and a lightweight recreation of the round bot. Its eyes follow the pointer
+and blink; reduced motion disables the animation. Desktop hover opens the panel,
+click keeps it open, and Escape or an outside click closes it.
+
 The site exposes agent-friendly discovery files:
 
 - `/sitemap.xml` lists canonical public pages and is referenced from `/robots.txt`.

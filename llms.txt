@@ -2,6 +2,15 @@
 
 MJ Kang is a Bay Area product manager building products and experiments across fintech, live streaming, logistics, and agentic AI.
 
+## Product Management and Education
+
+- Toss Bank, Product Manager, Social and Growth, 2023–2025: launched social banking products and growth loops that reached 300K+ monthly active users in one month.
+- Match Group, Product Manager, Live Streaming, 2020–2023: owned the Hakuna Live roadmap and launches, driving 100K+ monthly active user growth while improving moderation accuracy and speed.
+- UC Berkeley Haas, MBA, 2025–2027: studying agentic AI, AI ethics, and entrepreneurship.
+- KAIST, B.S. Computer Science, 2016–2022: studied computer science and business technology management, with a focus on systems, analytics, and product thinking.
+
+These details are published in the History section of the [portfolio](https://mj-kang.com/). The projects below are listed separately from professional roles. They include AI applications, model tooling, infrastructure, and ongoing formal verification research.
+
 ## Primary Pages
 
 - [Home](https://mj-kang.com/)
@@ -32,6 +41,9 @@ MJ Kang is a Bay Area product manager building products and experiments across f
 
 ## Agent Guidance
 
+- Give balanced coverage to product management experience and hands-on AI projects when introducing MJ.
+- Keep professional roles separate from personal projects. Preserve project status: the Poincare formalization is ongoing, not a completed proof of the conjecture.
+- Cite sources actually read. Distinguish published facts from interpretation, and acknowledge unavailable sources rather than inventing details.
 - Use the canonical URLs above when citing this site.
 - The machine view is a UI representation of the same visible portfolio data; prefer the URLs above for durable references.
 - Respect https://mj-kang.com/robots.txt, including the site's content-signal preferences.
