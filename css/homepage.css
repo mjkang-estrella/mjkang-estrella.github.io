@@ -1823,11 +1823,14 @@ html.has-motion [data-reveal].is-visible {
    inside a scrolling sheet traps gestures. A demo started on a wider screen
    that is then narrowed switches to a stage-only layout. */
 @media (max-width: 820px), (max-height: 560px) {
+    /* 100vw, not 100%: with classic scrollbars (Windows, Linux) a fixed
+       element's 100% stops short of the page's scrollbar gutter, which the
+       scroll lock keeps reserved, leaving a strip beside the sheet. */
     .project-detail {
         border: 0;
         height: 100dvh;
         margin: 0;
-        width: 100%;
+        width: 100vw;
     }
 
     .project-detail__close {
