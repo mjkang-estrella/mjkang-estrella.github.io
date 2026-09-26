@@ -13,10 +13,11 @@ module.exports = defineConfig({
         baseURL: `http://127.0.0.1:${PORT}`,
         trace: "retain-on-failure",
     },
-    // The site is static, so the Python stdlib server is enough and adds no
-    // dependency beyond what the structure tests already need.
+    // The site is static, so a Python stdlib server is enough and adds no
+    // dependency beyond what the structure tests already need. tests/serve.py
+    // only deepens the listen backlog so parallel workers don't get resets.
     webServer: {
-        command: `python3 -m http.server ${PORT} --bind 127.0.0.1`,
+        command: `python3 tests/serve.py ${PORT}`,
         url: `http://127.0.0.1:${PORT}/`,
         reuseExistingServer: !process.env.CI,
     },

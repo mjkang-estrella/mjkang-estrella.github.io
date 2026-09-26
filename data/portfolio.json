@@ -49,17 +49,57 @@
   ],
   "projects": [
     {
+      "id": "akashic-computer",
       "title": "Akashic Computer",
       "description": "An open-weight model atlas for comparing families, artifacts, runtimes, benchmarks, and hardware fit.",
-      "href": "https://akashic-computer.vercel.app/",
+      "href": "https://akashic.computer/",
       "cta": "Launch",
       "kind": "product",
       "domain": "model catalog",
       "status": "live",
       "image": "images/projects/akashic-simple.jpg",
-      "detailImage": "images/projects/akashic-thumbnail.jpg"
+      "detailImage": "images/projects/akashic-thumbnail.jpg",
+      "embed": true,
+      "detail": {
+        "pitch": "An atlas of open-weight models that follows the path from family to release, size, variant, and quantized artifact, with memory estimates, runtime support, and creator-reported benchmarks. It shows evidence without naming a best model.",
+        "problem": "People curious about running open-weight models locally often do not yet understand model families, parameter sizes, variants, quantization formats, runtimes, or hardware requirements. Akashic organizes the ecosystem into a legible hierarchy so a newcomer can see what exists and what is runnable, while experienced users can scan and compare the same detail quickly.",
+        "features": [
+          "Filters releases by category, capability, company, parameter range, variant, quantization, and provider.",
+          "Model pages list original and quantized artifacts per variant, with weight and KV-cache memory estimates and supported runtimes such as vLLM and SGLang.",
+          "A memory budget (16–384 GB presets or a custom value) marks which model sizes have an artifact estimated to fit, and states that runtime fit is unverified.",
+          "Benchmark leaderboards show creator-reported scores, each linked to its source report and labeled as not normalized retests.",
+          "A material-changes feed records new artifacts, license changes, and official recipe updates; short docs explain quantization, MoE, and memory."
+        ],
+        "tryThis": [
+          "Open the memory menu (icon at top right), choose 24 GB, and read how many model sizes have an artifact estimated to fit.",
+          "Open Model, pick any release, and compare its artifacts' memory estimates against that budget.",
+          "Open Benchmark to scan creator-reported leaderboards such as GPQA Diamond, each linked to its source report."
+        ],
+        "stack": [
+          "Next.js (App Router)",
+          "TypeScript",
+          "Tailwind CSS",
+          "Convex",
+          "Hugeicons"
+        ],
+        "links": [
+          {
+            "label": "Source",
+            "href": "https://github.com/mjkang-estrella/akashic-computer"
+          }
+        ],
+        "sources": [
+          "https://akashic.computer/",
+          "https://akashic.computer/models",
+          "https://akashic.computer/benchmarks",
+          "https://akashic.computer/models/glm-glm-5-3-753b",
+          "https://github.com/mjkang-estrella/akashic-computer/blob/main/README.md",
+          "https://github.com/mjkang-estrella/akashic-computer/blob/main/PRODUCT.md"
+        ]
+      }
     },
     {
+      "id": "poincare-lean",
       "title": "Poincaré Lean",
       "description": "An ongoing Lean 4 formalization of the Poincaré conjecture with proof-agent workflows.",
       "href": "https://github.com/mjkang-estrella/poincare-lean",
@@ -68,9 +108,50 @@
       "domain": "formal verification",
       "status": "ongoing",
       "image": "images/projects/poincare-lean-simple.jpg",
-      "detailImage": "images/projects/poincare-lean-thumbnail.jpg"
+      "detailImage": "images/projects/poincare-lean-thumbnail.jpg",
+      "embed": false,
+      "detail": {
+        "pitch": "An ongoing Lean 4 project that aims to formalize the Poincaré conjecture on Mathlib, driven by a long-running proof-agent harness. It is not a completed proof: the final theorem is deliberately absent until Lean can check it.",
+        "problem": "A formalization this large runs for weeks or months, so producing another proof attempt is not the hard part. The work needs a system that divides the proof into bounded tasks, keeps accepted work, rejects invalid results, and recovers from failed runs, with Lean elaboration as the final authority on every change.",
+        "features": [
+          "Codex chooses bounded proof Tasks, allocates isolated Git worktrees, reruns the Lean checks independently, and commits only verified progress.",
+          "Leanstral workers run through a bounded Pi job adapter with six scoped tools, inside a no-network, deny-by-default Bubblewrap sandbox.",
+          "Audit scripts reject sorry, admit, new axioms, and native_decide; the completion audit is expected to fail while the final theorem is absent.",
+          "Conditional end-to-end assembly routes make the remaining mathematical interfaces explicit instead of hiding them.",
+          "The long-running harness records durable evidence every three hours."
+        ],
+        "tryThisHeading": "Where to look",
+        "tryThis": [
+          "README.md, then HANDOFF.md and docs/PROJECT_MAP.md, for the current state and how the proof and support surfaces fit together.",
+          "Poincare/Statement.lean for the canonical target statement the project is working toward.",
+          "harness/README.md and harness/v2/SPEC.md for the proof-agent control plane.",
+          "CURRENT_STATUS.md for the latest generated audit snapshot; check its timestamp before relying on it."
+        ],
+        "stack": [
+          "Lean 4",
+          "Mathlib",
+          "Lake",
+          "Codex (orchestrator)",
+          "Leanstral (proof workers)",
+          "Pi 0.80.10 job adapter",
+          "Bubblewrap sandbox"
+        ],
+        "links": [
+          {
+            "label": "Write-up: My AI HomeLab",
+            "href": "https://blog.mj-kang.com/my-ai-homelab/"
+          }
+        ],
+        "sources": [
+          "https://github.com/mjkang-estrella/poincare-lean/blob/main/README.md",
+          "https://github.com/mjkang-estrella/poincare-lean/blob/main/lakefile.lean",
+          "https://github.com/mjkang-estrella/poincare-lean/blob/main/lean-toolchain",
+          "https://blog.mj-kang.com/my-ai-homelab/"
+        ]
+      }
     },
     {
+      "id": "personal-ai-lab",
       "title": "Personal AI Lab",
       "description": "A personal AI platform spanning applications, dual-DGX inference, storage, and observability.",
       "href": "https://blog.mj-kang.com/my-ai-homelab/",
@@ -79,9 +160,45 @@
       "domain": "AI infrastructure",
       "status": "article",
       "image": "images/projects/personal-ai-lab-simple.jpg",
-      "detailImage": "images/projects/personal-ai-lab-thumbnail.jpg"
+      "detailImage": "images/projects/personal-ai-lab-thumbnail.jpg",
+      "embed": false,
+      "detail": {
+        "pitch": "An article about a home AI lab built to run open-weight models too large for a 48 GB laptop (DGX Spark inference nodes, a NAS, and a ZimaBoard for services) and what operating it taught about the systems around a model.",
+        "problem": "A MacBook Pro with 48 GB of unified memory handles many useful models but becomes restrictive once checkpoints move beyond the 30B range. The lab exists to run larger open-weight models locally, with CUDA and serving tools such as vLLM, without cutting every experiment down to the smallest quantization that fits.",
+        "features": [
+          "Two NVIDIA DGX Sparks (at the time of writing) either split one large model across both GPUs or run an independent model server each.",
+          "A ZimaBoard runs applications, databases, monitoring, and remote access, so model servers can restart without taking down the rest of the lab.",
+          "A NAS stores checkpoints and experiment artifacts, while the Sparks serve active models from local NVMe.",
+          "Hosts long-running agent systems, including the Poincaré Lean proof harness and a web-search agent.",
+          "Argues that evaluations, routing decisions, and operating history, which the author calls Owned Intelligence, outlast any single checkpoint."
+        ],
+        "tryThisHeading": "Where to look",
+        "tryThis": [
+          "“What I built” for how inference, services, and storage are split across machines.",
+          "“The model became more useful inside a system” for the Poincaré formalizer and search-agent examples.",
+          "“Why I Think Local AI Will Thrive” for the argument on cost, privacy, and replaceable open weights."
+        ],
+        "stack": [
+          "NVIDIA DGX Spark",
+          "vLLM",
+          "ComfyUI",
+          "ZimaBoard",
+          "NAS storage"
+        ],
+        "links": [
+          {
+            "label": "GLM-5.3 on DGX Sparks (repo)",
+            "href": "https://github.com/mjkang-estrella/glm53-full-exl3-tp3"
+          }
+        ],
+        "sources": [
+          "https://blog.mj-kang.com/my-ai-homelab/",
+          "https://github.com/mjkang-estrella/glm53-full-exl3-tp3/blob/main/README.md"
+        ]
+      }
     },
     {
+      "id": "soma",
       "title": "Soma",
       "description": "A local-first health context and reporting system for private, evidence-grounded AI workflows.",
       "href": "https://github.com/mjkang-estrella/soma-context",
@@ -90,9 +207,47 @@
       "domain": "personal health data",
       "status": "source",
       "image": "images/projects/soma-simple.jpg",
-      "detailImage": "images/projects/soma-thumbnail.jpg"
+      "detailImage": "images/projects/soma-thumbnail.jpg",
+      "embed": false,
+      "detail": {
+        "pitch": "SomaContext gives a personal AI agent selected health context (records, their sources, and what is still unknown) from a local SQLite workspace. It uses deterministic rules and local search, with no LLM, GPU, or API key required.",
+        "features": [
+          "Answers keep observed facts, research evidence, interpretation, and uncertainty in separate sections; every fact carries its source and date.",
+          "A local MCP server over stdio exposes six tools; the connected agent supplies any model reasoning.",
+          "Default outputs omit free-text notes, arbitrary values, and raw genome rows, and missing data is never treated as normal or safe.",
+          "One command, soma demo, runs a synthetic sleep-and-caffeine scenario and writes HTML and Markdown reports without touching personal data.",
+          "Scoped as a local developer prototype, not a medical device: it does not diagnose, change medications, or establish safety."
+        ],
+        "tryThisHeading": "Where to look",
+        "tryThis": [
+          "The synthetic demo report, which answers “At 17:30, can I drink coffee?” with sources and stated uncertainty.",
+          "examples/demo/mcp-request.json and mcp-response.json for the actual MCP exchange.",
+          "docs/implementation-status.md for what is implemented, partial, and planned."
+        ],
+        "stack": [
+          "Python 3.11+",
+          "SQLite",
+          "FastAPI",
+          "Pydantic",
+          "Typer",
+          "MCP (stdio)",
+          "pytest"
+        ],
+        "links": [
+          {
+            "label": "Synthetic demo report",
+            "href": "https://mj-kang.com/soma-context/"
+          }
+        ],
+        "sources": [
+          "https://github.com/mjkang-estrella/soma-context/blob/main/README.md",
+          "https://github.com/mjkang-estrella/soma-context/blob/main/pyproject.toml",
+          "https://mj-kang.com/soma-context/"
+        ]
+      }
     },
     {
+      "id": "precortex",
       "title": "Precortex",
       "description": "A personal task manager where agentic workflows help move work toward completion.",
       "href": "https://www.pre-cortex.com/",
@@ -101,9 +256,49 @@
       "domain": "agentic workflows",
       "status": "live",
       "image": "images/projects/precortex-minimal.jpg",
-      "detailImage": "images/projects/precortex-thumbnail.jpg"
+      "detailImage": "images/projects/precortex-thumbnail.jpg",
+      "embed": true,
+      "embedUrl": "https://www.pre-cortex.com/?demo=1",
+      "detail": {
+        "pitch": "A task planner with an assistant that helps turn an unscheduled inbox into a deliberate plan for today. A public demo runs the real planner on fictional tasks, with no account needed.",
+        "problem": "Most planners pile on features. Precortex narrows the job to knowing what to do next and having room to think about it: the inbox holds everything until you are ready to decide, and each assistant suggestion can be reviewed, changed, or left unapplied, so the user's judgment sets the plan.",
+        "features": [
+          "Inbox, Today, Upcoming, and project views; tasks carry priority, due date, tags, and subtasks.",
+          "A side assistant suggests priorities and smaller steps and explains its reasoning before anything is applied.",
+          "Account workspaces sync across devices through Convex; voice capture uses AssemblyAI transcription when it is configured.",
+          "The demo keeps every change in tab memory with undo (up to 50 steps) and reset, never calls live AI, and is labeled as a prewritten example."
+        ],
+        "tryThis": [
+          "Tap “today” on a sample task to schedule it, then choose Undo last change.",
+          "Open the assistant (the chat button on narrow screens) and choose Apply example plan; the venue task moves to Today.",
+          "Open a task to edit its priority, due date, project, and subtasks.",
+          "Choose Reset demo to restore the starting workspace."
+        ],
+        "stack": [
+          "TypeScript",
+          "Convex",
+          "Auth0",
+          "Tailwind CSS",
+          "esbuild",
+          "AssemblyAI",
+          "Vercel"
+        ],
+        "links": [
+          {
+            "label": "Source",
+            "href": "https://github.com/mjkang-estrella/precortex"
+          }
+        ],
+        "sources": [
+          "https://www.pre-cortex.com/",
+          "https://www.pre-cortex.com/?demo=1",
+          "https://github.com/mjkang-estrella/precortex/blob/main/README.md",
+          "https://github.com/mjkang-estrella/precortex/blob/main/PRODUCT.md"
+        ]
+      }
     },
     {
+      "id": "prism",
       "title": "Prism",
       "description": "Turns rough product ideas into clear, structured specs that AI agents can execute.",
       "href": "https://prism.mj-kang.com/",
@@ -112,9 +307,27 @@
       "domain": "product specification",
       "status": "live",
       "image": "images/projects/prism-minimal.jpg",
-      "detailImage": "images/projects/prism-thumbnail.jpg"
+      "detailImage": "images/projects/prism-thumbnail.jpg",
+      "embed": true,
+      "detail": {
+        "pitch": "An AI-guided workspace that turns a rough product idea into a buildable spec: an interviewer asks the highest-risk open question each round until users, problem, scope, constraints, and acceptance criteria are concrete.",
+        "features": [
+          "Scores each session for readiness, document completeness, ambiguity, warnings, open questions, and implementation coverage.",
+          "Marks a spec Ready only when users, problem, scope, constraints, and observable acceptance criteria are documented, and shows the evidence check by check.",
+          "An AI interviewer asks one clarifying question per round, and the builder's answers feed the live specification.",
+          "A Market Research tab generates an evidence-backed report, and the finished spec exports as a handoff bundle."
+        ],
+        "tryThis": [
+          "Open “Example: Reading queue” and expand Readiness evidence to see the six checks behind its Ready status.",
+          "Open a session that is still in progress to read the interviewer's questions and answers round by round."
+        ],
+        "sources": [
+          "https://prism.mj-kang.com/"
+        ]
+      }
     },
     {
+      "id": "caption-with-intent",
       "title": "Caption With Intent",
       "description": "Caption timing and media editing prototype for intent-aware short-form video.",
       "href": "https://cwi.mj-kang.com/",
@@ -123,9 +336,41 @@
       "domain": "media tooling",
       "status": "live",
       "image": "images/projects/cwi-minimal.jpg",
-      "detailImage": "images/projects/cwi-thumbnail.jpg"
+      "detailImage": "images/projects/cwi-thumbnail.jpg",
+      "embed": false,
+      "detail": {
+        "pitch": "A browser-based editor prototype for Caption with Intention (CWI), a caption style that adds speaker attribution, word-level timing, and intonation cues such as color, motion, and size. It edits CWI overlays on a sample clip.",
+        "features": [
+          "Previews a bundled sample clip with an editable CWI overlay, alongside transcript, speaker, and QA panels.",
+          "Inspector controls for cue timing, speaker, word motion, volume size, optional tone overrides, line breaks, and off-camera styling.",
+          "Imports local media with SRT or WebVTT captions to create editable CWI cues, seeding vocal emphasis from an in-browser volume analysis.",
+          "Round-trips project state as CWI JSON; a QA panel checks structure, timing, sound cues, volume range, and read-ahead.",
+          "Runs entirely in the browser, with no backend or upload path; imported media stays local."
+        ],
+        "tryThis": [
+          "Select a cue in the Transcript list to load its timing, speaker, and words into the cue editor.",
+          "Open the QA tab to see the checks run against the sample project."
+        ],
+        "stack": [
+          "TypeScript",
+          "CSS",
+          "Static HTML (no framework)",
+          "Vercel"
+        ],
+        "links": [
+          {
+            "label": "Source",
+            "href": "https://github.com/mjkang-estrella/caption-with-intention"
+          }
+        ],
+        "sources": [
+          "https://cwi.mj-kang.com/",
+          "https://github.com/mjkang-estrella/caption-with-intention/blob/main/README.md"
+        ]
+      }
     },
     {
+      "id": "reader",
       "title": "Reader",
       "description": "Personal reader for feeds, saved articles, highlights, and a focused library.",
       "href": "https://reader.mj-kang.com/",
@@ -134,9 +379,31 @@
       "domain": "reading workflow",
       "status": "live",
       "image": "images/projects/reader-minimal.jpg",
-      "detailImage": "images/projects/reader-thumbnail.jpg"
+      "detailImage": "images/projects/reader-thumbnail.jpg",
+      "embed": false,
+      "detail": {
+        "pitch": "A personal reading app that brings RSS feeds, emailed newsletters, saved web pages, YouTube videos, and books into one library, with a daily digest and an inspector that summarizes the open article.",
+        "features": [
+          "Today builds a daily digest of feed articles, browsable by date on a calendar.",
+          "Feeds sync hourly through Convex; newsletters arrive at a dedicated email address; any article URL can be pasted in.",
+          "Separate views for saved articles, a library of clipped pages, YouTube videos, and books split into sections with reading progress.",
+          "An inspector pane summarizes the open article, alongside highlights and a link to the original."
+        ],
+        "tryThis": [
+          "Open All Articles to browse recent items from feeds and newsletters.",
+          "Open Books to see a book split into sections with reading progress."
+        ],
+        "stack": [
+          "Convex"
+        ],
+        "sources": [
+          "https://reader.mj-kang.com/",
+          "https://reader.mj-kang.com/api/config"
+        ]
+      }
     },
     {
+      "id": "agent-newsletter",
       "title": "Agent Newsletter",
       "description": "An AI agent newsletter for discovering new tools and capabilities automatically.",
       "href": "https://github.com/mjkang-estrella/agent-newsletter",
@@ -145,9 +412,46 @@
       "domain": "agent discovery",
       "status": "source",
       "image": "images/projects/agent-newsletter-minimal.jpg",
-      "detailImage": "images/projects/agent-newsletter-thumbnail.jpg"
+      "detailImage": "images/projects/agent-newsletter-thumbnail.jpg",
+      "embed": false,
+      "detail": {
+        "pitch": "A daily review queue for AI agents, served as JSON, on changes to tools and techniques: what changed, why it may matter to a task, and which source to check next. It never installs packages or runs instructions from articles.",
+        "features": [
+          "Collects from public sources such as GitHub and arXiv, with optional Reddit and X adapters, then normalizes, de-duplicates, and scores items.",
+          "Each item carries a summary, an integration hint, a 0–100 editorial relevance score, and evidence fields for dates, novelty, and uncertainty.",
+          "A consumer script compares stable item IDs with a local checkpoint to separate items new to that agent from material changes.",
+          "Editions report freshness and per-source coverage; a partial collection publishes only successful batches, never older filler.",
+          "Source text, including integration hints, is treated as untrusted data and never passed to a shell."
+        ],
+        "tryThisHeading": "Where to look",
+        "tryThis": [
+          "Run npm run demo, then npm run consume, to replay two synthetic editions through the real pipeline with no credentials.",
+          "docs/newsletter-json-api.md for the edition contract.",
+          "The live /api/newsletter/latest endpoint; read its freshness block before using an edition."
+        ],
+        "stack": [
+          "Node.js 22+",
+          "JavaScript (ES modules)",
+          "Supabase",
+          "Vercel",
+          "GitHub Actions"
+        ],
+        "links": [
+          {
+            "label": "Live API",
+            "href": "https://agent-news.mj-kang.com/"
+          }
+        ],
+        "sources": [
+          "https://github.com/mjkang-estrella/agent-newsletter/blob/main/README.md",
+          "https://github.com/mjkang-estrella/agent-newsletter/blob/main/package.json",
+          "https://agent-news.mj-kang.com/",
+          "https://agent-news.mj-kang.com/api/newsletter/latest"
+        ]
+      }
     },
     {
+      "id": "resume-os",
       "title": "Resume OS",
       "description": "Interactive resume platform that answers questions about my background.",
       "href": "https://resume-os.com/",
@@ -156,9 +460,45 @@
       "domain": "interactive resume",
       "status": "live",
       "image": "images/projects/resume-os-minimal.jpg",
-      "detailImage": "images/projects/resume-os-thumbnail.jpg"
+      "detailImage": "images/projects/resume-os-thumbnail.jpg",
+      "embed": false,
+      "detail": {
+        "pitch": "An interactive resume where each bullet opens the story behind it (context, decisions, and results), with an AI agent that answers interview questions from the same material.",
+        "problem": "Resumes compress complexity into bullets: good for speed, bad for nuance. The real signal sits in the choices behind a metric, and surfacing it now takes screening calls and follow-ups. That costs everyone time and can penalize strong candidates who are less practiced at compressed, high-stakes interviews.",
+        "features": [
+          "Clickable bullets expand into structured narratives covering background, problem, solution, and results.",
+          "Context on hover: metrics, constraints, stakeholders, timelines, and links to artifacts, without cluttering the top-level view.",
+          "An AI interview agent built with OpenAI ChatKit and Agent Builder answers interview and behavioral questions from the written stories.",
+          "Tailoring answers to a job description is marked as work in progress."
+        ],
+        "tryThis": [
+          "Click the Toss Bank “Challenge Account” bullet to open its background, solution, and results.",
+          "Click the CrossFit Analyzer bullet under Additional to read that project's case study."
+        ],
+        "stack": [
+          "TypeScript",
+          "Vite",
+          "Express",
+          "OpenAI ChatKit",
+          "OpenAI Agent Builder",
+          "Supabase (waitlist)",
+          "Notion (content)",
+          "Vercel"
+        ],
+        "links": [
+          {
+            "label": "Source",
+            "href": "https://github.com/mjkang-estrella/interactive-resume"
+          }
+        ],
+        "sources": [
+          "https://resume-os.com/",
+          "https://github.com/mjkang-estrella/interactive-resume/blob/main/README.md"
+        ]
+      }
     },
     {
+      "id": "conditioned",
       "title": "Conditioned",
       "description": "AI-based CrossFit performance analyzer & advisor.",
       "href": "https://ardent-footer-45845870.figma.site/",
@@ -167,9 +507,53 @@
       "domain": "fitness analytics",
       "status": "case",
       "image": "images/projects/conditioned-minimal.jpg",
-      "detailImage": "images/projects/conditioned-thumbnail.jpg"
+      "detailImage": "images/projects/conditioned-thumbnail.jpg",
+      "embed": false,
+      "detail": {
+        "pitch": "Published as CrossFit Analyzer, this prototype classifies each CrossFit workout (WOD) across CrossFit's ten fitness domains, so athletes and coaches can see where training is balanced and where it has gaps.",
+        "problem": "Most athletes record only scores such as time, rounds, or weight, and log them inconsistently across notebooks, spreadsheets, and apps. Existing tools track scores rather than insight, so it is hard to see which of the ten domains a training history develops, spot weaknesses, or plan the next cycle.",
+        "features": [
+          "A WOD recorder for logging results and movements.",
+          "A movement library with descriptions, scaling tips, and related workouts.",
+          "OpenAI-based analysis gives each WOD a domain split, such as 70% endurance and 30% power.",
+          "Trend plots show domain distribution over time to reveal gaps or overtraining.",
+          "Supabase authentication and storage for athletes and their training history."
+        ],
+        "tryThisHeading": "Where to look",
+        "tryThis": [
+          "The CrossFit Analyzer case study on Resume OS: open the bullet under Additional.",
+          "The source repository, exported from Figma Make, for the React front end and Supabase functions."
+        ],
+        "stack": [
+          "Figma Make",
+          "React",
+          "TypeScript",
+          "Vite",
+          "Supabase",
+          "OpenAI API",
+          "Recharts"
+        ],
+        "links": [
+          {
+            "label": "Case study on Resume OS",
+            "href": "https://resume-os.com/"
+          },
+          {
+            "label": "Source",
+            "href": "https://github.com/mjkang-estrella/CrossFit-WOD-Prototype"
+          }
+        ],
+        "sources": [
+          "https://resume-os.com/",
+          "https://ardent-footer-45845870.figma.site/",
+          "https://github.com/mjkang-estrella/CrossFit-WOD-Prototype",
+          "https://github.com/mjkang-estrella/CrossFit-WOD-Prototype/blob/main/package.json",
+          "https://github.com/mjkang-estrella/CrossFit-WOD-Prototype/blob/main/src/utils/supabase/info.tsx"
+        ]
+      }
     },
     {
+      "id": "reflect-ios",
       "title": "Reflect (iOS)",
       "description": "Voice journaling application powered by NLP for sentiment analysis.",
       "href": "https://testflight.apple.com/join/2ctpxzhd",
@@ -178,9 +562,18 @@
       "domain": "voice journaling",
       "status": "testflight",
       "image": "images/projects/reflect-ios-minimal.jpg",
-      "detailImage": "images/projects/reflect-ios-thumbnail.jpg"
+      "detailImage": "images/projects/reflect-ios-thumbnail.jpg",
+      "embed": false,
+      "detail": {
+        "pitch": "An iOS voice-journaling app that applies natural-language processing to entries for sentiment analysis, distributed as a beta through Apple TestFlight.",
+        "sources": [
+          "repo:data/portfolio.json",
+          "https://testflight.apple.com/join/2ctpxzhd"
+        ]
+      }
     },
     {
+      "id": "three-body-simulator",
       "title": "Three Body Simulator",
       "description": "Interactive two-dimensional gravity simulation for chaotic multi-body orbital dynamics.",
       "href": "/three-body-problem-simulation/",
@@ -189,9 +582,41 @@
       "domain": "physics",
       "status": "live",
       "image": "images/projects/three-body-simulator-minimal.jpg",
-      "detailImage": "images/projects/three-body-simulator-thumbnail.jpg"
+      "detailImage": "images/projects/three-body-simulator-thumbnail.jpg",
+      "embed": true,
+      "detail": {
+        "pitch": "A two-dimensional three-body gravity simulator with adaptive RK4 integration and 705 starting presets, from the figure-eight orbit to 695 periodic orbits labeled from the Li–Liao catalog. Drag bodies to break an orbit.",
+        "features": [
+          "Adaptive RK4 with step-doubling error control; presets use exact Newtonian gravity, and hand-placed setups switch to softened gravity.",
+          "Ten named presets (Figure Eight, Lagrange Triangle, Euler Collinear, Broucke, Henon, and others) plus 695 Li–Liao periodic orbits.",
+          "Per-body initial-velocity sliders, a gravitational-constant slider (0.1–3.0), and time speed up to 4×.",
+          "Live readouts label each body's trajectory (elliptical or hyperbolic) and status, such as stable or ejected.",
+          "Opens on a random preset and starts paused until Run Simulation is pressed."
+        ],
+        "tryThis": [
+          "Scroll to Simulation, pick an orbit from Preset Solutions, and press Run Simulation.",
+          "Drag a body to a new position, then run again to see how the orbit changes.",
+          "Click the canvas first, press Tab to focus a body, then nudge it with the arrow keys (hold Shift for larger steps)."
+        ],
+        "stack": [
+          "Vanilla JavaScript",
+          "Canvas 2D (trails)",
+          "HTML/CSS"
+        ],
+        "links": [
+          {
+            "label": "Source",
+            "href": "https://github.com/mjkang-estrella/mjkang-estrella.github.io/tree/main/three-body-problem-simulation"
+          }
+        ],
+        "sources": [
+          "repo:three-body-problem-simulation/index.html",
+          "repo:three-body-problem-simulation/simulator.js"
+        ]
+      }
     },
     {
+      "id": "block-fighter",
       "title": "Block Fighter",
       "description": "Browser-based physics mini-game built with Canvas API.",
       "href": "/block-fighter/",
@@ -200,9 +625,46 @@
       "domain": "canvas physics",
       "status": "live",
       "image": "images/projects/block-fighter-minimal.jpg",
-      "detailImage": "images/projects/block-fighter-thumbnail.jpg"
+      "detailImage": "images/projects/block-fighter-thumbnail.jpg",
+      "embed": true,
+      "detail": {
+        "pitch": "A two-player Pong Wars variant for one keyboard or touch screen: each ball repaints squares in its side's color, and a side wins by painting 60% of the board or holding more territory when the 60-second timer ends.",
+        "features": [
+          "A ball takes the color of the last paddle it touched and converts opposing squares it hits.",
+          "Balls speed up over the round; faster balls break extra squares along their path and shift toward red.",
+          "A missed ball respawns on its side after a three-second countdown.",
+          "Movement scales with frame time, so play speed matches on 60 Hz and 120 Hz+ displays.",
+          "On touch screens, each half of the board drags its own paddle, and a tap starts or restarts."
+        ],
+        "tryThis": [
+          "Click the board first to start (or press Space); this also gives the game keyboard focus.",
+          "Day moves with W and S; Night moves with the Up and Down arrow keys.",
+          "Paint 60% of the board or lead when the timer runs out; tap or press Space to play again."
+        ],
+        "stack": [
+          "HTML Canvas 2D",
+          "Vanilla JavaScript",
+          "CSS"
+        ],
+        "links": [
+          {
+            "label": "Source",
+            "href": "https://github.com/mjkang-estrella/mjkang-estrella.github.io/tree/main/block-fighter"
+          },
+          {
+            "label": "Inspired by Pong Wars",
+            "href": "https://github.com/vnglst/pong-wars"
+          }
+        ],
+        "sources": [
+          "repo:block-fighter/index.html",
+          "repo:block-fighter/AGENTS.md",
+          "repo:block-fighter/style.css"
+        ]
+      }
     },
     {
+      "id": "rent-calculator",
       "title": "Rent Calculator",
       "description": "Interactive Jeonse rent calculator for exploring deposit, monthly rent, and conversion tradeoffs.",
       "href": "/jeonse/",
@@ -211,9 +673,40 @@
       "domain": "housing finance",
       "status": "live",
       "image": "images/projects/rent-calculator-minimal.jpg",
-      "detailImage": "images/projects/rent-calculator-thumbnail.jpg"
+      "detailImage": "images/projects/rent-calculator-thumbnail.jpg",
+      "embed": true,
+      "detail": {
+        "pitch": "A Korean-language calculator comparing jeonse (lump-sum deposit) with wolse (monthly rent) from the landlord's side: deposits repay the loan first, the rest earns after-tax interest, and it compares monthly net cash flow.",
+        "features": [
+          "Inputs: jeonse deposit, wolse deposit and monthly rent, outstanding loan, loan rate, and deposit rate.",
+          "Applies 15.4% interest-income tax (14% withholding plus 1.4% local tax) to deposit interest.",
+          "For each option, shows loan repaid, remaining loan, invested cash, monthly interest before and after tax, and loan interest.",
+          "States which option pays more per month and by how much; the formulas are printed on the page.",
+          "Inputs are saved in the browser and restored on the next visit."
+        ],
+        "tryThis": [
+          "The interface is in Korean. Press 예시값 채우기 (fill example values) to load a sample scenario.",
+          "Change 월세 (monthly rent) and watch the summary update which option pays more per month."
+        ],
+        "stack": [
+          "Vanilla JavaScript",
+          "HTML/CSS",
+          "Pretendard font",
+          "localStorage"
+        ],
+        "links": [
+          {
+            "label": "Source",
+            "href": "https://github.com/mjkang-estrella/mjkang-estrella.github.io/tree/main/jeonse"
+          }
+        ],
+        "sources": [
+          "repo:jeonse/index.html"
+        ]
+      }
     },
     {
+      "id": "retirement-calculator",
       "title": "Retirement Calculator",
       "description": "Interactive retirement simulator for estimating long-term savings growth and monthly income.",
       "href": "/retirement-calculator/",
@@ -222,7 +715,36 @@
       "domain": "financial planning",
       "status": "live",
       "image": "images/projects/retirement-calculator-minimal.jpg",
-      "detailImage": "images/projects/retirement-calculator-thumbnail.jpg"
+      "detailImage": "images/projects/retirement-calculator-thumbnail.jpg",
+      "embed": true,
+      "detail": {
+        "pitch": "A retirement projector that compounds current savings and monthly contributions up to a chosen retirement age, charts the projected balance, and estimates monthly retirement income with the 4% rule.",
+        "features": [
+          "Sliders for current age, retirement age, current savings, monthly contribution, and expected annual return (1–15%).",
+          "Compounds monthly at the annual rate and draws the balance curve from this year to the retirement year.",
+          "Reports total saved, estimated monthly income from a 4% withdrawal, and growth beyond what was contributed.",
+          "Exports the inputs and projection as a plain-text report.",
+          "Keeps the retirement age at or above the current age."
+        ],
+        "tryThis": [
+          "Move the Expected Return slider from 7% to 10% and compare Total Saved and Monthly Income.",
+          "Press Export Report to download the projection as a text file."
+        ],
+        "stack": [
+          "Vanilla JavaScript",
+          "Inline SVG chart",
+          "HTML/CSS"
+        ],
+        "links": [
+          {
+            "label": "Source",
+            "href": "https://github.com/mjkang-estrella/mjkang-estrella.github.io/tree/main/retirement-calculator"
+          }
+        ],
+        "sources": [
+          "repo:retirement-calculator/index.html"
+        ]
+      }
     }
   ]
 }
