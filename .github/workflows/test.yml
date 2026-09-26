@@ -45,6 +45,8 @@ jobs:
       - name: Syntax-check JavaScript
         run: |
           node --check js/homepage.js
+          node --check js/project-detail.js
+          node --check js/ask-ai.js
           node --check three-body-problem-simulation/simulator.js
           python3 - <<'EOF'
           import re, subprocess, sys, tempfile

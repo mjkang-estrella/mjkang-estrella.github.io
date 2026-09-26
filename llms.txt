@@ -15,7 +15,7 @@ These details are published in the History section of the [portfolio](https://mj
 
 - [Home](https://mj-kang.com/)
 - [Machine view](https://mj-kang.com/?view=machine): UI representation of the same visible portfolio data
-- [Akashic Computer](https://akashic-computer.vercel.app/): open-weight model atlas for model families, artifacts, benchmarks, runtimes, and hardware fit
+- [Akashic Computer](https://akashic.computer/): open-weight model atlas for model families, artifacts, benchmarks, runtimes, and hardware fit
 - [Poincare Lean](https://github.com/mjkang-estrella/poincare-lean): ongoing Lean 4 formalization with proof-agent workflows
 - [Personal AI Lab](https://blog.mj-kang.com/my-ai-homelab/): personal AI platform spanning applications, dual-DGX inference, storage, and observability
 - [Soma](https://github.com/mjkang-estrella/soma-context): local-first health context and evidence-grounded reporting system

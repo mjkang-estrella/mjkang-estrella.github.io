@@ -11,6 +11,7 @@ import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX_HTML = ROOT / "index.html"
+PORTFOLIO_JSON = ROOT / "data" / "portfolio.json"
 ROBOTS_TXT = ROOT / "robots.txt"
 SITEMAP_XML = ROOT / "sitemap.xml"
 LLMS_TXT = ROOT / "llms.txt"
@@ -41,6 +42,7 @@ VOID_ELEMENTS = {
 }
 
 SOCIAL_HOSTS = {"www.linkedin.com", "x.com", "github.com", "blog.mj-kang.com"}
+FRAME_BLOCKED_HOSTS = {"github.com", "testflight.apple.com", "apps.apple.com"}
 
 
 class HomePageParser(HTMLParser):
@@ -54,12 +56,17 @@ class HomePageParser(HTMLParser):
         self.project_hrefs: list[str] = []
         self.project_titles: list[str] = []
         self.project_metadata_count = 0
+        self.project_cards: list[dict[str, str | None]] = []
+        self.detail_dialogs: list[dict[str, object]] = []
+        self.detail_close_buttons = 0
+        self.detail_templates: dict[str, dict[str, list[str | None]]] = {}
         self.timeline_item_count = 0
         self.machine_timeline_count = 0
         self.mode_buttons: list[str] = []
         self.mode_button_pressed: dict[str, str | None] = {}
         self.copy_machine_profile_button = False
         self.social_hosts: list[str] = []
+        self.profile_social_links: list[dict[str, str | None]] = []
         self.heading_text: list[str] = []
         self.title_text = ""
         self.stylesheets: list[str] = []
@@ -81,6 +88,10 @@ class HomePageParser(HTMLParser):
         self._json_ld_buffer: list[str] = []
         self._machine_depth = 0
         self._social_nav_depth = 0
+        self._main_depth = 0
+        self._dialog_depth = 0
+        self._template_depth = 0
+        self._template_id: str | None = None
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         attr_map = dict(attrs)
@@ -92,6 +103,59 @@ class HomePageParser(HTMLParser):
             self.machine_section_attrs = attr_map
         elif self._machine_depth and not is_void:
             self._machine_depth += 1
+
+        if tag == "main":
+            self._main_depth = 1
+        elif self._main_depth and not is_void:
+            self._main_depth += 1
+
+        if tag == "dialog" and "project-detail" in class_names:
+            self.detail_dialogs.append(
+                {
+                    "attrs": attr_map,
+                    "in_main": bool(self._main_depth),
+                    "in_machine": bool(self._machine_depth),
+                }
+            )
+            self._dialog_depth = 1
+        elif self._dialog_depth and not is_void:
+            self._dialog_depth += 1
+
+        if (
+            self._dialog_depth
+            and tag == "button"
+            and "data-project-detail-close" in attr_map
+            and attr_map.get("type") == "button"
+        ):
+            self.detail_close_buttons += 1
+
+        if tag == "template" and attr_map.get("data-project-detail"):
+            self._template_id = attr_map["data-project-detail"]
+            self._template_depth = 1
+            self.detail_templates[self._template_id] = {
+                "cta_hrefs": [],
+                "embed_srcs": [],
+                "forbidden": [],
+            }
+        elif self._template_depth and not is_void:
+            self._template_depth += 1
+
+            # Templates are cloned into the dialog, so they must not carry
+            # anything the page scrapes or observes, or any fixed ids.
+            template = self.detail_templates[self._template_id]
+            if tag == "a" and "project-detail__cta" in class_names:
+                template["cta_hrefs"].append(attr_map.get("href"))
+            if attr_map.get("data-embed-src"):
+                template["embed_srcs"].append(attr_map["data-embed-src"])
+            if (
+                class_names & {"project-card", "project-title"}
+                or "data-reveal" in attr_map
+                or "id" in attr_map
+            ):
+                template["forbidden"].append(tag)
+
+        if tag == "a" and "profile-social__link" in class_names:
+            self.profile_social_links.append(attr_map)
 
         if tag == "ul" and "social-links" in class_names:
             self._social_nav_depth = 1
@@ -109,6 +173,9 @@ class HomePageParser(HTMLParser):
 
         if tag == "a" and "project-card" in class_names:
             self.project_card_count += 1
+            self.project_cards.append(
+                {"id": attr_map.get("data-project-id"), "href": attr_map.get("href")}
+            )
             if attr_map.get("href"):
                 self.project_hrefs.append(attr_map["href"])
             if (
@@ -232,6 +299,17 @@ class HomePageParser(HTMLParser):
         if self._social_nav_depth:
             self._social_nav_depth -= 1
 
+        if self._main_depth:
+            self._main_depth -= 1
+
+        if self._dialog_depth:
+            self._dialog_depth -= 1
+
+        if self._template_depth:
+            self._template_depth -= 1
+            if not self._template_depth:
+                self._template_id = None
+
 
 def parse_homepage() -> tuple[HomePageParser, str]:
     html = INDEX_HTML.read_text(encoding="utf-8")
@@ -261,13 +339,13 @@ def test_document_structure() -> None:
     assert parser.project_metadata_count == 16
     assert len(parser.project_titles) == 16
     assert parser.project_hrefs[:4] == [
-        "https://akashic-computer.vercel.app/",
+        "https://akashic.computer/",
         "https://github.com/mjkang-estrella/poincare-lean",
         "https://blog.mj-kang.com/my-ai-homelab/",
         "https://github.com/mjkang-estrella/soma-context",
     ]
     assert "https://cwi.mj-kang.com/" in parser.project_hrefs
-    assert parser.timeline_item_count == 5
+    assert parser.timeline_item_count == 4
     assert parser.machine_timeline_count == 4
 
 
@@ -282,6 +360,34 @@ def test_machine_document_mirrors_visible_content() -> None:
         if href.startswith("/"):
             href = f"https://mj-kang.com{href}"
         assert href in machine_text
+
+
+def test_project_detail_popup() -> None:
+    parser, _ = parse_homepage()
+    projects = json.loads(PORTFOLIO_JSON.read_text(encoding="utf-8"))["projects"]
+    detailed_ids = sorted(project["id"] for project in projects if "detail" in project)
+    assert len(detailed_ids) == len(projects), "every project should have a popup"
+
+    assert len(parser.detail_dialogs) == 1
+    dialog = parser.detail_dialogs[0]
+    assert not dialog["in_main"], "the dialog must sit outside <main>"
+    assert not dialog["in_machine"], "the dialog must sit outside the machine view"
+    assert dialog["attrs"].get("aria-labelledby") == "project-detail-title"
+    assert parser.detail_close_buttons == 1
+
+    card_ids = [card["id"] for card in parser.project_cards if card["id"]]
+    assert len(card_ids) == len(set(card_ids)), "data-project-id must be unique"
+    assert sorted(card_ids) == detailed_ids
+    assert sorted(parser.detail_templates) == detailed_ids
+
+    for card in parser.project_cards:
+        if not card["id"]:
+            continue
+        template = parser.detail_templates[card["id"]]
+        assert template["cta_hrefs"] == [card["href"]], card["id"]
+        assert template["forbidden"] == [], card["id"]
+        for source in template["embed_srcs"]:
+            assert urlsplit(source).hostname not in FRAME_BLOCKED_HOSTS, card["id"]
 
 
 def test_view_toggle_initial_accessibility_state() -> None:
@@ -302,6 +408,25 @@ def test_footer_social_links() -> None:
 
     assert len(parser.social_hosts) == 4
     assert set(parser.social_hosts) == SOCIAL_HOSTS
+
+
+def test_profile_social_links() -> None:
+    parser, _ = parse_homepage()
+
+    hrefs = [link.get("href") or "" for link in parser.profile_social_links]
+    assert [urlsplit(href).hostname for href in hrefs[:3]] == [
+        "www.linkedin.com",
+        "github.com",
+        "x.com",
+    ]
+    assert hrefs[3] == "mailto:mj.kang@hey.com"
+    for link in parser.profile_social_links:
+        # Icon-only links need an accessible name; web profiles must leave
+        # the site safely.
+        assert link.get("aria-label"), link
+        if link["href"].startswith("https://"):
+            assert link.get("target") == "_blank"
+            assert link.get("rel") == "noopener noreferrer"
 
 
 def test_head_metadata() -> None:
@@ -356,7 +481,11 @@ def test_referenced_assets_exist_on_disk() -> None:
     parser, _ = parse_homepage()
 
     assert "css/homepage.css" in parser.stylesheets
-    assert parser.scripts == ["js/homepage.js", "js/ask-ai.js"]
+    assert parser.scripts == [
+        "js/homepage.js",
+        "js/project-detail.js",
+        "js/ask-ai.js",
+    ]
     for stylesheet in parser.stylesheets:
         assert_local_asset_exists(stylesheet)
     for script in parser.scripts:
@@ -366,8 +495,11 @@ def test_referenced_assets_exist_on_disk() -> None:
     for content_path in parser.meta_content_paths:
         assert_local_asset_exists(content_path)
 
-    # 16 flat card images + 16 hover-detail images + profile badge + 4 logos.
-    assert len(parser.image_sources) == 40
+    # Two images per card (flat + hover detail), two more per popup template,
+    # the profile badge, 4 timeline logos and 3 Ask-an-AI provider icons.
+    projects = json.loads(PORTFOLIO_JSON.read_text(encoding="utf-8"))["projects"]
+    detailed = [project for project in projects if "detail" in project]
+    assert len(parser.image_sources) == 2 * len(projects) + 2 * len(detailed) + 8
     for image in parser.image_sources:
         assert_local_asset_exists(image)
 

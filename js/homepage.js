@@ -135,6 +135,39 @@
         }
     };
 
+    const textsOf = (element, selector) =>
+        Array.from(element.querySelectorAll(selector), (match) =>
+            match.textContent.trim().replace(/\s+/g, " ")
+        );
+
+    const detailTemplates = new Map(
+        Array.from(
+            document.querySelectorAll("template[data-project-detail]"),
+            (template) => [template.dataset.projectDetail, template.content]
+        )
+    );
+
+    // The popup's richer copy lives in inert templates (see
+    // js/project-detail.js); read it the same way as the visible cards.
+    const getProjectDetail = (id) => {
+        const content = detailTemplates.get(id);
+
+        if (!content) {
+            return null;
+        }
+
+        const field = (name) => `[data-detail-field="${name}"]`;
+
+        return {
+            pitch: textOf(content, "[data-project-detail-pitch]"),
+            problem: textOf(content, `${field("problem")} p`),
+            features: textsOf(content, `${field("features")} li`),
+            tryThisHeading: textOf(content, `${field("tryThis")} h3`),
+            tryThis: textsOf(content, `${field("tryThis")} li`),
+            stack: textOf(content, `${field("stack")} p`),
+        };
+    };
+
     const getProjectData = () =>
         Array.from(document.querySelectorAll(".project-card")).map((project) => ({
             title: textOf(project, ".project-title"),
@@ -143,7 +176,29 @@
             kind: project.dataset.kind || "project",
             domain: project.dataset.domain || "unspecified",
             status: project.dataset.status || "available",
+            detail: getProjectDetail(project.dataset.projectId),
         }));
+
+    const detailMarkdownLines = (detail) => {
+        if (!detail) {
+            return [];
+        }
+
+        return [
+            `- Pitch: ${detail.pitch}`,
+            ...(detail.problem ? [`- Why it exists: ${detail.problem}`] : []),
+            ...(detail.features.length
+                ? ["- What it does:", ...detail.features.map((item) => `  - ${item}`)]
+                : []),
+            ...(detail.tryThis.length
+                ? [
+                      `- ${detail.tryThisHeading || "Try this"}:`,
+                      ...detail.tryThis.map((step, index) => `  ${index + 1}. ${step}`),
+                  ]
+                : []),
+            ...(detail.stack ? [`- Built with: ${detail.stack}`] : []),
+        ];
+    };
 
     const getTimelineData = () =>
         Array.from(
@@ -359,6 +414,7 @@
                 `- Kind: ${project.kind}`,
                 `- Domain: ${project.domain}`,
                 `- Status: ${project.status}`,
+                ...detailMarkdownLines(project.detail),
                 ""
             );
         });
