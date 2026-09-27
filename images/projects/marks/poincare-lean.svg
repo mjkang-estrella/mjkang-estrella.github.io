@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750">
+  <g transform="translate(600 375) scale(1.15) translate(-600 -375)" fill="none" stroke="#050505" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="600" cy="375" r="125"/>
+    <path d="M475 375 C 475 415, 725 415, 725 375"/>
+    <path d="M475 375 C 475 335, 725 335, 725 375" stroke-dasharray="4 14"/>
+    <ellipse cx="600" cy="300" rx="100.0" ry="22.0"/>
+    <circle cx="600" cy="258" r="8" fill="#050505" stroke="none"/>
+  </g>
+</svg>

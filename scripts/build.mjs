@@ -48,6 +48,7 @@ const PROJECT_KEYS = new Set([
     "status",
     "image",
     "detailImage",
+    "detailAlt",
     "embed",
     "embedUrl",
     "embedLabel",
@@ -96,7 +97,7 @@ const validatePortfolio = (data) => {
             if (!PROJECT_KEYS.has(key)) fail(`unknown key "${key}"`);
         }
 
-        for (const key of ["title", "description", "href", "cta", "kind", "domain", "status", "image", "detailImage"]) {
+        for (const key of ["title", "description", "href", "cta", "kind", "domain", "status", "image"]) {
             if (!isText(project[key])) fail(`${key} must be a non-empty string`);
         }
 
@@ -110,6 +111,16 @@ const validatePortfolio = (data) => {
 
         if (typeof project.embed !== "boolean") {
             fail("embed must be true or false");
+        }
+
+        for (const key of ["detailImage", "detailAlt"]) {
+            if (project[key] !== undefined && !isText(project[key])) {
+                fail(`${key} must be a non-empty string when present`);
+            }
+        }
+
+        if (project.detailAlt !== undefined && project.detailImage === undefined) {
+            fail("detailAlt describes detailImage, which is missing");
         }
 
         if (project.embedUrl !== undefined && !isSafeHref(project.embedUrl)) {
@@ -177,16 +188,28 @@ const validatePortfolio = (data) => {
     }
 };
 
-const jpegSizes = new Map();
+const imageSizes = new Map();
 
-/** Reads the pixel size from a JPEG's SOF marker so width/height attributes
- *  never drift from the files on disk. */
-const jpegSize = (path) => {
-    if (!jpegSizes.has(path)) {
-        jpegSizes.set(path, readJpegSize(path));
+/** Reads an image's intrinsic size from the file so width/height attributes
+ *  never drift from what is on disk. */
+const imageSize = (path) => {
+    if (!imageSizes.has(path)) {
+        imageSizes.set(path, path.endsWith(".svg") ? readSvgSize(path) : readJpegSize(path));
     }
 
-    return jpegSizes.get(path);
+    return imageSizes.get(path);
+};
+
+const readSvgSize = (path) => {
+    const root = readFileSync(resolve(ROOT, path), "utf8").match(/<svg\b[^>]*>/)?.[0] || "";
+    const width = Number(root.match(/\swidth="(\d+)"/)?.[1]);
+    const height = Number(root.match(/\sheight="(\d+)"/)?.[1]);
+
+    if (!width || !height) {
+        throw new Error(`${path}: the <svg> needs numeric width and height attributes`);
+    }
+
+    return { width, height };
 };
 
 const readJpegSize = (path) => {
@@ -242,9 +265,12 @@ const displayHost = (href) => {
     return `${host}${url.pathname.replace(/\/$/, "")}`;
 };
 
+// Cards show the project's ink mark, and on hover (and in the popup) the
+// real product: a screenshot, or a photo for the article. Projects with
+// nothing to capture have no detailImage and keep the mark throughout.
 const renderProjectCard = (project) => {
-    const flat = jpegSize(project.image);
-    const detail = jpegSize(project.detailImage);
+    const flat = imageSize(project.image);
+    const detail = project.detailImage && imageSize(project.detailImage);
     const external = isExternal(project.href);
     // With a detail popup the card explains before it launches; without one
     // it still goes straight to the project, so it keeps the project's CTA.
@@ -274,16 +300,20 @@ const renderProjectCard = (project) => {
         `            loading="lazy"`,
         `            decoding="async"`,
         `        />`,
-        `        <img`,
-        `            data-detail-src="${escapeHtml(project.detailImage)}"`,
-        `            class="project-image project-image--detail"`,
-        `            alt=""`,
-        `            aria-hidden="true"`,
-        `            width="${detail.width}"`,
-        `            height="${detail.height}"`,
-        `            loading="lazy"`,
-        `            decoding="async"`,
-        `        />`,
+        detail
+            ? [
+                  `        <img`,
+                  `            data-detail-src="${escapeHtml(project.detailImage)}"`,
+                  `            class="project-image project-image--detail"`,
+                  `            alt=""`,
+                  `            aria-hidden="true"`,
+                  `            width="${detail.width}"`,
+                  `            height="${detail.height}"`,
+                  `            loading="lazy"`,
+                  `            decoding="async"`,
+                  `        />`,
+              ]
+            : null,
         `    </span>`,
         `    <div class="project-info">`,
         `        <h3 class="project-title">${escapeHtml(project.title)}</h3>`,
@@ -316,8 +346,8 @@ const detailList = (tag, className, items) => [
  *  sixteen duplicate ids. */
 const renderProjectDetail = (project) => {
     const { detail } = project;
-    const flat = jpegSize(project.image);
-    const screenshot = jpegSize(project.detailImage);
+    const flat = imageSize(project.image);
+    const screenshot = project.detailImage && imageSize(project.detailImage);
     const embedSrc = project.embedUrl || project.href;
     const stageHref = project.embed ? embedSrc : project.href;
     const openLabel = project.embed ? "Open full site" : project.cta;
@@ -409,14 +439,18 @@ const renderProjectDetail = (project) => {
         `                    height="${flat.height}"`,
         `                    decoding="async"`,
         `                />`,
-        `                <img`,
-        `                    class="project-detail__image project-detail__image--detail"`,
-        `                    src="${escapeHtml(project.detailImage)}"`,
-        `                    alt="Screenshot of ${title}"`,
-        `                    width="${screenshot.width}"`,
-        `                    height="${screenshot.height}"`,
-        `                    decoding="async"`,
-        `                />`,
+        screenshot
+            ? [
+                  `                <img`,
+                  `                    class="project-detail__image project-detail__image--detail"`,
+                  `                    src="${escapeHtml(project.detailImage)}"`,
+                  `                    alt="${escapeHtml(project.detailAlt || `Screenshot of ${project.title}`)}"`,
+                  `                    width="${screenshot.width}"`,
+                  `                    height="${screenshot.height}"`,
+                  `                    decoding="async"`,
+                  `                />`,
+              ]
+            : null,
         `            </figure>`,
         tryButton.map((row) => `        ${row}`),
         `            <p class="project-detail__status" role="status" data-project-detail-status></p>`,
