@@ -4,10 +4,12 @@ This repository is for my github page.
 ## Analytics
 
 Cloudflare Web Analytics supplies aggregate traffic and performance reports.
-Optional GA4 measures the portfolio's project and navigation events after a
-visitor grants analytics consent. Configuration, event definitions, report
-recipes, verification and rollback are documented in [docs/analytics.md](docs/analytics.md).
-The public privacy notice is at [/privacy/](https://mj-kang.com/privacy/).
+The portfolio also increments anonymous daily counters for pageviews and clicks
+through a first-party Cloudflare Worker and D1 database. It uses no visitor or
+session identifiers, sends no Google requests, and shows no consent banner.
+The counter schema, deployment settings and report queries are documented in
+[docs/analytics.md](docs/analytics.md). The privacy notice and optional opt-out
+are at [/privacy/](https://mj-kang.com/privacy/).
 
 ## Editing projects and history
 

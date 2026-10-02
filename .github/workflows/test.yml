@@ -31,6 +31,9 @@ jobs:
       - name: Check generated markup matches data/portfolio.json
         run: npm run check:generated
 
+      - name: Verify anonymous counter validation and aggregation
+        run: npm run test:counter
+
       - name: Run browser smoke tests
         run: npx playwright test
 

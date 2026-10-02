@@ -1,157 +1,119 @@
-const { test, expect } = require("@playwright/test");
-const path = require("node:path");
-const ROOT = path.resolve(__dirname, "../..");
-const KEY = "mj-analytics-consent-v1";
-const ID = "G-7SZGKKSJT4";
-
-// Exercise the production hostname with local files. Never send test traffic
-// to Google, Cloudflare, or the deployed site.
-async function serveSite(page) {
-    const googleRequests = [];
-    await page.context().route("**/*", async (route) => {
+const { test, expect } = require('@playwright/test');
+const path = require('node:path');
+const ROOT = path.resolve(__dirname, '../..');
+const OPT_OUT = 'mj-anonymous-counts-disabled';
+async function serveSite(page, failure = false) {
+    const counts = [];
+    const google = [];
+    await page.context().route('**/*', async (route) => {
         const url = new URL(route.request().url());
-        if (url.hostname === "www.googletagmanager.com") {
-            googleRequests.push(url.href);
-            return route.fulfill({ contentType: "text/javascript", body: "" });
+        if (/google-analytics|googletagmanager/.test(url.hostname)) google.push(url.href);
+        if (url.hostname !== 'mj-kang.com') return route.abort();
+        if (url.pathname === '/__counts') {
+            counts.push({ body: route.request().postDataJSON(), headers: route.request().headers() });
+            return failure ? route.abort() : route.fulfill({ status: 204 });
         }
-        if (url.hostname !== "mj-kang.com") return route.abort();
-        const file = path.join(ROOT, url.pathname.endsWith("/") ? url.pathname + "index.html" : url.pathname);
-        try { return route.fulfill({ path: file }); }
-        catch { return route.fulfill({ status: 404, body: "Not found" }); }
+        try { return await route.fulfill({ path: path.join(ROOT, url.pathname.endsWith('/') ? url.pathname + 'index.html' : url.pathname) }); }
+        catch { return route.fulfill({ status: 404, body: 'Not found' }); }
     });
-    await page.emulateMedia({ reducedMotion: "reduce" });
-    return googleRequests;
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    return { counts, google };
 }
-async function events(page, name) {
-    return page.evaluate((name) => (window.dataLayer || [])
-        .map((entry) => Array.from(entry))
-        .filter((entry) => entry[0] === "event" && (!name || entry[1] === name)), name);
-}
-async function grant(page) {
-    await page.getByRole("button", { name: "Allow analytics", exact: true }).click();
-    await expect.poll(async () => (await events(page, "page_view")).length).toBe(1);
-}
+const of = (counts, event) => counts.filter((row) => row.body.event === event);
 
-test("no Google request before opt-in; decline persists", async ({ page }) => {
-    const requests = await serveSite(page);
-    await page.goto("https://mj-kang.com/");
-    await expect(page.getByRole("button", { name: "Allow analytics", exact: true })).toBeVisible();
-    await page.locator('[data-project-id="block-fighter"]').click();
-    expect(await events(page)).toEqual([]);
-    expect(requests).toEqual([]);
-    await page.keyboard.press("Escape");
-    await page.getByRole("button", { name: "No thanks", exact: true }).click();
-    await page.reload();
-    await expect(page.locator(".analytics-choice")).toBeHidden();
-    expect(requests).toEqual([]);
+test('counts immediately without a banner, identifiers, credentials, referrer or Google', async ({ page, context }) => {
+    const { counts, google } = await serveSite(page);
+    await context.addCookies([{ name: 'unrelated_session', value: 'private', domain: 'mj-kang.com', path: '/', secure: true }]);
+    await page.goto('https://mj-kang.com/?email=secret&utm_source=person#private');
+    await expect.poll(() => of(counts, 'page_view').length).toBe(1);
+    await expect(page.getByText('Allow analytics', { exact: true })).toHaveCount(0);
+    expect(google).toEqual([]);
+    for (const row of counts) {
+        expect(Object.keys(row.body).sort()).toEqual(['context', 'event', 'page', 'target']);
+        expect(row.headers.cookie).toBeUndefined();
+        expect(row.headers.referer).toBeUndefined();
+    }
+    expect(JSON.stringify(counts.map((row) => row.body))).not.toMatch(/secret|person|private|email|utm_source/);
+    expect(await page.evaluate(() => Object.keys(localStorage))).toEqual([]);
+    expect((await context.cookies()).map((c) => c.name)).toEqual(['unrelated_session']);
 });
 
-test("consented project funnel records actual opens and demo starts once", async ({ page }) => {
-    await serveSite(page);
-    await page.goto("https://mj-kang.com/");
-    await grant(page);
+test('project open, demo and outbound clicks remain separate anonymous increments', async ({ page }) => {
+    const { counts } = await serveSite(page);
+    await page.goto('https://mj-kang.com/');
     await page.locator('[data-project-id="block-fighter"]').click();
-    await expect(page.locator("dialog[open]")).toBeVisible();
-    const opens = await events(page, "project_open");
-    expect(opens).toHaveLength(1);
-    expect(opens[0][2]).toMatchObject({ project_id: "block-fighter", open_method: "card" });
-    expect(await events(page, "project_link_click")).toHaveLength(0);
-    expect(await events(page, "page_view")).toHaveLength(1);
-    await page.locator("dialog [data-project-detail-try]").click();
-    expect((await events(page, "demo_start"))[0][2].project_id).toBe("block-fighter");
-    await expect(page.locator("dialog iframe")).toBeVisible();
-    const frame = page.frames().find((frame) => frame.url().includes("/block-fighter/"));
-    await expect.poll(() => frame.evaluate(() => (window.dataLayer || []).length)).toBeGreaterThan(0);
-    expect(await frame.locator(".analytics-choice").count()).toBe(0);
-    const embeddedView = await frame.evaluate(() => Array.from(window.dataLayer).find((row) => row[1] === "page_view")[2]);
-    expect(embeddedView.page_context).toBe("embedded");
-    await page.locator("[data-project-detail-close]").click();
-    expect(await events(page, "project_close")).toHaveLength(1);
+    await expect.poll(() => of(counts, 'project_open').length).toBe(1);
+    expect(of(counts, 'project_open')[0].body).toEqual({ event: 'project_open', page: '/', target: 'block-fighter', context: 'page' });
+    expect(of(counts, 'project_link_click')).toHaveLength(0);
+    await page.locator('dialog [data-project-detail-try]').click();
+    await expect.poll(() => of(counts, 'demo_start').length).toBe(1);
+    await expect.poll(() => counts.filter((r) => r.body.event === 'page_view' && r.body.context === 'embed').length).toBe(1);
+    await page.locator('dialog [data-project-detail-exit]').click();
+    await page.locator('dialog .project-detail__cta').click();
+    await expect(page).toHaveURL('https://mj-kang.com/block-fighter/');
+    await expect.poll(() => of(counts, 'project_link_click').length).toBe(1);
 });
 
-test("clean URLs, campaign attribution, and AI provider clicks", async ({ page }) => {
-    await serveSite(page);
-    await page.goto("https://mj-kang.com/?private=secret&utm_source=linkedin&utm_medium=social");
-    await grant(page);
-    const config = await page.evaluate(() => Array.from(window.dataLayer).find((row) => row[0] === "config")[2]);
-    expect(config).toMatchObject({ page_location: "https://mj-kang.com/", campaign_source: "linkedin", campaign_medium: "social", send_page_view: false, allow_google_signals: false });
-    await page.getByRole("button", { name: "Ask an AI about MJ Kang", exact: true }).click();
-    const opened = page.waitForEvent("popup");
+test('AI clicks send only a provider category, never prompt or destination URL', async ({ page }) => {
+    const { counts } = await serveSite(page);
+    await page.goto('https://mj-kang.com/');
+    await page.getByRole('button', { name: 'Ask an AI about MJ Kang', exact: true }).click();
+    const popup = page.waitForEvent('popup');
     await page.locator('[data-ai-provider="chatgpt"]').click();
-    await (await opened).close();
-    expect((await events(page, "ai_assistant_click"))[0][2].provider).toBe("chatgpt");
-    const payload = JSON.stringify(await events(page));
-    expect(payload).not.toContain("secret");
-    expect(payload).not.toContain("Tell me about");
-    expect(payload).not.toContain("?q=");
+    await (await popup).close();
+    await expect.poll(() => of(counts, 'ai_assistant_click').length).toBe(1);
+    expect(of(counts, 'ai_assistant_click')[0].body).toEqual({ event: 'ai_assistant_click', page: '/', target: 'chatgpt', context: 'page' });
 });
 
-test("project CTA records destination without URL parameters", async ({ page }) => {
-    await serveSite(page);
-    await page.goto("https://mj-kang.com/");
-    await grant(page);
-    await page.locator('[data-project-id="block-fighter"]').click();
-    const opened = page.waitForEvent("popup");
-    await page.locator('dialog .project-detail__secondary[href^="https://github.com/mjkang-estrella/"]').click();
-    await (await opened).close();
-    expect((await events(page, "project_link_click"))[0][2]).toMatchObject({
-        project_id: "block-fighter", link_url: "https://github.com/mjkang-estrella/mjkang-estrella.github.io/tree/main/block-fighter", section: "project_detail",
+test('old GA cookies are removed and an existing refusal becomes an opt-out', async ({ page, context }) => {
+    const { counts, google } = await serveSite(page);
+    await context.addCookies(['_ga', '_ga_7SZGKKSJT4'].map((name) => ({ name, value: 'old-id', domain: 'mj-kang.com', path: '/', secure: true })));
+    await context.addInitScript(() => {
+        if (!localStorage.getItem('migration_seeded')) {
+            localStorage.setItem('mj-analytics-consent-v1', 'denied');
+            localStorage.setItem('migration_seeded', '1');
+        }
     });
+    await page.goto('https://mj-kang.com/');
+    expect(counts).toEqual([]);
+    expect(google).toEqual([]);
+    expect((await context.cookies()).filter((c) => c.name.startsWith('_ga'))).toEqual([]);
+    expect(await page.evaluate(() => localStorage.getItem('mj-analytics-consent-v1'))).toBeNull();
+    expect(await page.evaluate((key) => localStorage.getItem(key), OPT_OUT)).toBe('1');
+    await page.goto('https://mj-kang.com/privacy/');
+    await page.getByRole('button', { name: 'Enable anonymous counts', exact: true }).click();
+    await page.getByRole('link', { name: 'Back to MJ Kang', exact: true }).click();
+    await expect.poll(() => of(counts, 'page_view').length).toBe(1);
 });
 
-test("same-tab project link queues its event and still navigates if Google is blocked", async ({ page }) => {
-    await serveSite(page);
-    await page.goto("https://mj-kang.com/");
-    await grant(page);
-    await page.locator('[data-project-id="block-fighter"]').click();
-    let departureEvents = [];
-    await page.exposeFunction("recordDeparture", (rows) => { departureEvents = rows; });
-    await page.evaluate(() => {
-        document.addEventListener("click", () => {
-            window.recordDeparture((window.dataLayer || []).map((row) => [row[0], row[1], row[2]?.project_id]));
-        });
+test('privacy-page opt-out persists and privacy signals override collection', async ({ page, context }) => {
+    const { counts } = await serveSite(page);
+    await page.goto('https://mj-kang.com/privacy/');
+    await page.getByRole('button', { name: 'Disable anonymous counts', exact: true }).click();
+    await page.getByRole('link', { name: 'Back to MJ Kang', exact: true }).click();
+    expect(counts).toEqual([]);
+    await context.addInitScript(() => {
+        localStorage.clear();
+        Object.defineProperty(navigator, 'globalPrivacyControl', { value: true });
     });
-    await page.locator("dialog .project-detail__cta").click();
-    await expect(page).toHaveURL("https://mj-kang.com/block-fighter/");
-    expect(departureEvents).toContainEqual(["event", "project_link_click", "block-fighter"]);
-});
-
-test("withdrawal disables events, clears cookies, and survives reload", async ({ page, context }) => {
-    const requests = await serveSite(page);
-    await page.goto("https://mj-kang.com/");
-    await grant(page);
-    await context.addCookies([{ name: "_ga", value: "test", domain: "mj-kang.com", path: "/", secure: true }]);
-    await page.getByRole("button", { name: "Analytics preferences", exact: true }).click();
-    await page.getByRole("button", { name: "No thanks", exact: true }).click();
-    const before = (await events(page)).length;
-    await page.locator('[data-project-id="block-fighter"]').click();
-    expect((await events(page)).length).toBe(before);
-    expect((await context.cookies()).filter((cookie) => cookie.name.startsWith("_ga"))).toEqual([]);
-    expect(await page.evaluate((id) => window[`ga-disable-${id}`], ID)).toBe(true);
-    const loads = requests.length;
     await page.reload();
-    expect(requests).toHaveLength(loads);
+    expect(counts).toEqual([]);
+    await page.goto('https://mj-kang.com/privacy/');
+    await expect(page.getByRole('button', { name: 'Disable anonymous counts', exact: true })).toBeDisabled();
 });
 
-test("privacy signals override a stored grant", async ({ page, context }) => {
-    const requests = await serveSite(page);
-    await context.addInitScript(({ key }) => {
-        localStorage.setItem(key, "granted");
-        Object.defineProperty(navigator, "globalPrivacyControl", { value: true });
-    }, { key: KEY });
-    await page.goto("https://mj-kang.com/");
-    expect(await events(page)).toEqual([]);
-    expect(requests).toEqual([]);
-    await page.getByRole("button", { name: "Analytics preferences", exact: true }).click();
-    await expect(page.getByRole("button", { name: "Allow analytics", exact: true })).toHaveCount(0);
+test('unavailable counter never blocks project navigation', async ({ page }) => {
+    await serveSite(page, true);
+    await page.goto('https://mj-kang.com/');
+    await page.locator('[data-project-id="block-fighter"]').click();
+    await page.locator('dialog .project-detail__cta').click();
+    await expect(page).toHaveURL('https://mj-kang.com/block-fighter/');
 });
 
-test("local previews do not load analytics", async ({ page }) => {
-    const requests = [];
-    page.on("request", (request) => {
-        if (request.url().includes("googletagmanager")) requests.push(request.url());
-    });
-    await page.goto("/");
-    expect(requests).toEqual([]);
-    await expect(page.locator(".analytics-choice")).toHaveCount(0);
+test('local previews send no counter or Google requests', async ({ page }) => {
+    const unexpected = [];
+    page.on('request', (r) => { if (/__counts|googletagmanager|google-analytics/.test(r.url())) unexpected.push(r.url()); });
+    await page.goto('/');
+    expect(unexpected).toEqual([]);
+    await expect(page.locator('.analytics-choice, .analytics-settings')).toHaveCount(0);
 });

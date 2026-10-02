@@ -1,0 +1,18 @@
+{
+  "name": "portfolio-anonymous-counts",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-02",
+  "account_id": "499636ef9c9e66c98497d6d280b947b5",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    { "pattern": "mj-kang.com/__counts*", "zone_name": "mj-kang.com" },
+    { "pattern": "www.mj-kang.com/__counts*", "zone_name": "mj-kang.com" }
+  ],
+  "observability": { "enabled": false },
+  "d1_databases": [{
+    "binding": "COUNTS",
+    "database_name": "portfolio-anonymous-counts",
+    "database_id": "fd39c57d-55ea-4d99-ab3f-4f37b8061de7"
+  }]
+}
