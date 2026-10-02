@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "codex-grid-background",
+        "value": "*",
+        "files": [
+          "three-body-problem-simulation/index.html"
+        ],
+        "createdAt": "2026-10-02T05:35:06.833Z",
+        "reason": "Agent review: .sim-grid is confined to #sim-view beneath #trail-canvas and draggable bodies with coordinate labels. This is the actual physics simulation surface, an allowed canvas exception, not a decorative page background."
+      }
+    ]
+  }
+}
