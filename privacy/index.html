@@ -3,26 +3,37 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Analytics & privacy | MJ Kang</title>
+    <title>Anonymous counts & privacy | MJ Kang</title>
     <meta name="robots" content="noindex">
-    <link rel="stylesheet" href="/css/analytics.css">
-    <style>body{max-width:680px;margin:64px auto;padding:0 24px 96px;background:#fbfaf7;color:#252420;font:17px/1.7 system-ui,sans-serif}h1{line-height:1.2}a{color:inherit}h2{font-size:1.2em;margin-top:32px}</style>
+    <style>
+        body { max-width: 680px; margin: 64px auto; padding: 0 24px 64px; background: #fbfaf7; color: #252420; font: 17px/1.7 system-ui, sans-serif; }
+        h1 { line-height: 1.2; } h2 { font-size: 1.2em; margin-top: 32px; }
+        a { color: inherit; text-underline-offset: .2em; }
+        button { font: inherit; padding: 8px 16px; background: #252420; color: #fbfaf7; border: 0; border-radius: 6px; cursor: pointer; }
+        button:disabled { background: #66635b; cursor: default; }
+        button:focus-visible, a:focus-visible { outline: 2px solid #2e68bb; outline-offset: 4px; }
+        ::selection { background: #ddd8ca; color: #252420; }
+    </style>
 </head>
 <body>
-    <a href="/">← MJ Kang</a>
-    <h1>Analytics & privacy</h1>
-    <p>Updated October 1, 2026</p>
-    <p>I use analytics to understand which projects people explore and improve this personal website.</p>
-    <h2>Optional Google Analytics</h2>
-    <p>Google Analytics loads only after you choose “Allow analytics.” It uses cookies to distinguish browsers and sessions and measures page visits, scroll depth, visible sections, project details opened, demo starts and link clicks. This can show the sequence of actions within a visit; it does not tell me who you are.</p>
-    <p>The site does not send calculator inputs, form contents, email addresses or AI prompt text as analytics events. Page and destination URLs exclude query strings and fragments. Explicit UTM campaign labels are sent separately to measure referral campaigns. Please do not put personal information in campaign labels.</p>
-    <p>Advertising storage, advertising personalization and Google signals are disabled in the site's tag configuration. There is no session recording. Embedded external projects have their own privacy practices; this site measures opening a demo, not interactions inside an external site's frame.</p>
-    <p>Choose “Analytics preferences” to decline or withdraw consent. Withdrawal stops this site's Google Analytics events and removes the Google Analytics cookies created on this host. Your preference is stored in your browser. Global Privacy Control and Do Not Track signals keep optional analytics off.</p>
-    <p>Google processes analytics data under its <a href="https://policies.google.com/privacy">privacy policy</a>. This setup covers mj-kang.com and its local project pages; separately hosted subdomains may use different tools.</p>
-    <h2>Cloudflare</h2>
-    <p>Cloudflare delivers and protects the site and provides aggregate traffic and performance statistics. Cloudflare Web Analytics is configured to exclude EU visitors and operates separately from the optional Google Analytics choice. See <a href="https://www.cloudflare.com/web-analytics/">Cloudflare Web Analytics</a> for its measurement approach.</p>
+    <a href="/">Back to MJ Kang</a>
+    <h1>Anonymous counts & privacy</h1>
+    <p>Updated October 2, 2026</p>
+    <p>This site counts pageviews and actions such as opening a project, starting a demo or clicking a link. It stores daily totals, such as “Block Fighter was opened 12 times today.” It does not connect those actions to a visitor.</p>
+    <h2>What the counter stores</h2>
+    <p>Each total has a UTC date, a known page, an action, a known target and whether it came from a full page or an embedded demo. The counter increments that total directly. It does not keep individual event records, precise event timestamps or a browsing history.</p>
+    <p>There are no visitor or session identifiers, fingerprinting, tracking cookies or session recordings. The counting request omits cookies and the referrer. Query strings, campaign tags, full destination URLs, calculator inputs, email addresses and AI prompt contents are not collected by this counter.</p>
+    <p>The site no longer loads Google Analytics. It removes the cookies created by the previous integration. If you previously declined that optional tracking, anonymous counts remain off in this browser.</p>
+    <h2>Your preference</h2>
+    <p data-counts-status>JavaScript is required for the counter and this preference control. With JavaScript off, no custom counts are sent.</p>
+    <button type="button" data-counts-toggle>Disable anonymous counts</button>
+    <p>The only preference stored in your browser is an optional on/off flag. It is not sent with count requests. Global Privacy Control and Do Not Track also disable the custom counter.</p>
+    <h2>Hosting and Cloudflare</h2>
+    <p>The counter is hosted on Cloudflare and stores totals in a private D1 database. Its Worker request logging is disabled, and the counter does not read or store your IP address or browser information. Cloudflare still processes network information to deliver and protect the website, as it does for other web requests.</p>
+    <p>Existing Cloudflare Web Analytics provides separate aggregate traffic and performance reports and is configured to exclude EU visitor data. The preference above controls this site's custom counter. See <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare's privacy policy</a> and <a href="https://www.cloudflare.com/web-analytics/">Web Analytics information</a>.</p>
+    <p>External project demos have their own privacy practices. This site counts opening them, not activity inside their pages.</p>
     <h2>Contact</h2>
     <p>For questions, email <a href="mailto:mj.kang@hey.com">mj.kang@hey.com</a>.</p>
-    <script defer src="/js/analytics.js?v=20261001-2"></script>
+    <script defer src="/js/analytics.js?v=20261002-anonymous"></script>
 </body>
 </html>

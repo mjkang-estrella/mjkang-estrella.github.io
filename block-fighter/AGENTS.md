@@ -10,8 +10,8 @@ subdirectory of the portfolio repo (mjkang-estrella.github.io). Inspired by
   end of `<body>`. No build step; edit and reload.
 - `style.css` — layout, HUD, and overlay styles.
 
-The game uses shared favicons under `/images/logo/` and optional, consent-gated
-analytics at `/js/analytics.js` and `/css/analytics.css`. Gameplay does not
+The game uses shared favicons under `/images/logo/` and anonymous aggregate
+counts at `/js/analytics.js`. Gameplay does not
 depend on analytics. There is no environment file.
 
 ## Build, Test, and Development Commands

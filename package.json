@@ -8,9 +8,10 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "check:generated": "node scripts/build.mjs --check",
-    "test": "npm run check:generated && npm run test:structure && npm run test:e2e",
+    "test": "npm run check:generated && npm run test:structure && npm run test:counter && npm run test:e2e",
     "test:e2e": "playwright test",
-    "test:structure": "python3 tests/homepage_structure_test.py"
+    "test:structure": "python3 tests/homepage_structure_test.py",
+    "test:counter": "node --test tests/counter.test.mjs"
   },
   "repository": {
     "type": "git",

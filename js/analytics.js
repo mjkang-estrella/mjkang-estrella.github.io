@@ -1,222 +1,152 @@
-// Optional, consent-gated portfolio analytics. Cloudflare RUM remains separate.
+// Aggregate counts only: no Google tag, visitor/session ID, cookie or raw URL.
 (() => {
-    const MEASUREMENT_ID = "G-7SZGKKSJT4";
-    const CONSENT_KEY = "mj-analytics-consent-v1";
     const production = ["mj-kang.com", "www.mj-kang.com"].includes(location.hostname);
-    const embedded = window.top !== window.self;
+    const PAGES = new Set(["/", "/block-fighter/", "/three-body-problem-simulation/", "/jeonse/", "/retirement-calculator/"]);
+    const PROJECT_EVENTS = new Set(["project_open", "project_close", "demo_start", "demo_restart", "demo_exit", "project_link_click"]);
+    const OPT_OUT = "mj-anonymous-counts-disabled";
+    const LEGACY = "mj-analytics-consent-v1";
     const privacySignal = navigator.globalPrivacyControl === true || navigator.doNotTrack === "1";
-    let enabled = false;
-    let initialized = false;
+    let disabled = false;
+    let sent = 0;
     let pageSent = false;
     let observer;
     const seenSections = new Set();
     const seenDepths = new Set();
-    const readConsent = () => {
-        try { return localStorage.getItem(CONSENT_KEY); } catch { return null; }
-    };
-    const cleanUrl = (value) => {
+
+    // Retire our previous GA integration. Only an opt-out preference is retained.
+    if (production) {
         try {
-            const url = new URL(value, location.href);
-            return /^https?:$/.test(url.protocol) ? url.origin + url.pathname : "";
-        } catch { return ""; }
-    };
-    function gtag() {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push(arguments);
+            if (localStorage.getItem(LEGACY) === "denied") localStorage.setItem(OPT_OUT, "1");
+            localStorage.removeItem(LEGACY);
+            disabled = localStorage.getItem(OPT_OUT) === "1";
+        } catch { /* Storage is optional; counting does not require it. */ }
+        window["ga-disable-G-7SZGKKSJT4"] = true;
+        for (const name of ["_ga", "_ga_7SZGKKSJT4"]) {
+            for (const domain of ["", location.hostname, `.${location.hostname}`, ".mj-kang.com"]) {
+                document.cookie = `${name}=; Max-Age=0; Path=/;${domain ? ` Domain=${domain};` : ""} SameSite=Lax; Secure`;
+            }
+        }
     }
-    const track = (name, parameters = {}) => {
-        if (!enabled) return;
-        gtag("event", name, {
-            send_to: MEASUREMENT_ID,
-            page_location: cleanUrl(location.href),
-            page_referrer: cleanUrl(document.referrer),
-            page_title: document.title,
-            view_mode: document.body.dataset.portfolioView || "project",
-            page_context: embedded ? "embedded" : "standalone",
-            ...parameters,
-        });
+
+    const targets = {
+        page_view: () => "",
+        navigation_click: (p) => p.target,
+        contact_click: () => "email",
+        ai_assistant_click: (p) => p.provider,
+        view_mode_change: (p) => p.view_mode,
+        copy_click: (p) => p.content_type,
+        section_view: (p) => p.section,
+        scroll_depth: (p) => String(p.percent_scrolled),
+    };
+    const track = (event, parameters = {}) => {
+        if (!production || disabled || privacySignal || !PAGES.has(location.pathname) || sent >= 120) return;
+        const target = PROJECT_EVENTS.has(event) ? parameters.project_id :
+            Object.hasOwn(targets, event) ? targets[event](parameters) : undefined;
+        if (typeof target !== "string" || target.length > 64) return;
+        sent += 1;
+        // One independent increment. No batching/session key, credentials,
+        // referrer, query string, fragment, exact time, UA or device data.
+        fetch("/__counts", {
+            method: "POST",
+            mode: "same-origin",
+            credentials: "omit",
+            referrerPolicy: "no-referrer",
+            keepalive: true,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ event, page: location.pathname, target, context: window.top === window.self ? "page" : "embed" }),
+        }).catch(() => {});
     };
     window.portfolioAnalytics = Object.freeze({ track });
 
-    const trackDepth = () => {
-        if (!enabled || document.visibilityState === "hidden") return;
-        const height = document.documentElement.scrollHeight;
-        if (height <= innerHeight) return;
-        const percent = Math.min(100, (scrollY + innerHeight) / height * 100);
-        [25, 50, 75, 90].forEach((depth) => {
-            if (percent >= depth && !seenDepths.has(depth)) {
-                seenDepths.add(depth);
-                track("scroll_depth", { percent_scrolled: depth });
-            }
-        });
-    };
-    const observeSections = () => {
+    const start = () => {
+        if (!production || disabled || privacySignal || !PAGES.has(location.pathname)) return;
+        if (!pageSent) { pageSent = true; track("page_view"); }
         if (!("IntersectionObserver" in window)) return;
         observer ||= new IntersectionObserver((entries) => {
-            entries.forEach(({ target, isIntersecting }) => {
+            for (const { target, isIntersecting } of entries) {
                 const section = target.dataset.humanBlock;
-                if (enabled && isIntersecting && !seenSections.has(section)) {
+                if (!disabled && isIntersecting && !seenSections.has(section)) {
                     seenSections.add(section);
                     track("section_view", { section });
                 }
-            });
+            }
         }, { threshold: 0.1 });
         document.querySelectorAll('[data-human-block]:not([data-human-block="page"])')
             .forEach((section) => observer.observe(section));
     };
-    const start = () => {
-        if (!production || privacySignal || enabled) return;
-        enabled = true;
-        window[`ga-disable-${MEASUREMENT_ID}`] = false;
-        if (!initialized) {
-            initialized = true;
-            // Basic consent mode: no Google request at all before opt-in.
-            gtag("consent", "default", {
-                analytics_storage: "granted", ad_storage: "denied",
-                ad_user_data: "denied", ad_personalization: "denied",
-            });
-            gtag("js", new Date());
-            const campaign = {};
-            const query = new URLSearchParams(location.search);
-            ["source", "medium", "campaign", "term", "content", "id"].forEach((key) => {
-                const value = query.get(`utm_${key}`);
-                if (value) campaign[`campaign_${key === "campaign" ? "name" : key}`] = value.slice(0, 100);
-            });
-            gtag("config", MEASUREMENT_ID, {
-                send_page_view: false,
-                allow_google_signals: false,
-                allow_ad_personalization_signals: false,
-                cookie_domain: location.hostname,
-                cookie_flags: "SameSite=Lax;Secure",
-                page_location: cleanUrl(location.href),
-                page_referrer: cleanUrl(document.referrer),
-                ...(query.get("analytics_debug") === "1" ? { debug_mode: true } : {}),
-                ...campaign,
-            });
-            const script = document.createElement("script");
-            script.async = true;
-            script.src = `https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}`;
-            document.head.append(script);
-        } else {
-            gtag("consent", "update", { analytics_storage: "granted" });
+    const button = document.querySelector("[data-counts-toggle]");
+    const status = document.querySelector("[data-counts-status]");
+    const updatePreference = () => {
+        if (status) status.textContent = privacySignal ? "Anonymous counts are off because your browser requests not to be tracked." :
+            disabled ? "Anonymous counts are off in this browser." : "Anonymous counts are on. No visitor or session identifier is used.";
+        if (button) {
+            button.textContent = disabled ? "Enable anonymous counts" : "Disable anonymous counts";
+            button.disabled = privacySignal;
         }
-        if (!pageSent) {
-            pageSent = true;
-            track("page_view");
-        }
-        observeSections();
     };
-    const stop = () => {
-        enabled = false;
-        observer?.disconnect();
-        window[`ga-disable-${MEASUREMENT_ID}`] = true;
-        if (initialized) gtag("consent", "update", { analytics_storage: "denied" });
-        // Remove only cookies owned by this integration on this host.
-        ["_ga", `_ga_${MEASUREMENT_ID.slice(2)}`].forEach((name) => {
-            ["", location.hostname, `.${location.hostname}`].forEach((domain) => {
-                document.cookie = `${name}=; Max-Age=0; Path=/;${domain ? ` Domain=${domain};` : ""} SameSite=Lax; Secure`;
-            });
-        });
-    };
-
-    // Local previews never contact Google or display a consent prompt.
-    if (!production) return;
-
-    if (!embedded) {
-        const panel = document.createElement("section");
-        panel.className = "analytics-choice";
-        panel.setAttribute("aria-label", "Analytics preference");
-        panel.innerHTML = '<p><strong>Help improve this site?</strong> Optional Google Analytics cookies measure page visits and clicks. <a href="/privacy/">Privacy details</a></p><div><button type="button" data-choice="denied">No thanks</button><button type="button" data-choice="granted">Allow analytics</button></div>';
-        const settings = document.createElement("button");
-        settings.type = "button";
-        settings.className = "analytics-settings";
-        settings.textContent = "Analytics preferences";
-        settings.addEventListener("click", () => {
-            panel.hidden = false;
-            settings.hidden = true;
-            panel.querySelector("button").focus();
-        });
-        panel.addEventListener("click", (event) => {
-            const choice = event.target.closest("[data-choice]")?.dataset.choice;
-            if (!choice) return;
-            try { localStorage.setItem(CONSENT_KEY, choice); } catch { /* Session-only choice. */ }
-            if (choice === "granted") start(); else stop();
-            panel.hidden = true;
-            settings.hidden = false;
-            settings.focus({ preventScroll: true });
-        });
-        if (privacySignal) {
-            panel.querySelector("p").innerHTML = 'Analytics is off because your browser requests not to be tracked. <a href="/privacy/">Privacy details</a>';
-            panel.querySelector('[data-choice="granted"]').remove();
-        }
-        panel.hidden = readConsent() !== null || privacySignal;
-        settings.hidden = !panel.hidden;
-        document.body.append(panel, settings);
-    }
-
-    if (readConsent() === "granted") start();
-    else window[`ga-disable-${MEASUREMENT_ID}`] = true;
-    window.addEventListener("storage", (event) => {
-        if (event.key !== CONSENT_KEY && event.key !== null) return;
-        if (readConsent() === "granted") start(); else stop();
+    button?.addEventListener("click", () => {
+        disabled = !disabled;
+        try { if (disabled) localStorage.setItem(OPT_OUT, "1"); else localStorage.removeItem(OPT_OUT); } catch { /* In-memory preference. */ }
+        if (disabled) observer?.disconnect(); else start();
+        updatePreference();
     });
-    window.addEventListener("scroll", trackDepth, { passive: true });
+    window.addEventListener("storage", (event) => {
+        if (event.key !== OPT_OUT && event.key !== null) return;
+        try { disabled = localStorage.getItem(OPT_OUT) === "1"; } catch { return; }
+        if (disabled) observer?.disconnect(); else start();
+        updatePreference();
+    });
+    updatePreference();
+    start();
 
+    const navigationTarget = (link) => {
+        try {
+            const url = new URL(link.href);
+            if (!/^https?:$/.test(url.protocol)) return null;
+            if (url.origin === location.origin) {
+                if (url.pathname === "/") return "home";
+                if (url.pathname === "/privacy/") return "privacy";
+                if (url.pathname === "/llms.txt" || url.pathname.startsWith("/.well-known/")) return "machine";
+            }
+            const host = url.hostname.replace(/^www\./, "");
+            return ({ "blog.mj-kang.com": "blog", "github.com": "github", "linkedin.com": "linkedin", "x.com": "x" })[host] ||
+                (link.closest("[data-human-block=history]") ? "history" : "other");
+        } catch { return null; }
+    };
     const linkClick = (event) => {
-        if (!enabled || (event.type === "auxclick" && event.button !== 1)) return;
+        if (event.defaultPrevented || (event.type === "auxclick" && event.button !== 1)) return;
         const link = event.target.closest("a[href]");
-        if (!link || event.defaultPrevented || link.closest(".analytics-choice")) return;
-        const href = link.getAttribute("href");
-        const projectId = link.dataset.projectId ||
-            link.closest('[data-project-detail-dialog]')
-                ?.querySelector('[data-project-detail-body]')?.dataset.analyticsProjectId || "";
-        const section = link.closest("[data-human-block]")?.dataset.humanBlock ||
-            (link.closest("[data-project-detail-dialog]") ? "project_detail" : "navigation");
-        if (/^mailto:/i.test(href)) {
-            track("contact_click", { contact_method: "email", section });
-            return;
-        }
-        if (link.dataset.aiProvider) {
-            track("ai_assistant_click", { provider: link.dataset.aiProvider });
-            return;
-        }
-        const url = cleanUrl(link.href);
-        if (!url || href.startsWith("#")) return;
-        const delivery = {};
-        // Give gtag a bounded opportunity to send before a same-tab navigation
-        // tears down this document. A blocked tag must never strand the link.
-        if (event.type === "click" && event.button === 0 &&
-            !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey &&
-            (!link.target || link.target === "_self") && !link.hasAttribute("download")) {
-            event.preventDefault();
-            const destination = link.href;
-            let navigated = false;
-            const navigate = () => {
-                if (navigated) return;
-                navigated = true;
-                location.assign(destination);
-            };
-            delivery.event_callback = navigate;
-            delivery.event_timeout = 200;
-            window.setTimeout(navigate, 250);
-        }
-        track(projectId ? "project_link_click" : "navigation_click", {
-            ...(projectId ? { project_id: projectId } : {}),
-            link_url: url,
-            link_domain: new URL(url).hostname,
-            outbound: new URL(url).origin !== location.origin,
-            section,
-            ...delivery,
-        });
+        if (!link) return;
+        if (link.getAttribute("href").startsWith("#")) return;
+        if (link.protocol === "mailto:") { track("contact_click"); return; }
+        if (link.dataset.aiProvider) { track("ai_assistant_click", { provider: link.dataset.aiProvider }); return; }
+        const projectId = link.dataset.projectId || link.closest("[data-project-detail-dialog]")
+            ?.querySelector("[data-project-detail-body]")?.dataset.analyticsProjectId;
+        if (projectId) { track("project_link_click", { project_id: projectId }); return; }
+        const target = navigationTarget(link);
+        if (target) track("navigation_click", { target });
+        // Keep native navigation. fetch keepalive needs no tag-load or timeout.
     };
     document.addEventListener("click", linkClick);
     document.addEventListener("auxclick", linkClick);
     document.addEventListener("click", (event) => {
-        const button = event.target.closest("button");
-        if (!button) return;
-        if (button.dataset.viewMode) track("view_mode_change", { view_mode: button.dataset.viewMode });
-        if (button.matches("[data-copy-machine-profile], .ask-ai__copy")) {
-            track("copy_click", { content_type: button.matches(".ask-ai__copy") ? "ai_prompt" : "machine_profile" });
+        const control = event.target.closest("button");
+        if (!control) return;
+        if (control.dataset.viewMode) track("view_mode_change", { view_mode: control.dataset.viewMode });
+        if (control.matches("[data-copy-machine-profile], .ask-ai__copy")) {
+            track("copy_click", { content_type: control.matches(".ask-ai__copy") ? "ai_prompt" : "machine_profile" });
         }
     });
+    window.addEventListener("scroll", () => {
+        if (disabled || privacySignal || document.visibilityState === "hidden") return;
+        const height = document.documentElement.scrollHeight;
+        if (height <= innerHeight) return;
+        const percent = (scrollY + innerHeight) / height * 100;
+        for (const depth of [25, 50, 75, 90]) {
+            if (percent >= depth && !seenDepths.has(depth)) {
+                seenDepths.add(depth);
+                track("scroll_depth", { percent_scrolled: depth });
+            }
+        }
+    }, { passive: true });
 })();
