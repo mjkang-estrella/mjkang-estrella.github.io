@@ -182,12 +182,31 @@
         }
         const url = cleanUrl(link.href);
         if (!url || href.startsWith("#")) return;
+        const delivery = {};
+        // Give gtag a bounded opportunity to send before a same-tab navigation
+        // tears down this document. A blocked tag must never strand the link.
+        if (event.type === "click" && event.button === 0 &&
+            !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey &&
+            (!link.target || link.target === "_self") && !link.hasAttribute("download")) {
+            event.preventDefault();
+            const destination = link.href;
+            let navigated = false;
+            const navigate = () => {
+                if (navigated) return;
+                navigated = true;
+                location.assign(destination);
+            };
+            delivery.event_callback = navigate;
+            delivery.event_timeout = 200;
+            window.setTimeout(navigate, 250);
+        }
         track(projectId ? "project_link_click" : "navigation_click", {
             ...(projectId ? { project_id: projectId } : {}),
             link_url: url,
             link_domain: new URL(url).hostname,
             outbound: new URL(url).origin !== location.origin,
             section,
+            ...delivery,
         });
     };
     document.addEventListener("click", linkClick);

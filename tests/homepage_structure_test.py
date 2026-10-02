@@ -482,7 +482,7 @@ def test_referenced_assets_exist_on_disk() -> None:
 
     assert "css/homepage.css" in parser.stylesheets
     assert parser.scripts == [
-        "/js/analytics.js",
+        "/js/analytics.js?v=20261001-2",
         "js/homepage.js",
         "js/project-detail.js?v=20261001-analytics",
         "js/ask-ai.js",

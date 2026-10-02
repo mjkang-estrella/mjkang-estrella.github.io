@@ -99,6 +99,23 @@ test("project CTA records destination without URL parameters", async ({ page }) 
     });
 });
 
+test("same-tab project link queues its event and still navigates if Google is blocked", async ({ page }) => {
+    await serveSite(page);
+    await page.goto("https://mj-kang.com/");
+    await grant(page);
+    await page.locator('[data-project-id="block-fighter"]').click();
+    let departureEvents = [];
+    await page.exposeFunction("recordDeparture", (rows) => { departureEvents = rows; });
+    await page.evaluate(() => {
+        document.addEventListener("click", () => {
+            window.recordDeparture((window.dataLayer || []).map((row) => [row[0], row[1], row[2]?.project_id]));
+        });
+    });
+    await page.locator("dialog .project-detail__cta").click();
+    await expect(page).toHaveURL("https://mj-kang.com/block-fighter/");
+    expect(departureEvents).toContainEqual(["event", "project_link_click", "block-fighter"]);
+});
+
 test("withdrawal disables events, clears cookies, and survives reload", async ({ page, context }) => {
     const requests = await serveSite(page);
     await page.goto("https://mj-kang.com/");
