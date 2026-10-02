@@ -484,7 +484,7 @@ def test_referenced_assets_exist_on_disk() -> None:
     assert parser.scripts == [
         "/js/analytics.js",
         "js/homepage.js",
-        "js/project-detail.js",
+        "js/project-detail.js?v=20261001-analytics",
         "js/ask-ai.js",
     ]
     for stylesheet in parser.stylesheets:
