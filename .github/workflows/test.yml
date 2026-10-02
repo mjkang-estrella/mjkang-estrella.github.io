@@ -44,6 +44,7 @@ jobs:
 
       - name: Syntax-check JavaScript
         run: |
+          node --check js/analytics.js
           node --check js/homepage.js
           node --check js/project-detail.js
           node --check js/ask-ai.js

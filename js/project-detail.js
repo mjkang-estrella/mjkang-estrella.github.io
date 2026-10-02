@@ -112,6 +112,7 @@
 
     const render = (id) => {
         stopDemo();
+        detailBody.dataset.analyticsProjectId = id;
         const fragment = templates.get(id).content.cloneNode(true);
         fragment
             .querySelector("[data-project-detail-title]")
@@ -144,6 +145,7 @@
                     pushed: history.state?.projectDetail === id,
                     demoUsed: false,
                 });
+                window.portfolioAnalytics?.track("project_open", { project_id: id, open_method: "history" });
             }
             return;
         }
@@ -174,6 +176,10 @@
             if (!dialog.open) {
                 dialog.showModal();
             }
+            window.portfolioAnalytics?.track("project_open", {
+                project_id: id,
+                open_method: push ? "card" : "history",
+            });
         };
 
         const cardMedia = session.card?.querySelector(".project-media");
@@ -244,6 +250,7 @@
         }
 
         stopDemo();
+        window.portfolioAnalytics?.track("project_close", { project_id: session.id });
         current = null;
         detailBody.replaceChildren();
 
@@ -347,6 +354,7 @@
 
         loadFrame();
         dialog.classList.add("is-live");
+        window.portfolioAnalytics?.track("demo_start", { project_id: current.id });
 
         const tools = part("[data-project-detail-tools]");
         const tryButton = part("[data-project-detail-try]");
@@ -433,7 +441,9 @@
             startDemo();
         } else if (event.target.closest("[data-project-detail-restart]")) {
             loadFrame();
+            if (current) window.portfolioAnalytics?.track("demo_restart", { project_id: current.id });
         } else if (event.target.closest("[data-project-detail-exit]")) {
+            if (current) window.portfolioAnalytics?.track("demo_exit", { project_id: current.id });
             stopDemo({ restoreFocus: true });
         }
     });

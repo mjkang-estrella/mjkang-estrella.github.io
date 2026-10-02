@@ -1,6 +1,14 @@
 # Github-Page
 This repository is for my github page.
 
+## Analytics
+
+Cloudflare Web Analytics supplies aggregate traffic and performance reports.
+Optional GA4 measures the portfolio's project and navigation events after a
+visitor grants analytics consent. Configuration, event definitions, report
+recipes, verification and rollback are documented in [docs/analytics.md](docs/analytics.md).
+The public privacy notice is at [/privacy/](https://mj-kang.com/privacy/).
+
 ## Editing projects and history
 
 The Selected Works grid, the History timeline, and their machine-readable
