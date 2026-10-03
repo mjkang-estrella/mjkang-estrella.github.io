@@ -58,6 +58,28 @@ later would break embeds the same way.
 
 `npm run build` validates all of this and lists every problem at once.
 
+## Project images
+
+Each card shows a small ink drawing of the project's idea
+(`images/projects/marks/<id>.svg`, hand-edited SVG: 1200×750, `#050505` ink,
+5px strokes, transparent background). On hover, and in the popup, the card
+shows the real product: `detailImage`, a screenshot in
+`images/projects/screens/<id>.jpg`.
+
+Screenshots are captured, not drawn. When a product changes, run:
+
+```sh
+node scripts/capture.mjs            # every project
+node scripts/capture.mjs prism      # or just some
+npm run build
+```
+
+The script drives each app into a representative state (see the comments in
+`scripts/capture.mjs`), then check the images before committing. A project
+with nothing honest to capture (a login wall, a closed beta, private data)
+omits `detailImage` and keeps its ink mark in the popup. `detailAlt`
+overrides the default "Screenshot of <title>" alt text, e.g. for a photo.
+
 ## Shared styles
 
 `css/base.css` is linked from every page except Block Fighter, which is kept

@@ -1074,10 +1074,12 @@ html.has-motion [data-reveal].is-visible {
     transform: scaleX(1);
 }
 
+/* Paper, not a tint: the ink marks are transparent and should read as
+   drawn on the page. */
 .project-media {
     width: 100%;
     aspect-ratio: 16 / 10;
-    background-color: var(--surface-media);
+    background-color: var(--surface-color);
     border-bottom: 1px solid var(--ink-color);
     display: block;
     overflow: hidden;

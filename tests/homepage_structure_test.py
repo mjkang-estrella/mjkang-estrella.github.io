@@ -496,11 +496,12 @@ def test_referenced_assets_exist_on_disk() -> None:
     for content_path in parser.meta_content_paths:
         assert_local_asset_exists(content_path)
 
-    # Two images per card (flat + hover detail), two more per popup template,
-    # the profile badge, 4 timeline logos and 3 Ask-an-AI provider icons.
+    # Each project's ink mark, plus its screenshot when it has one, appears
+    # once on the card and once in its popup template; then the profile
+    # badge, 4 timeline logos and 3 Ask-an-AI provider icons.
     projects = json.loads(PORTFOLIO_JSON.read_text(encoding="utf-8"))["projects"]
-    detailed = [project for project in projects if "detail" in project]
-    assert len(parser.image_sources) == 2 * len(projects) + 2 * len(detailed) + 8
+    per_project = sum(1 + ("detailImage" in project) for project in projects)
+    assert len(parser.image_sources) == 2 * per_project + 8
     for image in parser.image_sources:
         assert_local_asset_exists(image)
 
