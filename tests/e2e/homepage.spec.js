@@ -484,7 +484,7 @@ test.describe("project detail", () => {
     });
 
     for (const width of [1280, 390]) {
-        test(`plays the hackathon recording on demand at ${width}px and unloads it on close`, async ({ page }) => {
+        test(`loads the hackathon video in the popup at ${width}px and unloads it on close`, async ({ page }) => {
             await page.setViewportSize({ width, height: 844 });
             const videoUrl = "https://drive.google.com/file/d/1v3rAq66T40dje1TkuuASHaEHmZAyQG2n/preview";
             // Test the player lifecycle independently of Google's network/player.
@@ -494,20 +494,26 @@ test.describe("project detail", () => {
                 await route.fulfill({ contentType: "text/html", body: "<p>Demo video player</p>" });
             });
             await page.goto("/");
+            expect(loads).toBe(0);
+            const card = page.locator('[data-project-id="jobswitch"]');
+            await card.hover();
+            await expect(card.locator('.project-image--detail')).toHaveAttribute('src', 'images/projects/jobswitch-thumbnail.jpg');
+            await expect(card.locator('.project-image--detail')).toHaveCSS('opacity', '1');
+            expect(loads).toBe(0);
             const { dialog } = await openProject(page, "jobswitch");
             const frame = dialog.locator("iframe");
-            await expect(frame).toHaveCount(0);
-            expect(loads).toBe(0);
+            await expect(frame).toHaveCount(1);
+            await expect(dialog.locator('.project-detail__media')).toHaveCount(0);
             await expect(dialog.getByRole("link", { name: "Open JobSwitch" })).toHaveAttribute("href", "https://jobswitch-sooty.vercel.app/");
-            await dialog.getByRole("button", { name: "Watch demo" }).click();
             await expect(frame).toHaveAttribute("src", videoUrl);
             await expect(frame).toHaveAttribute("title", "JobSwitch demo video");
-            await expect(dialog.getByRole("button", { name: "Exit video" })).toBeFocused();
+            await expect(frame).toBeVisible();
+            expect((await frame.boundingBox()).height).toBeGreaterThan(180);
+            await expect(dialog.getByRole('region', { name: 'About JobSwitch' })).toBeVisible();
             await expect(dialog.getByRole("link", { name: "Open video", exact: false })).toBeVisible();
-            await dialog.getByRole("button", { name: "Exit video" }).click();
-            await expect(frame).toHaveCount(0);
-            await expect(dialog.getByRole("button", { name: "Watch demo" })).toBeFocused();
-            await dialog.getByRole("button", { name: "Watch demo" }).click();
+            await expect(dialog.getByRole('link', { name: 'Video on Drive' })).toHaveCount(0);
+            await dialog.getByRole("button", { name: "Restart" }).click();
+            await expect.poll(() => loads).toBe(2);
             await expect(frame).toHaveCount(1);
             await dialog.locator("[data-project-detail-close]").click();
             await expect(page.locator("iframe")).toHaveCount(0);
