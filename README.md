@@ -6,7 +6,7 @@ This repository is for my github page.
 Cloudflare Web Analytics supplies aggregate traffic and performance reports.
 The portfolio also increments anonymous daily counters for pageviews and clicks
 through a first-party Cloudflare Worker and D1 database. It uses no visitor or
-session identifiers, sends no Google requests, and shows no consent banner.
+session identifiers, sends no Google analytics requests, and shows no consent banner.
 The counter schema, deployment settings and report queries are documented in
 [docs/analytics.md](docs/analytics.md). The privacy notice and optional opt-out
 are at [/privacy/](https://mj-kang.com/privacy/).
@@ -55,6 +55,17 @@ work without an account or third-party cookies. Browsers can't report a
 refused frame, so the build rejects `embed: true` for hosts known to refuse
 (GitHub, TestFlight). A `frame-src`/`frame-ancestors` CSP added at the CDN
 later would break embeds the same way.
+
+Set `screenshot` to a local JPEG capture of the actual homepage or public demo
+to show it inside the popup. The image fits without cropping, while `image`
+and `detailImage` keep the grid's existing artwork and hover treatment. Without
+a screenshot the popup falls back to the illustration.
+
+For a recorded demo, use `embed: true`, `embedType: "video"`, an embeddable
+player URL in `embedUrl`, and `embedLabel: "Watch demo"`. The player loads
+only when requested and is removed on exit or popup close. Video controls
+also work on phones. Keep `href` pointing to the project itself and include
+a direct video link in `detail.links` as a fallback.
 
 `npm run build` validates all of this and lists every problem at once.
 

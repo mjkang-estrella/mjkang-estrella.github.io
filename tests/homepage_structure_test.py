@@ -335,10 +335,12 @@ def test_document_structure() -> None:
     assert "MJ Kang" in parser.heading_text
     assert "History" in parser.heading_text
     assert "Selected Works" in parser.heading_text
-    assert parser.project_card_count == 16
-    assert parser.project_metadata_count == 16
-    assert len(parser.project_titles) == 16
-    assert parser.project_hrefs[:4] == [
+    assert parser.project_card_count == 18
+    assert parser.project_metadata_count == 18
+    assert len(parser.project_titles) == 18
+    assert parser.project_hrefs[:6] == [
+        "https://jobswitch-sooty.vercel.app/",
+        "https://folio-subscription-manager.vercel.app/",
         "https://akashic.computer/",
         "https://github.com/mjkang-estrella/poincare-lean",
         "https://blog.mj-kang.com/my-ai-homelab/",
@@ -484,7 +486,7 @@ def test_referenced_assets_exist_on_disk() -> None:
     assert parser.scripts == [
         "/js/analytics.js?v=20261002-anonymous",
         "js/homepage.js",
-        "js/project-detail.js?v=20261001-analytics",
+        "js/project-detail.js?v=20261004-video",
         "js/ask-ai.js",
     ]
     for stylesheet in parser.stylesheets:

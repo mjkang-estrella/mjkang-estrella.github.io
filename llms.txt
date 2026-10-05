@@ -15,6 +15,8 @@ These details are published in the History section of the [portfolio](https://mj
 
 - [Home](https://mj-kang.com/)
 - [Machine view](https://mj-kang.com/?view=machine): UI representation of the same visible portfolio data
+- [JobSwitch](https://jobswitch-sooty.vercel.app/): Personal Agent Hackathon project for employer benefits, job-transition tasks, and reviewed HR follow-ups; [demo video](https://drive.google.com/file/d/1v3rAq66T40dje1TkuuASHaEHmZAyQG2n/view)
+- [Folio](https://folio-subscription-manager.vercel.app/): subscription management agent connecting costs, usage evidence, and renewal decisions; automated merchant changes are controlled demos
 - [Akashic Computer](https://akashic.computer/): open-weight model atlas for model families, artifacts, benchmarks, runtimes, and hardware fit
 - [Poincare Lean](https://github.com/mjkang-estrella/poincare-lean): ongoing Lean 4 formalization with proof-agent workflows
 - [Personal AI Lab](https://blog.mj-kang.com/my-ai-homelab/): personal AI platform spanning applications, dual-DGX inference, storage, and observability

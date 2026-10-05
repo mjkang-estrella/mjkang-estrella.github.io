@@ -49,6 +49,122 @@
   ],
   "projects": [
     {
+      "id": "jobswitch",
+      "title": "JobSwitch",
+      "description": "A personal agent for the space between two jobs, built at the Personal Agent Hackathon.",
+      "href": "https://jobswitch-sooty.vercel.app/",
+      "cta": "Open JobSwitch",
+      "kind": "hackathon",
+      "domain": "job transitions",
+      "status": "live demo",
+      "image": "images/projects/jobswitch-thumbnail.jpg",
+      "detailImage": "images/projects/jobswitch-thumbnail.jpg",
+      "embed": true,
+      "embedType": "video",
+      "embedUrl": "https://drive.google.com/file/d/1v3rAq66T40dje1TkuuASHaEHmZAyQG2n/preview",
+      "embedLabel": "Watch demo",
+      "detail": {
+        "pitch": "Built at the Personal Agent Hackathon on October 4, 2026, JobSwitch helps people compare employer benefits, prepare claims, and follow up with HR through the space between two jobs.",
+        "problem": "Changing jobs scatters benefits, deadlines, reimbursements, and HR follow-ups across documents and inboxes. JobSwitch turns that material into a plan tied to the person’s transition dates, prepares the next useful action, and leaves consequential choices with the person.",
+        "features": [
+          "Compares employer handbooks and builds a transition plan with exact source pages and explicit missing information.",
+          "Prepares reimbursement claims and HR replies for review; outgoing submissions and messages require approval of their exact contents.",
+          "Eight practice cases turn staged emails into tasks, timelines, and proactive reply drafts. Practice email stays inside JobSwitch.",
+          "Optional background HR checks continue for up to seven days. Claim approval and actual payment remain separate states.",
+          "Connected portal tasks use a browser agent with a reviewed plan, pausing for sign-in or anything outside the approved scope."
+        ],
+        "tryThis": [
+          "Watch the hackathon demo here: fictional employers and simulated practice email show the follow-up workflow.",
+          "Open JobSwitch and choose “Explore the demo” to inspect the transition workspace and policy evidence.",
+          "Open “Review & decide” to see prepared work and the choices that still need your judgment."
+        ],
+        "stack": [
+          "Next.js",
+          "TypeScript",
+          "Mastra",
+          "Neon Postgres & AI Gateway",
+          "Kernel & Stagehand",
+          "AgentMail",
+          "Exa",
+          "Vercel Workflow"
+        ],
+        "links": [
+          {
+            "label": "Source",
+            "href": "https://github.com/mjkang-estrella/personal-agent-hackathon"
+          },
+          {
+            "label": "Video on Drive",
+            "href": "https://drive.google.com/file/d/1v3rAq66T40dje1TkuuASHaEHmZAyQG2n/view"
+          }
+        ],
+        "sources": [
+          "https://jobswitch-sooty.vercel.app/",
+          "https://github.com/mjkang-estrella/personal-agent-hackathon/blob/main/README.md",
+          "https://github.com/mjkang-estrella/personal-agent-hackathon/blob/main/docs/decisions/2026-10-04-205230-mj-practice-cases-proactive-drafts.md",
+          "https://github.com/mjkang-estrella/personal-agent-hackathon/blob/main/docs/decisions/2026-10-04-221921-mj-natural-review-tasks.md",
+          "https://github.com/mjkang-estrella/personal-agent-hackathon/blob/main/docs/decisions/2026-10-04-231014-nolan-demo-video.md"
+        ]
+      },
+      "screenshot": "images/projects/jobswitch-thumbnail.jpg"
+    },
+    {
+      "id": "folio",
+      "title": "Folio",
+      "description": "A subscription management agent that connects recurring costs, usage evidence, and renewal decisions.",
+      "href": "https://folio-subscription-manager.vercel.app/",
+      "cta": "Open Folio",
+      "kind": "product",
+      "domain": "subscription management",
+      "status": "live",
+      "image": "images/projects/folio-thumbnail.jpg",
+      "detailImage": "images/projects/folio-thumbnail.jpg",
+      "embed": false,
+      "detail": {
+        "pitch": "A personal subscription manager that helps decide what is worth renewing, using reviewed imports, usage evidence, and confirmed plan terms. Its agent demonstrates approved changes against controlled test merchants.",
+        "problem": "A list of recurring charges cannot tell you which services are worth keeping. Folio connects spending to usage, shared value, and upcoming renewals, then turns that evidence into a decision you can review and follow through on.",
+        "features": [
+          "Imports card-statement CSVs and email receipts into reviewable candidates, preserving charge history and source excerpts.",
+          "Combines usage observations and renewal check-ins. Browser visits alone never establish that a subscription is unused.",
+          "Builds a renewal queue and researches alternatives with source-backed prices that need confirmation before counting savings.",
+          "Runs approved cancellation, plan-change, and migration demos through Kernel, verifying results against independent test-merchant records.",
+          "Tracks user-recorded personal changes separately from demo results, with a private renewal calendar, recovery codes, and JSON backups."
+        ],
+        "tryThis": [
+          "Open the public subscription overview, then choose “My workspace” to explore the separate Demo workspace.",
+          "Open Adobe Creative Cloud to inspect its sample usage evidence and renewal decision.",
+          "Compare monthly equivalent costs with the payment calendar, where annual subscriptions retain their actual billing amounts."
+        ],
+        "stack": [
+          "React",
+          "TypeScript",
+          "Vite & Express",
+          "Neon Postgres",
+          "Mastra & Neon AI Gateway",
+          "Kernel",
+          "Exa",
+          "Assistant UI"
+        ],
+        "links": [
+          {
+            "label": "Try demo workspace",
+            "href": "https://folio-subscription-manager.vercel.app/workspace"
+          },
+          {
+            "label": "Source",
+            "href": "https://github.com/mjkang-estrella/subscription-manager"
+          }
+        ],
+        "sources": [
+          "https://folio-subscription-manager.vercel.app/",
+          "https://folio-subscription-manager.vercel.app/workspace",
+          "https://github.com/mjkang-estrella/subscription-manager/blob/main/README.md",
+          "https://github.com/mjkang-estrella/subscription-manager/blob/main/docs/roadmap.md"
+        ]
+      },
+      "screenshot": "images/projects/folio-thumbnail.jpg"
+    },
+    {
       "id": "akashic-computer",
       "title": "Akashic Computer",
       "description": "An open-weight model atlas for comparing families, artifacts, runtimes, benchmarks, and hardware fit.",
@@ -96,7 +212,8 @@
           "https://github.com/mjkang-estrella/akashic-computer/blob/main/README.md",
           "https://github.com/mjkang-estrella/akashic-computer/blob/main/PRODUCT.md"
         ]
-      }
+      },
+      "screenshot": "images/projects/akashic-computer-screenshot.jpg"
     },
     {
       "id": "poincare-lean",
@@ -195,7 +312,8 @@
           "https://blog.mj-kang.com/my-ai-homelab/",
           "https://github.com/mjkang-estrella/glm53-full-exl3-tp3/blob/main/README.md"
         ]
-      }
+      },
+      "screenshot": "images/projects/personal-ai-lab-screenshot.jpg"
     },
     {
       "id": "soma",
@@ -244,7 +362,8 @@
           "https://github.com/mjkang-estrella/soma-context/blob/main/pyproject.toml",
           "https://mj-kang.com/soma-context/"
         ]
-      }
+      },
+      "screenshot": "images/projects/soma-screenshot.jpg"
     },
     {
       "id": "precortex",
@@ -295,7 +414,8 @@
           "https://github.com/mjkang-estrella/precortex/blob/main/README.md",
           "https://github.com/mjkang-estrella/precortex/blob/main/PRODUCT.md"
         ]
-      }
+      },
+      "screenshot": "images/projects/precortex-screenshot.jpg"
     },
     {
       "id": "prism",
@@ -324,7 +444,8 @@
         "sources": [
           "https://prism.mj-kang.com/"
         ]
-      }
+      },
+      "screenshot": "images/projects/prism-screenshot.jpg"
     },
     {
       "id": "caption-with-intent",
@@ -367,7 +488,8 @@
           "https://cwi.mj-kang.com/",
           "https://github.com/mjkang-estrella/caption-with-intention/blob/main/README.md"
         ]
-      }
+      },
+      "screenshot": "images/projects/caption-with-intent-screenshot.jpg"
     },
     {
       "id": "reader",
@@ -400,7 +522,8 @@
           "https://reader.mj-kang.com/",
           "https://reader.mj-kang.com/api/config"
         ]
-      }
+      },
+      "screenshot": "images/projects/reader-screenshot.jpg"
     },
     {
       "id": "agent-newsletter",
@@ -495,7 +618,8 @@
           "https://resume-os.com/",
           "https://github.com/mjkang-estrella/interactive-resume/blob/main/README.md"
         ]
-      }
+      },
+      "screenshot": "images/projects/resume-os-screenshot.jpg"
     },
     {
       "id": "conditioned",
@@ -613,7 +737,8 @@
           "repo:three-body-problem-simulation/index.html",
           "repo:three-body-problem-simulation/simulator.js"
         ]
-      }
+      },
+      "screenshot": "images/projects/three-body-simulator-screenshot.jpg"
     },
     {
       "id": "block-fighter",
@@ -661,7 +786,8 @@
           "repo:block-fighter/AGENTS.md",
           "repo:block-fighter/style.css"
         ]
-      }
+      },
+      "screenshot": "images/projects/block-fighter-screenshot.jpg"
     },
     {
       "id": "rent-calculator",
@@ -703,7 +829,8 @@
         "sources": [
           "repo:jeonse/index.html"
         ]
-      }
+      },
+      "screenshot": "images/projects/rent-calculator-screenshot.jpg"
     },
     {
       "id": "retirement-calculator",
@@ -744,7 +871,8 @@
         "sources": [
           "repo:retirement-calculator/index.html"
         ]
-      }
+      },
+      "screenshot": "images/projects/retirement-calculator-screenshot.jpg"
     }
   ]
 }

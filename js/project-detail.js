@@ -281,10 +281,10 @@
         }
     };
 
-    const createFrame = (src, title) => {
+    const createFrame = (src, title, isVideo) => {
         const frame = document.createElement("iframe");
         frame.className = "project-detail__frame";
-        frame.title = `${title} live demo`;
+        frame.title = `${title} ${isVideo ? "demo video" : "live demo"}`;
         frame.allow = "fullscreen; clipboard-write";
         frame.referrerPolicy = "strict-origin-when-cross-origin";
         // Setting src before insertion makes the first load replace
@@ -327,7 +327,8 @@
         }
 
         const title = part("[data-project-detail-title]")?.textContent.trim() || "Project";
-        const frame = createFrame(stage.dataset.embedSrc, title);
+        const isVideo = stage.dataset.embedType === "video";
+        const frame = createFrame(stage.dataset.embedSrc, title, isVideo);
 
         window.clearTimeout(current.slowTimer);
         stage.classList.remove("is-loaded", "is-slow");
@@ -340,10 +341,10 @@
 
         current.frame = frame;
         current.demoUsed = true;
-        setStatus("Loading live demo…");
+        setStatus(isVideo ? "Loading video…" : "Loading live demo…");
         current.slowTimer = window.setTimeout(() => {
             stage.classList.add("is-slow");
-            setStatus("Still loading. If it stays blank, use Open full site.");
+            setStatus(`Still loading. If it stays blank, use ${isVideo ? "Open video" : "Open full site"}.`);
         }, SLOW_LOAD_MS);
     };
 

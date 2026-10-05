@@ -48,9 +48,11 @@ const PROJECT_KEYS = new Set([
     "status",
     "image",
     "detailImage",
+    "screenshot",
     "embed",
     "embedUrl",
     "embedLabel",
+    "embedType",
     "detail",
 ]);
 
@@ -100,6 +102,10 @@ const validatePortfolio = (data) => {
             if (!isText(project[key])) fail(`${key} must be a non-empty string`);
         }
 
+        if (project.screenshot !== undefined && !isText(project.screenshot)) {
+            fail("screenshot must be a non-empty local JPEG path");
+        }
+
         if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(project.id || "")) {
             fail("id must be a kebab-case slug");
         } else if (seenIds.has(project.id)) {
@@ -110,6 +116,11 @@ const validatePortfolio = (data) => {
 
         if (typeof project.embed !== "boolean") {
             fail("embed must be true or false");
+        }
+
+        if (project.embedType !== undefined &&
+            (project.embedType !== "video" || !project.embed || !project.embedUrl)) {
+            fail('embedType must be "video" with embed: true and an embedUrl');
         }
 
         if (project.embedUrl !== undefined && !isSafeHref(project.embedUrl)) {
@@ -313,14 +324,16 @@ const detailList = (tag, className, items) => [
 /** The popup body for one project. It lives in an inert <template>, so none
  *  of it renders or loads until the dialog clones it. The dialog assigns the
  *  ids that aria-labelledby/-describedby point at, keeping the source free of
- *  sixteen duplicate ids. */
+ *  duplicate ids. */
 const renderProjectDetail = (project) => {
     const { detail } = project;
     const flat = jpegSize(project.image);
-    const screenshot = jpegSize(project.detailImage);
+    const detailSrc = project.screenshot || project.detailImage;
+    const screenshot = jpegSize(detailSrc);
     const embedSrc = project.embedUrl || project.href;
     const stageHref = project.embed ? embedSrc : project.href;
-    const openLabel = project.embed ? "Open full site" : project.cta;
+    const isVideo = project.embedType === "video";
+    const openLabel = isVideo ? "Open video" : project.embed ? "Open full site" : project.cta;
     const title = escapeHtml(project.title);
 
     const narrative = [
@@ -364,7 +377,7 @@ const renderProjectDetail = (project) => {
         ? [
               `    <span class="project-detail__tools" data-project-detail-tools hidden>`,
               `        <button class="project-detail__tool" type="button" data-project-detail-restart>Restart</button>`,
-              `        <button class="project-detail__tool" type="button" data-project-detail-exit>Exit demo</button>`,
+              `        <button class="project-detail__tool" type="button" data-project-detail-exit>${isVideo ? "Exit video" : "Exit demo"}</button>`,
               `    </span>`,
           ]
         : [];
@@ -392,7 +405,7 @@ const renderProjectDetail = (project) => {
         `    <div class="project-detail__narrative" role="region" tabindex="0" aria-label="About ${title}">`,
         narrative.map((row) => `        ${row}`),
         `    </div>`,
-        `    <div class="project-detail__stage"${project.embed ? ` data-embed-src="${escapeHtml(embedSrc)}"` : ""}>`,
+        `    <div class="project-detail__stage"${project.embed ? ` data-embed-src="${escapeHtml(embedSrc)}"` : ""}${isVideo ? ' data-embed-type="video"' : ""}>`,
         `        <div class="project-detail__toolbar">`,
         `            <span class="project-detail__address" translate="no">${escapeHtml(displayHost(stageHref))}</span>`,
         liveControls.map((row) => `        ${row}`),
@@ -410,9 +423,9 @@ const renderProjectDetail = (project) => {
         `                    decoding="async"`,
         `                />`,
         `                <img`,
-        `                    class="project-detail__image project-detail__image--detail"`,
-        `                    src="${escapeHtml(project.detailImage)}"`,
-        `                    alt="Screenshot of ${title}"`,
+        `                    class="project-detail__image project-detail__image--detail${project.screenshot ? " project-detail__image--screenshot" : ""}"`,
+        `                    src="${escapeHtml(detailSrc)}"`,
+        `                    alt="${project.screenshot ? "Screenshot" : "Illustration"} of ${title}"`,
         `                    width="${screenshot.width}"`,
         `                    height="${screenshot.height}"`,
         `                    decoding="async"`,
