@@ -1493,6 +1493,11 @@ html.has-motion [data-reveal].is-visible {
     flex: none;
 }
 
+.project-detail__image--screenshot {
+    background: var(--surface-color);
+    object-fit: contain;
+}
+
 .project-detail__try[hidden] {
     display: none;
 }
@@ -1857,8 +1862,8 @@ html.has-motion [data-reveal].is-visible {
         font-size: clamp(1.7rem, 8vw, 2.2rem);
     }
 
-    /* Screenshot first for context; nothing in the stage is focusable on
-       a phone, so the visual order cannot diverge from the tab order. */
+    /* Screenshot first for apps. Videos keep their controls and follow the
+       narrative in DOM order so visual and keyboard order agree. */
     .project-detail__stage {
         border-bottom: var(--border-width) solid var(--ink-color);
         display: block;
@@ -1869,6 +1874,18 @@ html.has-motion [data-reveal].is-visible {
     .project-detail__toolbar,
     .project-detail__try {
         display: none;
+    }
+
+    .project-detail__stage[data-embed-type="video"] {
+        order: 3;
+    }
+
+    .project-detail__stage[data-embed-type="video"] .project-detail__toolbar {
+        display: flex;
+    }
+
+    .project-detail__stage[data-embed-type="video"] .project-detail__try:not([hidden]) {
+        display: inline-flex;
     }
 
     .project-detail__viewport {

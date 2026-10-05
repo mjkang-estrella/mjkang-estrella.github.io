@@ -483,6 +483,37 @@ test.describe("project detail", () => {
         await context.close();
     });
 
+    for (const width of [1280, 390]) {
+        test(`plays the hackathon recording on demand at ${width}px and unloads it on close`, async ({ page }) => {
+            await page.setViewportSize({ width, height: 844 });
+            const videoUrl = "https://drive.google.com/file/d/1v3rAq66T40dje1TkuuASHaEHmZAyQG2n/preview";
+            // Test the player lifecycle independently of Google's network/player.
+            let loads = 0;
+            await page.route(videoUrl, async (route) => {
+                loads += 1;
+                await route.fulfill({ contentType: "text/html", body: "<p>Demo video player</p>" });
+            });
+            await page.goto("/");
+            const { dialog } = await openProject(page, "jobswitch");
+            const frame = dialog.locator("iframe");
+            await expect(frame).toHaveCount(0);
+            expect(loads).toBe(0);
+            await expect(dialog.getByRole("link", { name: "Open JobSwitch" })).toHaveAttribute("href", "https://jobswitch-sooty.vercel.app/");
+            await dialog.getByRole("button", { name: "Watch demo" }).click();
+            await expect(frame).toHaveAttribute("src", videoUrl);
+            await expect(frame).toHaveAttribute("title", "JobSwitch demo video");
+            await expect(dialog.getByRole("button", { name: "Exit video" })).toBeFocused();
+            await expect(dialog.getByRole("link", { name: "Open video", exact: false })).toBeVisible();
+            await dialog.getByRole("button", { name: "Exit video" }).click();
+            await expect(frame).toHaveCount(0);
+            await expect(dialog.getByRole("button", { name: "Watch demo" })).toBeFocused();
+            await dialog.getByRole("button", { name: "Watch demo" }).click();
+            await expect(frame).toHaveCount(1);
+            await dialog.locator("[data-project-detail-close]").click();
+            await expect(page.locator("iframe")).toHaveCount(0);
+        });
+    }
+
     test("the machine view's Copy export includes the popup copy", async ({ page, context }) => {
         await context.grantPermissions(["clipboard-read", "clipboard-write"]);
         await page.goto("/?view=machine");

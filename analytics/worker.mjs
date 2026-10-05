@@ -1,6 +1,6 @@
 // Receives one bounded, allowlisted counter increment. Never logs requests.
 const PAGES = new Set(["/", "/block-fighter/", "/three-body-problem-simulation/", "/jeonse/", "/retirement-calculator/"]);
-const PROJECTS = new Set(["akashic-computer", "poincare-lean", "personal-ai-lab", "soma", "precortex", "prism", "caption-with-intent", "reader", "agent-newsletter", "resume-os", "conditioned", "reflect-ios", "three-body-simulator", "block-fighter", "rent-calculator", "retirement-calculator"]);
+const PROJECTS = new Set(["jobswitch", "folio", "akashic-computer", "poincare-lean", "personal-ai-lab", "soma", "precortex", "prism", "caption-with-intent", "reader", "agent-newsletter", "resume-os", "conditioned", "reflect-ios", "three-body-simulator", "block-fighter", "rent-calculator", "retirement-calculator"]);
 const PROJECT_EVENTS = new Set(["project_open", "project_close", "demo_start", "demo_restart", "demo_exit", "project_link_click"]);
 const TARGETS = {
     page_view: [""],
