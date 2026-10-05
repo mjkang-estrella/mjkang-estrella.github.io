@@ -1,0 +1,13 @@
+{
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "path": "images/projects/jobswitch-artwork.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: landscape portfolio card illustration, 16:10. Create artwork for JobSwitch, a personal agent that handles the space between two jobs: benefit documents, a transition timeline, and reviewed HR follow-ups. Match the established thumbnail style: warm ivory textured paper, thin charcoal hand-drawn outlines, muted sage/teal fills, tiny burnt-orange accents, restrained mid-century editorial infographic. Center two simple employer document folders bridged by a dotted arrow and a small calendar, with a single approval checkmark. Flat almost vector-like ink illustration with subtle printed grain, generous empty margins, a few clean symbolic shapes, no words, letters, numbers, brand logos, UI screenshot, photorealism, gradients, or drop shadows. Keep all meaningful content within the central 75% so it remains legible as a small thumbnail. Reference visual: an ivory paper background with a simple outlined task card connected by a dotted arrow to a teal approval circle."
+    },
+    {
+      "path": "images/projects/folio-artwork.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: landscape portfolio card illustration, 16:10. Create artwork for Folio, a personal subscription management agent that connects recurring costs, usage evidence, and renewal decisions. Match a cohesive portfolio thumbnail system: warm ivory textured paper, thin charcoal hand-drawn outlines, muted sage/teal fills, a few burnt-orange accents, restrained mid-century editorial infographic. A sparse centered arrangement of three overlapping small subscription receipt cards with simple abstract icons, a clean teal ring chart, a renewal calendar with one orange date dot, and a small approval check connected by short dotted lines. Flat almost vector-like ink illustration with subtle printed grain, generous empty margins, clear symbols legible at small size. No words, letters, numbers, brand logos, UI screenshots, photorealism, gradients, or drop shadows. Keep all meaningful content within the central 75%. The composition should communicate subscriptions being organized and reviewed, not money or savings promises."
+    }
+  ]
+}
