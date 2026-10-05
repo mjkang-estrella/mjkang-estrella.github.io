@@ -1724,14 +1724,66 @@ html.has-motion [data-reveal].is-visible {
 
     .projects-wrapper {
         grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 16px;
     }
 
-    .project-card {
-        border-right: none;
+    /* One column of full-width artwork made the list several screens tall
+       per project, so phones get slim bar cards: thumbnail, title, a
+       one-line description, and a chevron. The whole bar stays the link,
+       which makes the Explore button redundant here. :nth-child(n) matches
+       the specificity of the grid's per-column border resets above. */
+    .project-item:nth-child(n) .project-card {
+        border: var(--border-width) solid var(--border-color);
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 14px 8px 8px;
+    }
+
+    .project-card::before {
+        content: "";
+        flex: none;
+        order: 3;
+        width: 0;
+        height: 0;
+        border-top: 0.35rem solid transparent;
+        border-bottom: 0.35rem solid transparent;
+        border-left: 0.5rem solid currentColor;
     }
 
     .project-media {
-        aspect-ratio: 16 / 9;
+        flex: none;
+        width: 48px;
+        aspect-ratio: 1;
+        border: 1px solid var(--ink-color);
+    }
+
+    .project-info {
+        gap: 0.15rem;
+        min-width: 0;
+        padding: 0;
+    }
+
+    .project-title {
+        font-size: 0.95rem;
+        margin-bottom: 0;
+        overflow: hidden;
+        overflow-wrap: normal;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .project-desc {
+        color: var(--ink-muted);
+        overflow: hidden;
+        overflow-wrap: normal;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .project-link {
+        display: none;
     }
 
     .timeline-item {
@@ -1811,10 +1863,6 @@ html.has-motion [data-reveal].is-visible {
 
     .works-header {
         padding: 18px;
-    }
-
-    .project-media {
-        aspect-ratio: 16 / 10;
     }
 
     .footer {
