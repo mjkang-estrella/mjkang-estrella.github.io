@@ -42,7 +42,8 @@ object:
 - `tryThis`: 1–4 steps a visitor can do in the live app, logged out.
   `tryThisHeading` renames the section (e.g. "Where to look" for a repo).
 - `stack`: shown as "Built with".
-- `links`: extra `{ "label", "href" }` links next to the main button.
+- `links`: extra `{ "label", "href" }` links next to the main button. GitHub
+  links render as icons with accessible names.
 - `sources` (required, never rendered): where each claim came from. Don't add
   metrics, motives or stack details that no source states.
 
@@ -57,15 +58,15 @@ refused frame, so the build rejects `embed: true` for hosts known to refuse
 later would break embeds the same way.
 
 Set `screenshot` to a local JPEG capture of the actual homepage or public demo
-to show it inside the popup. The image fits without cropping, while `image`
-and `detailImage` keep the grid's existing artwork and hover treatment. Without
-a screenshot the popup falls back to the illustration.
+to show it on card hover and inside the popup. Screenshots fit without cropping.
+The grid uses `image` at rest and keeps it on hover if no screenshot is available.
+Without a screenshot the popup falls back to the `detailImage` illustration.
 
-For a recorded demo, use `embed: true`, `embedType: "video"`, an embeddable
-player URL in `embedUrl`, and `embedLabel: "Watch demo"`. The player loads
-only when requested and is removed on exit or popup close. Video controls
-also work on phones. Keep `href` pointing to the project itself and include
-a direct video link in `detail.links` as a fallback.
+For a recorded demo, use `embed: true`, `embedType: "video"`, and an embeddable
+player URL in `embedUrl`. The card shows its screenshot on hover. The popup
+loads the video player immediately and removes it on close. The player and
+project explanation stay visible on phones. Keep `href` pointing to the project
+itself; the player toolbar includes an "Open video" fallback link.
 
 `npm run build` validates all of this and lists every problem at once.
 

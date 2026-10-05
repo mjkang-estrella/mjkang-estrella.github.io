@@ -255,7 +255,7 @@ const displayHost = (href) => {
 
 const renderProjectCard = (project) => {
     const flat = jpegSize(project.image);
-    const detail = jpegSize(project.detailImage);
+    const detail = project.screenshot ? jpegSize(project.screenshot) : null;
     const external = isExternal(project.href);
     // With a detail popup the card explains before it launches; without one
     // it still goes straight to the project, so it keeps the project's CTA.
@@ -285,16 +285,18 @@ const renderProjectCard = (project) => {
         `            loading="lazy"`,
         `            decoding="async"`,
         `        />`,
-        `        <img`,
-        `            data-detail-src="${escapeHtml(project.detailImage)}"`,
-        `            class="project-image project-image--detail"`,
-        `            alt=""`,
-        `            aria-hidden="true"`,
-        `            width="${detail.width}"`,
-        `            height="${detail.height}"`,
-        `            loading="lazy"`,
-        `            decoding="async"`,
-        `        />`,
+        ...(detail ? [
+            `        <img`,
+            `            data-detail-src="${escapeHtml(project.screenshot)}"`,
+            `            class="project-image project-image--detail"`,
+            `            alt=""`,
+            `            aria-hidden="true"`,
+            `            width="${detail.width}"`,
+            `            height="${detail.height}"`,
+            `            loading="lazy"`,
+            `            decoding="async"`,
+            `        />`,
+        ] : []),
         `    </span>`,
         `    <div class="project-info">`,
         `        <h3 class="project-title">${escapeHtml(project.title)}</h3>`,
@@ -320,6 +322,16 @@ const detailList = (tag, className, items) => [
     ...items.map((item) => `    <li>${escapeHtml(item)}</li>`),
     `</${tag}>`,
 ];
+
+const githubIcon = `<svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" /></svg>`;
+
+const renderDetailLink = (link, project) => {
+    if (hostOf(link.href) === "github.com") {
+        const label = escapeHtml(link.label === "Source" ? `${project.title} source on GitHub` : `${link.label} on GitHub`);
+        return `    <a class="project-detail__secondary project-detail__github" href="${escapeHtml(link.href)}"${externalLinkAttributes(link.href)} aria-label="${label}" title="${label}">${githubIcon}</a>`;
+    }
+    return `    <a class="project-detail__secondary" href="${escapeHtml(link.href)}"${externalLinkAttributes(link.href)}>${escapeHtml(link.label)}${externalMark(link.href)}</a>`;
+};
 
 /** The popup body for one project. It lives in an inert <template>, so none
  *  of it renders or loads until the dialog clones it. The dialog assigns the
@@ -366,10 +378,7 @@ const renderProjectDetail = (project) => {
             : []),
         `<div class="project-detail__actions">`,
         `    <a class="project-detail__cta" href="${escapeHtml(project.href)}"${externalLinkAttributes(project.href)}>${escapeHtml(project.cta)}${externalMark(project.href)}</a>`,
-        ...(detail.links || []).map(
-            (link) =>
-                `    <a class="project-detail__secondary" href="${escapeHtml(link.href)}"${externalLinkAttributes(link.href)}>${escapeHtml(link.label)}${externalMark(link.href)}</a>`
-        ),
+        ...(detail.links || []).map((link) => renderDetailLink(link, project)),
         `</div>`,
     ];
 
@@ -377,12 +386,12 @@ const renderProjectDetail = (project) => {
         ? [
               `    <span class="project-detail__tools" data-project-detail-tools hidden>`,
               `        <button class="project-detail__tool" type="button" data-project-detail-restart>Restart</button>`,
-              `        <button class="project-detail__tool" type="button" data-project-detail-exit>${isVideo ? "Exit video" : "Exit demo"}</button>`,
+              ...(!isVideo ? [`        <button class="project-detail__tool" type="button" data-project-detail-exit>Exit demo</button>`] : []),
               `    </span>`,
           ]
         : [];
 
-    const tryButton = project.embed
+    const tryButton = project.embed && !isVideo
         ? [
               `    <button class="project-detail__try" type="button" data-project-detail-try>`,
               `        <span class="project-detail__try-icon" aria-hidden="true"></span>`,
@@ -412,25 +421,27 @@ const renderProjectDetail = (project) => {
         `            <a class="project-detail__open" href="${escapeHtml(stageHref)}"${externalLinkAttributes(stageHref)}>${escapeHtml(openLabel)}${externalMark(stageHref)}</a>`,
         `        </div>`,
         `        <div class="project-detail__viewport">`,
-        `            <figure class="project-detail__media" data-project-detail-media>`,
-        `                <img`,
-        `                    class="project-detail__image project-detail__image--flat"`,
-        `                    src="${escapeHtml(project.image)}"`,
-        `                    alt=""`,
-        `                    aria-hidden="true"`,
-        `                    width="${flat.width}"`,
-        `                    height="${flat.height}"`,
-        `                    decoding="async"`,
-        `                />`,
-        `                <img`,
-        `                    class="project-detail__image project-detail__image--detail${project.screenshot ? " project-detail__image--screenshot" : ""}"`,
-        `                    src="${escapeHtml(detailSrc)}"`,
-        `                    alt="${project.screenshot ? "Screenshot" : "Illustration"} of ${title}"`,
-        `                    width="${screenshot.width}"`,
-        `                    height="${screenshot.height}"`,
-        `                    decoding="async"`,
-        `                />`,
-        `            </figure>`,
+        ...(!isVideo ? [
+            `            <figure class="project-detail__media" data-project-detail-media>`,
+            `                <img`,
+            `                    class="project-detail__image project-detail__image--flat"`,
+            `                    src="${escapeHtml(project.image)}"`,
+            `                    alt=""`,
+            `                    aria-hidden="true"`,
+            `                    width="${flat.width}"`,
+            `                    height="${flat.height}"`,
+            `                    decoding="async"`,
+            `                />`,
+            `                <img`,
+            `                    class="project-detail__image project-detail__image--detail${project.screenshot ? " project-detail__image--screenshot" : ""}"`,
+            `                    src="${escapeHtml(detailSrc)}"`,
+            `                    alt="${project.screenshot ? "Screenshot" : "Illustration"} of ${title}"`,
+            `                    width="${screenshot.width}"`,
+            `                    height="${screenshot.height}"`,
+            `                    decoding="async"`,
+            `                />`,
+            `            </figure>`,
+        ] : []),
         tryButton.map((row) => `        ${row}`),
         `            <p class="project-detail__status" role="status" data-project-detail-status></p>`,
         `        </div>`,
@@ -439,9 +450,10 @@ const renderProjectDetail = (project) => {
     );
 };
 
-// Experience spans use an em dash; education spans use a tilde to read as
-// "expected" rather than "completed".
-const dateSeparator = (item) => (item.kind === "education" ? "~" : "—");
+const dateSeparator = "—";
+const timelineDate = (item) => item.season
+    ? `${item.from} ${item.season}`
+    : `${item.from}${dateSeparator}${item.to}`;
 
 const renderTimelineItem = (item) => {
     const logoClass =
@@ -457,7 +469,7 @@ const renderTimelineItem = (item) => {
         `    data-machine-kind="${escapeHtml(item.kind)}"`,
         `    data-machine-label="${escapeHtml(item.label)}"`,
         `>`,
-        `    <div class="timeline-date">${item.from}${dateSeparator(item)}<br />${item.to}</div>`,
+        `    <div class="timeline-date">${escapeHtml(item.from)}${item.season ? " " : dateSeparator}<br />${escapeHtml(item.season || item.to)}</div>`,
         `    <div>`,
         `        <a`,
         `            class="company-link"`,
@@ -488,7 +500,7 @@ const markdownLink = (label, href) => `[${label}](${absoluteUrl(href)})`;
 const paragraph = (text) => `<p>${escapeHtml(text)}</p>`;
 
 const machineTimelineLine = (item) =>
-    `- ${item.from}${dateSeparator(item)}${item.to} · ${markdownLink(
+    `- ${timelineDate(item)} · ${markdownLink(
         item.organization,
         item.href
     )} · ${item.title} · ${item.description}`;

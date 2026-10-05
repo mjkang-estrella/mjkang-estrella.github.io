@@ -905,7 +905,7 @@ html.has-motion [data-reveal].is-visible {
 
 .timeline-item {
     display: grid;
-    grid-template-columns: 80px 1fr;
+    grid-template-columns: 80px minmax(0, 1fr);
     margin-bottom: 2.5rem;
     align-items: flex-start;
     transition: transform var(--motion-base) var(--ease-out-quart);
@@ -919,6 +919,7 @@ html.has-motion [data-reveal].is-visible {
     font-weight: 700;
     font-size: 0.9rem;
     color: var(--ink-subtle);
+    white-space: nowrap;
 }
 
 .company-link {
@@ -1100,6 +1101,9 @@ html.has-motion [data-reveal].is-visible {
 
 .project-image--detail {
     opacity: 0;
+    object-fit: contain;
+    background: var(--surface-media);
+    filter: none;
 }
 
 .project-card:focus-visible .project-image--detail {
@@ -1214,13 +1218,18 @@ html.has-motion [data-reveal].is-visible {
     color: var(--ink-color);
 }
 
-/* Secondary links (source, write-ups) stay lighter than the main button so
-   the row reads as one action plus references. */
+/* Secondary links stay lighter than the main action. */
 .project-detail__secondary {
     background: transparent;
     border-color: transparent transparent currentColor;
     color: var(--ink-color);
     padding-inline: 0.15rem;
+}
+
+.project-detail__github {
+    border-color: transparent;
+    width: 44px;
+    padding: 0;
 }
 
 .project-detail__cta,
@@ -1787,7 +1796,7 @@ html.has-motion [data-reveal].is-visible {
     }
 
     .timeline-item {
-        grid-template-columns: 72px 1fr;
+        grid-template-columns: 80px minmax(0, 1fr);
         margin-bottom: 2rem;
     }
 
@@ -1831,7 +1840,7 @@ html.has-motion [data-reveal].is-visible {
     }
 
     .timeline-item {
-        grid-template-columns: 64px 1fr;
+        grid-template-columns: 72px minmax(0, 1fr);
         margin-bottom: 1.6rem;
     }
 
@@ -1926,14 +1935,16 @@ html.has-motion [data-reveal].is-visible {
 
     .project-detail__stage[data-embed-type="video"] {
         order: 3;
+        grid-template-rows: auto auto;
     }
 
     .project-detail__stage[data-embed-type="video"] .project-detail__toolbar {
         display: flex;
     }
 
-    .project-detail__stage[data-embed-type="video"] .project-detail__try:not([hidden]) {
-        display: inline-flex;
+    .project-detail__stage[data-embed-type="video"] .project-detail__viewport {
+        aspect-ratio: 16 / 9;
+        padding: 0;
     }
 
     .project-detail__viewport {
@@ -1962,7 +1973,7 @@ html.has-motion [data-reveal].is-visible {
         padding: 14px 18px max(14px, env(safe-area-inset-bottom));
     }
 
-    .project-detail.is-live .project-detail__body {
+    .project-detail.is-live:not(.is-video) .project-detail__body {
         display: grid;
         grid-template-areas:
             "header"
@@ -1972,7 +1983,7 @@ html.has-motion [data-reveal].is-visible {
         overflow: hidden;
     }
 
-    .project-detail.is-live .project-detail__narrative {
+    .project-detail.is-live:not(.is-video) .project-detail__narrative {
         display: none;
     }
 

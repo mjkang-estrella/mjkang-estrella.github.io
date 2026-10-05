@@ -344,11 +344,11 @@ def test_document_structure() -> None:
         "https://akashic.computer/",
         "https://github.com/mjkang-estrella/poincare-lean",
         "https://blog.mj-kang.com/my-ai-homelab/",
-        "https://github.com/mjkang-estrella/soma-context",
+        "https://mj-kang.com/soma-context/",
     ]
     assert "https://cwi.mj-kang.com/" in parser.project_hrefs
-    assert parser.timeline_item_count == 4
-    assert parser.machine_timeline_count == 4
+    assert parser.timeline_item_count == 5
+    assert parser.machine_timeline_count == 5
 
 
 def test_machine_document_mirrors_visible_content() -> None:
@@ -498,11 +498,11 @@ def test_referenced_assets_exist_on_disk() -> None:
     for content_path in parser.meta_content_paths:
         assert_local_asset_exists(content_path)
 
-    # Two images per card (flat + hover detail), two more per popup template,
-    # the profile badge, 4 timeline logos and 3 Ask-an-AI provider icons.
+    # One image per card plus available screenshots, two per popup template,
+    # the profile badge, 5 timeline logos and 3 Ask-an-AI provider icons.
     projects = json.loads(PORTFOLIO_JSON.read_text(encoding="utf-8"))["projects"]
     detailed = [project for project in projects if "detail" in project]
-    assert len(parser.image_sources) == 2 * len(projects) + 2 * len(detailed) + 8
+    assert len(parser.image_sources) == len(projects) + sum("screenshot" in project for project in projects) + 2 * sum(project.get("embedType") != "video" for project in detailed) + 9
     for image in parser.image_sources:
         assert_local_asset_exists(image)
 

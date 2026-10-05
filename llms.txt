@@ -4,10 +4,11 @@ MJ Kang is a Bay Area product manager building products and experiments across f
 
 ## Product Management and Education
 
-- Toss Bank, Product Manager, Social and Growth, 2023–2025: launched social banking products and growth loops that reached 300K+ monthly active users in one month.
-- Match Group, Product Manager, Live Streaming, 2020–2023: owned the Hakuna Live roadmap and launches, driving 100K+ monthly active user growth while improving moderation accuracy and speed.
-- UC Berkeley Haas, MBA, 2025–2027: studying agentic AI, AI ethics, and entrepreneurship.
-- KAIST, B.S. Computer Science, 2016–2022: studied computer science and business technology management, with a focus on systems, analytics, and product thinking.
+- Liner, Product Manager (API Growth, Monetization), 2026 Summer. Tripled landing-to-paid conversion and acquired 1,000 active API users. Helped build $400K in qualified ARR pipeline.
+- Toss Bank, Product Manager (Social, Growth), 2023—2025. Launched social banking products that reached 300K+ monthly active users in one month and increased new account growth.
+- Match Group, Product Manager (Live Streaming), 2020—2023. Led Hakuna Live product development, adding 100K+ monthly active users and improving moderation accuracy and speed.
+- UC Berkeley Haas, Master of Business Administration (MBA), 2025—2027. Studying AI agents, automation, entrepreneurship, and ethics. Led 5+ vibe-coding workshops as AI Club Engineering VP; also PM Club Branding VP.
+- KAIST, B.S. Computer Science, 2016—2022. Studied computer science and business technology management, with a focus on systems and analytics.
 
 These details are published in the History section of the [portfolio](https://mj-kang.com/). The projects below are listed separately from professional roles. They include AI applications, model tooling, infrastructure, and ongoing formal verification research.
 
@@ -20,7 +21,7 @@ These details are published in the History section of the [portfolio](https://mj
 - [Akashic Computer](https://akashic.computer/): open-weight model atlas for model families, artifacts, benchmarks, runtimes, and hardware fit
 - [Poincare Lean](https://github.com/mjkang-estrella/poincare-lean): ongoing Lean 4 formalization with proof-agent workflows
 - [Personal AI Lab](https://blog.mj-kang.com/my-ai-homelab/): personal AI platform spanning applications, dual-DGX inference, storage, and observability
-- [Soma](https://github.com/mjkang-estrella/soma-context): local-first health context and evidence-grounded reporting system
+- [Soma](https://mj-kang.com/soma-context/): local-first health context and evidence-grounded reporting system
 - [Precortex](https://www.pre-cortex.com/): personal task manager with agentic workflows
 - [Prism](https://prism.mj-kang.com/): turns rough product ideas into structured specs for AI agents
 - [Caption With Intent](https://cwi.mj-kang.com/): caption timing and media editing prototype

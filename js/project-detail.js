@@ -146,6 +146,7 @@
                     demoUsed: false,
                 });
                 window.portfolioAnalytics?.track("project_open", { project_id: id, open_method: "history" });
+                if (part('[data-embed-type="video"]')) startDemo({ focus: false });
             }
             return;
         }
@@ -180,6 +181,7 @@
                 project_id: id,
                 open_method: push ? "card" : "history",
             });
+            if (part('[data-embed-type="video"]')) startDemo({ focus: false });
         };
 
         const cardMedia = session.card?.querySelector(".project-media");
@@ -348,13 +350,14 @@
         }, SLOW_LOAD_MS);
     };
 
-    const startDemo = () => {
+    const startDemo = ({ focus = true } = {}) => {
         if (!current || current.frame) {
             return;
         }
 
         loadFrame();
         dialog.classList.add("is-live");
+        dialog.classList.toggle("is-video", !!part('[data-embed-type="video"]'));
         window.portfolioAnalytics?.track("demo_start", { project_id: current.id });
 
         const tools = part("[data-project-detail-tools]");
@@ -366,7 +369,7 @@
         // Focus stays on the control that undoes the action. The frame is
         // never focused for the visitor: Escape cannot leave an iframe, so
         // the visible Close and Exit demo buttons have to stay reachable.
-        part("[data-project-detail-exit]")?.focus();
+        if (focus) part("[data-project-detail-exit]")?.focus();
     };
 
     const stopDemo = ({ restoreFocus = false } = {}) => {
@@ -377,7 +380,7 @@
         window.clearTimeout(current.slowTimer);
         current.frame.remove();
         current.frame = null;
-        dialog.classList.remove("is-live");
+        dialog.classList.remove("is-live", "is-video");
         part(".project-detail__stage")?.classList.remove("is-loaded", "is-slow");
         setStatus("");
 

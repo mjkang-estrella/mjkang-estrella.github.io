@@ -4,13 +4,24 @@
     {
       "kind": "experience",
       "label": "role",
+      "from": "2026",
+      "organization": "Liner",
+      "href": "https://liner.com/",
+      "logo": "images/logos/liner.png",
+      "title": "Product Manager (API Growth, Monetization)",
+      "description": "Tripled landing-to-paid conversion and acquired 1,000 active API users. Helped build $400K in qualified ARR pipeline.",
+      "season": "Summer"
+    },
+    {
+      "kind": "experience",
+      "label": "role",
       "from": "2023",
       "to": "2025",
       "organization": "Toss Bank",
       "href": "https://www.tossbank.com/",
       "logo": "images/logos/viva-republica.png",
       "title": "Product Manager (Social, Growth)",
-      "description": "Launched social banking products and growth loops that drove 300K+ MAU in 1 month and accelerated new-account growth at scale."
+      "description": "Launched social banking products that reached 300K+ monthly active users in one month and increased new account growth."
     },
     {
       "kind": "experience",
@@ -22,7 +33,7 @@
       "logo": "images/logos/match-group.jpg",
       "logoFit": "cover",
       "title": "Product Manager (Live Streaming)",
-      "description": "Owned Hakuna Live roadmap and iterative launches, driving 100K+ MAU growth while improving moderation accuracy and speed."
+      "description": "Led Hakuna Live product development, adding 100K+ monthly active users and improving moderation accuracy and speed."
     },
     {
       "kind": "education",
@@ -31,9 +42,9 @@
       "to": "2027",
       "organization": "UC Berkeley Haas",
       "href": "https://haas.berkeley.edu/",
-      "logo": "images/logos/uc-berkeley-seal.png",
+      "logo": "images/logos/uc-berkeley-seal.svg",
       "title": "Master of Business Administration (MBA)",
-      "description": "Studying Agentic AI, AI ethics, and entrepreneurship; serving as VP roles in AI Club and Product Management Club."
+      "description": "Studying AI agents, automation, entrepreneurship, and ethics. Led 5+ vibe-coding workshops as AI Club Engineering VP; also PM Club Branding VP."
     },
     {
       "kind": "education",
@@ -44,14 +55,14 @@
       "href": "https://www.kaist.ac.kr/en/",
       "logo": "images/logos/kaist.svg",
       "title": "B.S. Computer Science",
-      "description": "Studied Computer Science and Business Technology Management with focus on systems, analytics, and product thinking."
+      "description": "Studied computer science and business technology management, with a focus on systems and analytics."
     }
   ],
   "projects": [
     {
       "id": "jobswitch",
       "title": "JobSwitch",
-      "description": "A personal agent for the space between two jobs, built at the Personal Agent Hackathon.",
+      "description": "An agent for comparing benefits, preparing claims, and following up with HR when changing jobs.",
       "href": "https://jobswitch-sooty.vercel.app/",
       "cta": "Open JobSwitch",
       "kind": "hackathon",
@@ -62,9 +73,8 @@
       "embed": true,
       "embedType": "video",
       "embedUrl": "https://drive.google.com/file/d/1v3rAq66T40dje1TkuuASHaEHmZAyQG2n/preview",
-      "embedLabel": "Watch demo",
       "detail": {
-        "pitch": "Built at the Personal Agent Hackathon on October 4, 2026, JobSwitch helps people compare employer benefits, prepare claims, and follow up with HR through the space between two jobs.",
+        "pitch": "Built at the Personal Agent Hackathon on October 4, 2026, JobSwitch helps people compare employer benefits, prepare claims, and follow up with HR when changing jobs.",
         "problem": "Changing jobs scatters benefits, deadlines, reimbursements, and HR follow-ups across documents and inboxes. JobSwitch turns that material into a plan tied to the person’s transition dates, prepares the next useful action, and leaves consequential choices with the person.",
         "features": [
           "Compares employer handbooks and builds a transition plan with exact source pages and explicit missing information.",
@@ -92,10 +102,6 @@
           {
             "label": "Source",
             "href": "https://github.com/mjkang-estrella/personal-agent-hackathon"
-          },
-          {
-            "label": "Video on Drive",
-            "href": "https://drive.google.com/file/d/1v3rAq66T40dje1TkuuASHaEHmZAyQG2n/view"
           }
         ],
         "sources": [
@@ -146,10 +152,6 @@
           "Assistant UI"
         ],
         "links": [
-          {
-            "label": "Try demo workspace",
-            "href": "https://folio-subscription-manager.vercel.app/workspace"
-          },
           {
             "label": "Source",
             "href": "https://github.com/mjkang-estrella/subscription-manager"
@@ -253,19 +255,14 @@
           "Pi 0.80.10 job adapter",
           "Bubblewrap sandbox"
         ],
-        "links": [
-          {
-            "label": "Write-up: My AI HomeLab",
-            "href": "https://blog.mj-kang.com/my-ai-homelab/"
-          }
-        ],
         "sources": [
           "https://github.com/mjkang-estrella/poincare-lean/blob/main/README.md",
           "https://github.com/mjkang-estrella/poincare-lean/blob/main/lakefile.lean",
           "https://github.com/mjkang-estrella/poincare-lean/blob/main/lean-toolchain",
           "https://blog.mj-kang.com/my-ai-homelab/"
         ]
-      }
+      },
+      "screenshot": "images/projects/poincare-lean-screenshot.jpg"
     },
     {
       "id": "personal-ai-lab",
@@ -319,8 +316,8 @@
       "id": "soma",
       "title": "Soma",
       "description": "A local-first health context and reporting system for private, evidence-grounded AI workflows.",
-      "href": "https://github.com/mjkang-estrella/soma-context",
-      "cta": "View Repo",
+      "href": "https://mj-kang.com/soma-context/",
+      "cta": "View demo report",
       "kind": "repository",
       "domain": "personal health data",
       "status": "source",
@@ -353,8 +350,8 @@
         ],
         "links": [
           {
-            "label": "Synthetic demo report",
-            "href": "https://mj-kang.com/soma-context/"
+            "label": "Source",
+            "href": "https://github.com/mjkang-estrella/soma-context"
           }
         ],
         "sources": [
@@ -368,7 +365,7 @@
     {
       "id": "precortex",
       "title": "Precortex",
-      "description": "A personal task manager where agentic workflows help move work toward completion.",
+      "description": "A task planner with an AI assistant that suggests priorities and breaks work into smaller steps.",
       "href": "https://www.pre-cortex.com/",
       "cta": "Open",
       "kind": "product",
@@ -420,7 +417,7 @@
     {
       "id": "prism",
       "title": "Prism",
-      "description": "Turns rough product ideas into clear, structured specs that AI agents can execute.",
+      "description": "Turns product ideas into structured specifications for AI coding agents.",
       "href": "https://prism.mj-kang.com/",
       "cta": "Launch",
       "kind": "product",
@@ -571,7 +568,8 @@
           "https://agent-news.mj-kang.com/",
           "https://agent-news.mj-kang.com/api/newsletter/latest"
         ]
-      }
+      },
+      "screenshot": "images/projects/agent-newsletter-screenshot.jpg"
     },
     {
       "id": "resume-os",
@@ -624,7 +622,7 @@
     {
       "id": "conditioned",
       "title": "Conditioned",
-      "description": "AI-based CrossFit performance analyzer & advisor.",
+      "description": "Analyzes CrossFit workouts to track training balance and identify gaps.",
       "href": "https://ardent-footer-45845870.figma.site/",
       "cta": "View Case",
       "kind": "case study",
@@ -645,8 +643,8 @@
         ],
         "tryThisHeading": "Where to look",
         "tryThis": [
-          "The CrossFit Analyzer case study on Resume OS: open the bullet under Additional.",
-          "The source repository, exported from Figma Make, for the React front end and Supabase functions."
+          "Open the prototype to see the sign-in screen. An account is required to record workouts.",
+          "Browse the source repository for the React front end and Supabase functions."
         ],
         "stack": [
           "Figma Make",
@@ -659,10 +657,6 @@
         ],
         "links": [
           {
-            "label": "Case study on Resume OS",
-            "href": "https://resume-os.com/"
-          },
-          {
             "label": "Source",
             "href": "https://github.com/mjkang-estrella/CrossFit-WOD-Prototype"
           }
@@ -674,12 +668,13 @@
           "https://github.com/mjkang-estrella/CrossFit-WOD-Prototype/blob/main/package.json",
           "https://github.com/mjkang-estrella/CrossFit-WOD-Prototype/blob/main/src/utils/supabase/info.tsx"
         ]
-      }
+      },
+      "screenshot": "images/projects/conditioned-screenshot.jpg"
     },
     {
       "id": "reflect-ios",
       "title": "Reflect (iOS)",
-      "description": "Voice journaling application powered by NLP for sentiment analysis.",
+      "description": "An iOS voice journal that analyzes the sentiment of your entries.",
       "href": "https://testflight.apple.com/join/2ctpxzhd",
       "cta": "TestFlight",
       "kind": "ios app",
