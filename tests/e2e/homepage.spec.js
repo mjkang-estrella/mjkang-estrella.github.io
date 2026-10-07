@@ -237,6 +237,7 @@ test.describe("phone layout", () => {
 test.describe("sub-projects", () => {
     for (const path of [
         "/block-fighter/",
+        "/jagyeokru/",
         "/jeonse/",
         "/retirement-calculator/",
         "/three-body-problem-simulation/",

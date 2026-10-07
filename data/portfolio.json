@@ -692,6 +692,50 @@
       }
     },
     {
+      "id": "jagyeokru",
+      "title": "자격루 (Jagyeokru)",
+      "description": "Animated isometric model of King Sejong's 1434 self-striking water clock, built from the Veritable Records.",
+      "href": "/jagyeokru/",
+      "cta": "Open",
+      "kind": "illustration",
+      "domain": "history of technology",
+      "status": "live",
+      "image": "images/projects/jagyeokru-minimal.jpg",
+      "detailImage": "images/projects/jagyeokru-thumbnail.jpg",
+      "embed": true,
+      "detail": {
+        "pitch": "An animated isometric model of Jagyeokru, the water clock King Sejong's court began using in 1434. It follows the Veritable Records step by step, from water rising in a receiver to wooden figures striking a bell, a drum and a gong.",
+        "features": [
+          "Water runs from four supply vessels into two receivers that take turns; a rising float rod releases balls that run down copper tubes and tip spoon levers.",
+          "Figures strike a bell for each double-hour, a drum for each night watch and a gong for each point, and a wheel of twelve figures raises the hour's plaque.",
+          "A readout gives the time as the period wrote it, such as 子初 and 三更 二點, next to the modern clock time and the receiver levels.",
+          "Play and pause, four speeds, a time-of-day slider and a zoom on the mechanism; with reduced motion it starts paused.",
+          "Sections on the time system, the drum relay across Seoul, a timeline from 1398 to 2024 and the surviving vessels, with sources."
+        ],
+        "tryThis": [
+          "Set the speed to ½× and follow one ball from the copper plate to the bell.",
+          "Press Mechanism to zoom in on the tower.",
+          "Drag the time slider all the way right, just before 05:00, and watch the flow switch to the other receiver."
+        ],
+        "stack": [
+          "Vanilla JavaScript",
+          "Inline SVG",
+          "HTML/CSS"
+        ],
+        "links": [
+          {
+            "label": "Source",
+            "href": "https://github.com/mjkang-estrella/mjkang-estrella.github.io/tree/main/jagyeokru"
+          }
+        ],
+        "sources": [
+          "repo:jagyeokru/index.html",
+          "repo:jagyeokru/clock.js"
+        ]
+      },
+      "screenshot": "images/projects/jagyeokru-screenshot.jpg"
+    },
+    {
       "id": "three-body-simulator",
       "title": "Three Body Simulator",
       "description": "Interactive two-dimensional gravity simulation for chaotic multi-body orbital dynamics.",

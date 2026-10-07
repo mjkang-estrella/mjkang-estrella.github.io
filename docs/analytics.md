@@ -46,8 +46,8 @@ its tag or sends Google analytics requests. The optional JobSwitch recording
 loads Google's Drive player only after a visitor chooses Watch demo.
 
 Counting runs only on `mj-kang.com` and `www.mj-kang.com`. Coverage is `/`,
-`/block-fighter/`, `/three-body-problem-simulation/`, `/jeonse/`, and
-`/retirement-calculator/`. The privacy page handles preferences but sends no
+`/block-fighter/`, `/three-body-problem-simulation/`, `/jeonse/`,
+`/retirement-calculator/`, and `/jagyeokru/`. The privacy page handles preferences but sends no
 counts. External project apps and other subdomains are not instrumented here.
 
 Cloudflare necessarily processes network requests to operate the site. The
@@ -118,7 +118,7 @@ Wrangler authentication, which is not committed or bundled. A future authenticat
 CLI deployment can use `npx wrangler deploy --config analytics/wrangler.jsonc`.
 
 Frontend updates deploy through GitHub Pages. Bump the analytics script query
-version on all six HTML pages after edits to avoid stale CDN/browser JavaScript.
+version on all seven HTML pages after edits to avoid stale CDN/browser JavaScript.
 There is no frontend secret or credential.
 
 To stop collection, remove the analytics script includes, or remove the two
