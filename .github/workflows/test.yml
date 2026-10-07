@@ -52,6 +52,7 @@ jobs:
           node --check js/project-detail.js
           node --check js/ask-ai.js
           node --check three-body-problem-simulation/simulator.js
+          node --check jagyeokru/clock.js
           python3 - <<'EOF'
           import re, subprocess, sys, tempfile
           from pathlib import Path

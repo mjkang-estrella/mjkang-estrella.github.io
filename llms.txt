@@ -30,6 +30,7 @@ These details are published in the History section of the [portfolio](https://mj
 - [Resume OS](https://resume-os.com/): interactive resume platform
 - [Conditioned](https://ardent-footer-45845870.figma.site/): AI-based CrossFit performance analyzer
 - [Reflect (iOS)](https://testflight.apple.com/join/2ctpxzhd): voice journaling application
+- [Jagyeokru (자격루)](https://mj-kang.com/jagyeokru/): animated model of King Sejong's 1434 self-striking water clock
 - [Three Body Simulator](https://mj-kang.com/three-body-problem-simulation/): interactive 2D gravity simulation
 - [Block Fighter](https://mj-kang.com/block-fighter/): browser-based physics mini-game
 - [Jeonse Rent Calculator](https://mj-kang.com/jeonse/): Korean jeonse vs. monthly rent comparison

@@ -1,7 +1,7 @@
 // Aggregate counts only: no Google tag, visitor/session ID, cookie or raw URL.
 (() => {
     const production = ["mj-kang.com", "www.mj-kang.com"].includes(location.hostname);
-    const PAGES = new Set(["/", "/block-fighter/", "/three-body-problem-simulation/", "/jeonse/", "/retirement-calculator/"]);
+    const PAGES = new Set(["/", "/block-fighter/", "/three-body-problem-simulation/", "/jeonse/", "/retirement-calculator/", "/jagyeokru/"]);
     const PROJECT_EVENTS = new Set(["project_open", "project_close", "demo_start", "demo_restart", "demo_exit", "project_link_click"]);
     const OPT_OUT = "mj-anonymous-counts-disabled";
     const LEGACY = "mj-analytics-consent-v1";

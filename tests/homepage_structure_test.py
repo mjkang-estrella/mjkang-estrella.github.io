@@ -335,9 +335,9 @@ def test_document_structure() -> None:
     assert "MJ Kang" in parser.heading_text
     assert "History" in parser.heading_text
     assert "Selected Works" in parser.heading_text
-    assert parser.project_card_count == 18
-    assert parser.project_metadata_count == 18
-    assert len(parser.project_titles) == 18
+    assert parser.project_card_count == 19
+    assert parser.project_metadata_count == 19
+    assert len(parser.project_titles) == 19
     assert parser.project_hrefs[:6] == [
         "https://jobswitch-sooty.vercel.app/",
         "https://folio-subscription-manager.vercel.app/",
@@ -484,7 +484,7 @@ def test_referenced_assets_exist_on_disk() -> None:
 
     assert "css/homepage.css" in parser.stylesheets
     assert parser.scripts == [
-        "/js/analytics.js?v=20261002-anonymous",
+        "/js/analytics.js?v=20261007-jagyeokru",
         "js/homepage.js",
         "js/project-detail.js?v=20261004-video",
         "js/ask-ai.js",
@@ -518,6 +518,7 @@ def test_machine_export_strings_present() -> None:
     assert "https://mj-kang.com/block-fighter/" in html
     assert "https://mj-kang.com/jeonse/" in html
     assert "https://mj-kang.com/retirement-calculator/" in html
+    assert "https://mj-kang.com/jagyeokru/" in html
     assert "## Contact" in html
     assert "## Social" in html
     assert "## Colophon" in html
@@ -542,6 +543,7 @@ def test_sitemap() -> None:
         "https://mj-kang.com/block-fighter/",
         "https://mj-kang.com/jeonse/",
         "https://mj-kang.com/retirement-calculator/",
+        "https://mj-kang.com/jagyeokru/",
     ]
 
 
@@ -552,6 +554,7 @@ def test_llms_txt() -> None:
     assert "[Caption With Intent](https://cwi.mj-kang.com/)" in llms_text
     assert "[Reader](https://reader.mj-kang.com/)" in llms_text
     assert "https://mj-kang.com/retirement-calculator/" in llms_text
+    assert "https://mj-kang.com/jagyeokru/" in llms_text
 
 
 def test_headers_and_nojekyll() -> None:

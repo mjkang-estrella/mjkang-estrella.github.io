@@ -14,6 +14,7 @@ Use this skill when an agent needs a concise map of MJ Kang's public site.
 - Block Fighter: https://mj-kang.com/block-fighter/
 - Jeonse Rent Calculator: https://mj-kang.com/jeonse/
 - Retirement Calculator: https://mj-kang.com/retirement-calculator/
+- Jagyeokru (자격루): https://mj-kang.com/jagyeokru/
 
 ## External Context
 

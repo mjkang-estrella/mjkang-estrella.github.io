@@ -1,0 +1,1221 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/logo/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/logo/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/logo/apple-icon-180x180.png">
+    <link rel="manifest" href="/images/logo/manifest.json">
+    <meta name="theme-color" content="#FAFAFA" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
+    <meta name="color-scheme" content="light dark">
+    <title>자격루 (Jagyeokru): the water clock that strikes itself | MJ Kang</title>
+    <meta name="description" content="An animated isometric model of Jagyeokru (자격루), the self-striking water clock built for King Sejong in 1434: water lifts a rod, the rod releases balls, and the balls make wooden figures strike a bell, a drum and a gong.">
+    <meta name="author" content="MJ Kang">
+    <link rel="canonical" href="https://mj-kang.com/jagyeokru/">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="자격루 (Jagyeokru): the water clock that strikes itself">
+    <meta property="og:description" content="An animated model of King Sejong's 1434 self-striking water clock, built from the Veritable Records.">
+    <meta property="og:url" content="https://mj-kang.com/jagyeokru/">
+    <meta property="og:image" content="https://mj-kang.com/images/projects/jagyeokru-thumbnail.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="자격루 (Jagyeokru): the water clock that strikes itself">
+    <meta name="twitter:description" content="An animated model of King Sejong's 1434 self-striking water clock, built from the Veritable Records.">
+    <meta name="twitter:image" content="https://mj-kang.com/images/projects/jagyeokru-thumbnail.jpg">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.2.5/400.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.2.5/600.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+    <!-- Only the Hanja the page uses, for the time names -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap&text=%E5%AD%90%E4%B8%91%E5%AF%85%E5%8D%AF%E8%BE%B0%E5%B7%B3%E5%8D%88%E6%9C%AA%E7%94%B3%E9%85%89%E6%88%8C%E4%BA%A5%E6%99%82%E5%88%9D%E6%AD%A3%E6%9B%B4%E9%BB%9E%E4%BA%8C%E4%B8%89%E5%9B%9B%E4%BA%94%E5%88%BB">
+    <link rel="stylesheet" href="/css/base.css">
+    <style>
+        :root {
+            color-scheme: light dark;
+            --bg: #FAFAFA;
+            --fg: #111111;
+            --muted: #5c5c5c;
+            --rule: #e2e2e2;
+            --panel: #ffffff;
+            --accent: #F35815;
+            --blue: #144EB6;
+            --red: #D92038;
+            --connector: #818181;
+            --water-opacity: 0.1;
+            --mono: "JetBrains Mono", "Pretendard Variable", ui-monospace, monospace;
+            --sans: "Pretendard Variable", Pretendard, system-ui, -apple-system, "Segoe UI", sans-serif;
+            --han: "Noto Serif KR", "Noto Serif CJK KR", "Source Han Serif K", AppleMyungjo, Batang, serif;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #111111;
+                --fg: #FAFAFA;
+                --muted: #a6a6a6;
+                --rule: #2b2b2b;
+                --panel: #171717;
+                --blue: #0E73CC;
+                --red: #FF455D;
+                --water-opacity: 0.25;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            background: var(--bg);
+            color: var(--fg);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            margin: 0;
+            font: 17px/1.7 var(--sans);
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+
+        a {
+            color: inherit;
+            text-decoration-color: var(--connector);
+            text-underline-offset: 0.2em;
+            transition: text-decoration-color var(--motion-fast) ease;
+        }
+
+        a:hover {
+            text-decoration-color: var(--accent);
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+        }
+
+        ::selection {
+            background: color-mix(in srgb, var(--accent) 25%, transparent);
+        }
+
+        .wrap {
+            width: min(1180px, 100% - 40px);
+            margin-inline: auto;
+        }
+
+        .prose {
+            max-width: 720px;
+        }
+
+        .han {
+            font-family: var(--han);
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip-path: inset(50%);
+            white-space: nowrap;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-block: 22px;
+            font: 13px/1.4 var(--mono);
+            color: var(--muted);
+        }
+
+        .topbar a {
+            text-decoration: none;
+        }
+
+        .topbar a:hover {
+            color: var(--fg);
+        }
+
+        header.hero {
+            padding-block: 28px 32px;
+        }
+
+        .eyebrow {
+            margin: 0 0 14px;
+            font: 600 12px/1.4 var(--mono);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(34px, 6vw, 60px);
+            line-height: 1.08;
+            letter-spacing: -0.02em;
+            font-weight: 700;
+        }
+
+        h1 .en {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.5em;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            color: var(--muted);
+        }
+
+        .lede {
+            margin: 22px 0 0;
+            font-size: 19px;
+            max-width: 720px;
+        }
+
+        sup.ref {
+            font: 600 0.62em/1 var(--mono);
+            margin-left: 1px;
+        }
+
+        sup.ref a {
+            text-decoration: none;
+            color: var(--blue);
+        }
+
+        /* ---------- figure */
+
+        figure.clock {
+            margin: 8px 0 0;
+        }
+
+        .stage {
+            position: relative;
+            border-top: 1px solid var(--rule);
+            border-bottom: 1px solid var(--rule);
+        }
+
+        #jgr-svg {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1.32;
+            font-family: var(--mono);
+            user-select: none;
+            opacity: 0;
+            transition: opacity var(--motion-slow) ease;
+        }
+
+        #jgr-svg.is-ready {
+            opacity: 1;
+        }
+
+        .readout {
+            position: absolute;
+            top: 18px;
+            right: 0;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            padding: 12px 16px 12px 12px;
+            background: color-mix(in srgb, var(--bg) 88%, transparent);
+            border: 1px solid var(--rule);
+            border-radius: 10px;
+            font: 13px/1.5 var(--mono);
+        }
+
+        .readout p {
+            margin: 0;
+        }
+
+        .readout-hour {
+            display: grid;
+            place-items: center;
+            min-width: 76px;
+            height: 58px;
+            padding-inline: 8px;
+            border: 2px solid var(--fg);
+            border-radius: 6px;
+            font: 600 32px/1 var(--han);
+        }
+
+        .readout p .han,
+        .readout .watch.han {
+            font-size: 15px;
+            line-height: 1.3;
+        }
+
+        .readout .watch {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .readout .vessel {
+            color: var(--muted);
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px 22px;
+            padding-block: 16px;
+            font: 13px/1.4 var(--mono);
+        }
+
+        .controls button {
+            font: inherit;
+            color: var(--fg);
+            background: transparent;
+            border: 1px solid var(--rule);
+            border-radius: 6px;
+            padding: 7px 11px;
+            cursor: pointer;
+            transition: border-color var(--motion-fast) ease, background-color var(--motion-fast) ease;
+        }
+
+        .controls button:hover {
+            border-color: var(--connector);
+        }
+
+        .controls button[aria-pressed="true"] {
+            background: var(--fg);
+            color: var(--bg);
+            border-color: var(--fg);
+        }
+
+        #jgr-play {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 92px;
+            justify-content: center;
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        #jgr-play[aria-pressed="true"] {
+            background: transparent;
+            color: var(--fg);
+            border-color: var(--fg);
+        }
+
+        #jgr-play .icon-pause,
+        #jgr-play[aria-pressed="true"] .icon-play {
+            display: none;
+        }
+
+        #jgr-play[aria-pressed="true"] .icon-pause {
+            display: inline;
+        }
+
+        .group {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .group-label {
+            color: var(--muted);
+            margin-right: 2px;
+        }
+
+        .scrub {
+            flex: 1 1 260px;
+            display: grid;
+            gap: 4px;
+        }
+
+        .scrub label {
+            color: var(--muted);
+        }
+
+        .scrub input {
+            width: 100%;
+            accent-color: var(--accent);
+        }
+
+        .scrub-ticks {
+            display: flex;
+            justify-content: space-between;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .speed-note,
+        .rm-note {
+            flex-basis: 100%;
+            margin: 0;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .rm-note {
+            display: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .rm-note {
+                display: block;
+            }
+        }
+
+        ol.steps {
+            list-style: none;
+            counter-reset: step;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+            margin: 6px 0 0;
+            padding: 0;
+        }
+
+        ol.steps li {
+            counter-increment: step;
+            position: relative;
+            padding: 12px 12px 12px 42px;
+            border: 1px solid var(--rule);
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--muted);
+            transition: border-color var(--motion-base) ease, color var(--motion-base) ease, background-color var(--motion-base) ease;
+        }
+
+        ol.steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: 12px;
+            top: 11px;
+            display: grid;
+            place-items: center;
+            width: 20px;
+            height: 20px;
+            border: 1.5px solid currentColor;
+            border-radius: 50%;
+            font: 600 11px/1 var(--mono);
+        }
+
+        ol.steps li strong {
+            display: block;
+            color: var(--fg);
+            font-weight: 600;
+        }
+
+        ol.steps li.is-active {
+            color: var(--fg);
+            border-color: var(--accent);
+            background: color-mix(in srgb, var(--accent) 7%, transparent);
+        }
+
+        ol.steps li.is-active::before {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        figcaption {
+            margin-top: 16px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--muted);
+            max-width: 860px;
+        }
+
+        /* ---------- svg vocabulary */
+
+        #jgr-svg .face { fill: var(--bg); stroke: var(--fg); stroke-width: 2; stroke-linejoin: round; }
+        #jgr-svg .floor { fill: var(--bg); fill-opacity: 0.72; stroke: var(--fg); stroke-width: 1.6; stroke-linejoin: round; }
+        #jgr-svg .glass { fill: none; stroke: var(--connector); stroke-width: 1.5; stroke-dasharray: 6 6; }
+        #jgr-svg .post { fill: none; stroke: var(--fg); stroke-width: 2; stroke-linecap: square; }
+        #jgr-svg .roof { fill: var(--bg); stroke: var(--fg); stroke-width: 2.4; stroke-linejoin: round; }
+        #jgr-svg .roof-line { fill: none; stroke: var(--fg); stroke-width: 2.4; }
+        #jgr-svg .wall { fill: none; stroke: var(--fg); stroke-width: 2.6; stroke-linejoin: round; stroke-linecap: square; }
+        #jgr-svg .edge-hidden { fill: none; stroke: var(--connector); stroke-width: 1.5; stroke-dasharray: 6 6; }
+        #jgr-svg .water { fill: var(--blue); fill-opacity: var(--water-opacity); }
+        #jgr-svg .water-hatch { fill: url(#jgr-hatch); }
+        #jgr-svg .hatch-line { stroke: var(--blue); stroke-opacity: 0.3; stroke-width: 2; }
+        #jgr-svg .water-edge { fill: none; stroke: var(--blue); stroke-width: 2; }
+        #jgr-svg .pipe-outer { fill: none; stroke: var(--fg); stroke-width: 11; stroke-linejoin: miter; }
+        #jgr-svg .pipe-inner { fill: none; stroke: var(--bg); stroke-width: 7; stroke-linejoin: miter; }
+        #jgr-svg .pipe-water { fill: none; stroke: var(--blue); stroke-opacity: 0.3; stroke-width: 7; stroke-linejoin: miter; }
+        #jgr-svg .pipe-flow,
+        #jgr-svg .stream { fill: none; stroke: var(--blue); stroke-width: 2.5; stroke-dasharray: 6 10; }
+        #jgr-svg .stream { stroke-width: 2.2; }
+        #jgr-svg .chute-outer { fill: none; stroke: var(--fg); stroke-width: 9; stroke-linejoin: round; }
+        #jgr-svg .chute-inner { fill: none; stroke: var(--bg); stroke-width: 5; stroke-linejoin: round; }
+        #jgr-svg .rod { fill: none; stroke: var(--fg); stroke-width: 3; }
+        #jgr-svg .rod-ticks { fill: none; stroke: var(--fg); stroke-width: 1.4; }
+        #jgr-svg .float { fill: var(--bg); stroke: var(--fg); stroke-width: 1.6; }
+        #jgr-svg .plane * { vector-effect: non-scaling-stroke; }
+        #jgr-svg .plate { fill: color-mix(in srgb, var(--accent) 16%, var(--bg)); stroke: var(--fg); stroke-width: 1.2; }
+        #jgr-svg .plate-ball { fill: var(--fg); stroke: none; transition: opacity var(--motion-fast) ease; }
+        #jgr-svg .plate-ball.is-gone { opacity: 0.12; }
+        #jgr-svg .pointer { fill: none; stroke: var(--red); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+        #jgr-svg .pointer-tip { fill: var(--red); }
+        #jgr-svg .lane { fill: none; stroke: var(--fg); stroke-width: 2; }
+        #jgr-svg .lane-wall { fill: none; stroke: var(--fg); stroke-width: 2; }
+        #jgr-svg .tube { fill: none; stroke: var(--fg); stroke-width: 1.8; }
+        #jgr-svg .hole { fill: none; stroke: var(--fg); stroke-width: 2.4; }
+        #jgr-svg .hole.is-closed { stroke: var(--connector); stroke-width: 1.2; }
+        #jgr-svg .ball-big { fill: var(--fg); transition: opacity var(--motion-fast) ease; }
+        #jgr-svg .ball-big.is-gone { opacity: 0; }
+        #jgr-svg .ball-small { fill: var(--bg); stroke: var(--fg); stroke-width: 1.6; }
+        #jgr-svg .is-live { fill: var(--accent); stroke: var(--bg); stroke-width: 1.5; transition: none; }
+        #jgr-svg .spoon { fill: none; stroke: var(--fg); stroke-width: 3; stroke-linecap: round; }
+        #jgr-svg .spoon-cup { fill: var(--bg); stroke: var(--fg); stroke-width: 2; }
+        #jgr-svg .pivot { fill: var(--fg); }
+        #jgr-svg .pivot-post { fill: none; stroke: var(--fg); stroke-width: 2; }
+        #jgr-svg .push-rod { fill: none; stroke: var(--connector); stroke-width: 2; stroke-dasharray: 4 4; }
+        #jgr-svg .beam { fill: none; stroke: var(--fg); stroke-width: 4; stroke-linecap: round; }
+        #jgr-svg .wheel-ring { fill: none; stroke: var(--connector); stroke-width: 1.6; stroke-dasharray: 6 6; }
+        #jgr-svg .wheel-hub { fill: none; stroke: var(--connector); stroke-width: 1.4; }
+        #jgr-svg .wheel-stem { fill: none; stroke: var(--connector); stroke-width: 1.6; }
+        #jgr-svg .wheel-head { fill: var(--bg); stroke: var(--connector); stroke-width: 1.4; }
+        #jgr-svg .wheel-god.is-raised .wheel-stem,
+        #jgr-svg .wheel-god.is-raised .wheel-head { stroke: var(--fg); }
+        #jgr-svg .figure { fill: var(--bg); stroke: var(--fg); stroke-width: 1.8; stroke-linejoin: round; }
+        #jgr-svg .figure-cap { fill: var(--fg); stroke: var(--fg); stroke-width: 1.4; }
+        #jgr-svg .figure-line { fill: none; stroke: var(--fg); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+        #jgr-svg .mallet { fill: var(--fg); }
+        #jgr-svg .plaque { fill: var(--panel); stroke: var(--fg); stroke-width: 1.6; }
+        #jgr-svg .plaque-text { font: 600 12px/1 var(--han); fill: var(--fg); }
+        #jgr-svg .frame { fill: none; stroke: var(--fg); stroke-width: 1.8; stroke-linejoin: round; }
+        #jgr-svg .bell-body,
+        #jgr-svg .drum-body,
+        #jgr-svg .gong-body { fill: var(--bg); stroke: var(--fg); stroke-width: 2; }
+        #jgr-svg .drum-face,
+        #jgr-svg .gong-boss { fill: none; stroke: var(--fg); stroke-width: 1.5; }
+        #jgr-svg .wave { fill: none; stroke: var(--accent); stroke-width: 2.4; stroke-linecap: round; }
+        #jgr-svg .god.is-striking .bell-body,
+        #jgr-svg .god.is-striking .drum-body,
+        #jgr-svg .god.is-striking .gong-body { fill: color-mix(in srgb, var(--accent) 22%, var(--bg)); }
+        #jgr-svg .tag { font: 500 11px/1 var(--mono); fill: var(--muted); }
+        #jgr-svg .god .tag { font-size: 8.5px; }
+        #jgr-svg .tag .han { font: 600 13px/1 var(--han); fill: var(--fg); }
+        #jgr-svg .leader { fill: none; stroke: var(--connector); stroke-width: 1.2; }
+        #jgr-svg .leader-dot { fill: var(--connector); }
+        #jgr-svg .badge { fill: var(--bg); stroke: var(--fg); stroke-width: 1.6; transition: fill var(--motion-base) ease, stroke var(--motion-base) ease; }
+        #jgr-svg .badge-text { font: 600 13px/1 var(--mono); fill: var(--fg); }
+        #jgr-svg .callout-text { font: 500 14px/1 var(--mono); fill: var(--fg); paint-order: stroke; stroke: var(--bg); stroke-width: 5px; stroke-linejoin: round; }
+        #jgr-svg .callout.is-active .badge { fill: var(--accent); stroke: var(--accent); }
+        #jgr-svg .callout.is-active .badge-text { fill: #fff; }
+        #jgr-svg .callout.is-active .leader { stroke: var(--accent); }
+
+        /* ---------- sections */
+
+        main section {
+            padding-block: 56px 8px;
+        }
+
+        h2 {
+            margin: 0 0 18px;
+            font-size: clamp(24px, 3.4vw, 32px);
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+
+        h2 .num {
+            font: 600 13px/1 var(--mono);
+            color: var(--accent);
+            display: block;
+            margin-bottom: 10px;
+            letter-spacing: 0.06em;
+        }
+
+        h3 {
+            margin: 30px 0 8px;
+            font-size: 18px;
+        }
+
+        p {
+            margin: 0 0 16px;
+        }
+
+        .term {
+            font-weight: 600;
+        }
+
+        blockquote {
+            margin: 20px 0;
+            padding: 4px 0 4px 18px;
+            border-left: 3px solid var(--accent);
+            color: var(--fg);
+        }
+
+        blockquote p {
+            margin: 0 0 6px;
+        }
+
+        blockquote cite {
+            font: 12px/1.4 var(--mono);
+            font-style: normal;
+            color: var(--muted);
+        }
+
+        .facts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 0;
+            margin: 24px 0;
+            border-top: 1px solid var(--rule);
+        }
+
+        .facts div {
+            padding: 14px 16px 14px 0;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .facts dt {
+            font: 12px/1.4 var(--mono);
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        .facts dd {
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.45;
+        }
+
+        .facts dd b {
+            font: 600 20px/1.2 var(--mono);
+        }
+
+        .hours {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            margin: 24px 0;
+            padding: 0;
+            list-style: none;
+            border-top: 1px solid var(--rule);
+            border-left: 1px solid var(--rule);
+        }
+
+        .hours li {
+            display: grid;
+            justify-items: center;
+            gap: 4px;
+            padding: 14px 4px 12px;
+            border-right: 1px solid var(--rule);
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .hours .han {
+            font-size: 28px;
+            font-weight: 600;
+            line-height: 1.1;
+        }
+
+        .hours .reading {
+            font: 11px/1.3 var(--mono);
+            color: var(--muted);
+        }
+
+        .hours .range {
+            font: 600 12px/1.3 var(--mono);
+        }
+
+        /* relay */
+        .relay {
+            margin: 28px 0 20px;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            position: relative;
+        }
+
+        .relay::before {
+            content: "";
+            position: absolute;
+            left: calc(100% / 12);
+            right: calc(100% / 12);
+            top: 15px;
+            border-top: 2px dashed var(--connector);
+        }
+
+        .relay::after {
+            content: "";
+            position: absolute;
+            top: 10px;
+            left: calc(100% / 12 - 6px);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: relay-run calc(var(--motion-page) * 7) linear infinite;
+        }
+
+        @keyframes relay-run {
+            0% { left: calc(100% / 12 - 6px); opacity: 0; }
+            6% { opacity: 1; }
+            88% { opacity: 1; }
+            100% { left: calc(100% * 11 / 12 - 6px); opacity: 0; }
+        }
+
+        .relay li {
+            position: relative;
+            text-align: center;
+            padding: 36px 6px 0;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .relay li::before {
+            content: "";
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            translate: -50% 0;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid var(--fg);
+            background: var(--bg);
+        }
+
+        .relay li.is-source::before {
+            background: var(--fg);
+        }
+
+        .relay li.is-namu::before {
+            border-style: dashed;
+        }
+
+        .relay b {
+            display: block;
+            font-weight: 600;
+        }
+
+        .relay small {
+            display: block;
+            color: var(--muted);
+            font: 11px/1.4 var(--mono);
+            margin-top: 4px;
+        }
+
+        /* timeline */
+        .timeline {
+            list-style: none;
+            margin: 24px 0 0;
+            padding: 0;
+            border-left: 2px solid var(--rule);
+        }
+
+        .timeline li {
+            position: relative;
+            display: grid;
+            grid-template-columns: 112px 1fr;
+            gap: 16px;
+            padding: 0 0 22px 22px;
+        }
+
+        .timeline li::before {
+            content: "";
+            position: absolute;
+            left: -7px;
+            top: 8px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 2px solid var(--fg);
+        }
+
+        .timeline li.is-key::before {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .timeline time {
+            font: 600 14px/1.9 var(--mono);
+        }
+
+        .timeline time small {
+            display: block;
+            font-weight: 400;
+            font-size: 11px;
+            line-height: 1.3;
+            color: var(--muted);
+        }
+
+        .timeline p {
+            margin: 0;
+        }
+
+        /* survivor */
+        .survivor {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(280px, 400px);
+            gap: 40px;
+            align-items: start;
+        }
+
+        .survivor svg {
+            width: 100%;
+            height: auto;
+            font-family: var(--mono);
+        }
+
+        .survivor svg .wall { fill: none; stroke: var(--fg); stroke-width: 2.4; }
+        .survivor svg .water { fill: var(--blue); fill-opacity: var(--water-opacity); }
+        .survivor svg .dim { fill: none; stroke: var(--connector); stroke-width: 1.2; }
+        .survivor svg .dim-text { font-size: 12px; fill: var(--fg); }
+        .survivor svg .dim-cap { font-size: 11px; fill: var(--muted); }
+        .survivor svg .hidden { fill: none; stroke: var(--connector); stroke-width: 1.4; stroke-dasharray: 5 5; }
+
+        ol.sources {
+            margin: 18px 0 0;
+            padding-left: 22px;
+            font-size: 15px;
+        }
+
+        ol.sources li {
+            margin-bottom: 12px;
+            padding-left: 4px;
+        }
+
+        ol.sources li::marker {
+            font: 600 13px var(--mono);
+            color: var(--blue);
+        }
+
+        .note {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        ol.sources small {
+            display: block;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        footer {
+            margin-top: 64px;
+            padding-block: 28px 48px;
+            border-top: 1px solid var(--rule);
+            font: 13px/1.6 var(--mono);
+            color: var(--muted);
+        }
+
+        footer a {
+            color: var(--fg);
+        }
+
+        @media (max-width: 980px) {
+            ol.steps {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .survivor {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 760px) {
+            body {
+                font-size: 16px;
+            }
+
+            .wrap {
+                width: calc(100% - 32px);
+            }
+
+            .stage {
+                margin-inline: -16px;
+                border-top: 0;
+            }
+
+            .readout {
+                position: static;
+                margin: 0 16px 6px;
+                border-radius: 8px;
+            }
+
+            #jgr-svg .callout-text {
+                display: none;
+            }
+
+            #jgr-svg .tag {
+                display: none;
+            }
+
+            #jgr-svg .badge {
+                r: 34px;
+                stroke-width: 3px;
+            }
+
+            #jgr-svg .badge-text {
+                font-size: 38px;
+                translate: 0 9px;
+            }
+
+            ol.steps {
+                grid-template-columns: 1fr;
+            }
+
+            .hours {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .relay {
+                grid-template-columns: 1fr;
+                gap: 4px;
+            }
+
+            .relay::before {
+                left: 15px;
+                right: auto;
+                top: 18px;
+                bottom: 18px;
+                border-top: 0;
+                border-left: 2px dashed var(--connector);
+            }
+
+            .relay::after {
+                display: none;
+            }
+
+            .relay li {
+                text-align: left;
+                padding: 4px 0 10px 44px;
+            }
+
+            .relay li::before {
+                left: 16px;
+                top: 6px;
+            }
+
+            .timeline li {
+                grid-template-columns: 1fr;
+                gap: 2px;
+            }
+        }
+    </style>
+    <script defer src="/js/analytics.js?v=20261007-jagyeokru"></script>
+</head>
+<body>
+    <div class="wrap topbar">
+        <a href="/">← mj-kang.com</a>
+        <span><span lang="ko">자격루</span>, 1434</span>
+    </div>
+
+    <main>
+        <header class="hero wrap">
+            <p class="eyebrow">Joseon Korea, 1434 · an automatic water clock</p>
+            <h1><span lang="ko">자격루</span> (Jagyeokru)<span class="en">The water clock that strikes itself</span></h1>
+            <p class="lede">
+                From the first day of the seventh lunar month of 1434, King Sejong's court kept time with a new water clock.<sup class="ref"><a href="#src-1">1</a></sup>
+                It announced the time without human help. Rising water lifted a rod, the rod let small copper balls drop, and the balls set off levers that made wooden figures strike a bell, a drum and a gong.<sup class="ref"><a href="#src-1">1</a></sup>
+                The model below follows the description in the Veritable Records of King Sejong, step by step.
+            </p>
+        </header>
+
+        <div class="wrap">
+            <figure class="clock" id="jgr-figure">
+                <div class="stage" id="jgr-stage">
+                    <svg id="jgr-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1443 1046" role="img" aria-labelledby="jgr-svg-title jgr-svg-desc">
+                        <title id="jgr-svg-title">Animated isometric model of the 1434 Jagyeokru water clock</title>
+                        <desc id="jgr-svg-desc">Water runs down four supply vessels on stepped stands into one of two tall receiving vessels. A float rod rises in the active vessel beside a column of copper plates. At each mark a small ball drops from the plate, rolls down a chute and a copper tube, and releases an egg-sized iron ball. The iron ball falls onto a spoon-shaped lever that pushes up the arm of a wooden figure, which strikes a bell for the hour, a drum for the night watch or a gong for the point. For each hour a beam also lifts that hour's figure from a wheel of twelve, holding its plaque.</desc>
+                        <defs>
+                            <pattern id="jgr-hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                                <line class="hatch-line" x1="0" y1="0" x2="0" y2="12"/>
+                            </pattern>
+                        </defs>
+                    </svg>
+                    <div class="readout" aria-label="Clock reading">
+                        <span class="readout-hour han" id="jgr-hour" lang="ko">子</span>
+                        <div>
+                            <p><span class="han" id="jgr-hour-name" lang="ko">子初</span> · ≈ <span id="jgr-clock">23:00</span></p>
+                            <p class="watch han" id="jgr-watch" lang="ko">三更 初點</p>
+                            <p class="vessel" id="jgr-vessel">Receiver A 75% · B standby</p>
+                            <p class="sr-only" id="jgr-reading">Hour of the Rat, first half; third watch, first point</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button type="button" id="jgr-play" aria-pressed="false">
+                        <svg class="icon-play" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1 L11 6 L2 11 Z" fill="currentColor"/></svg>
+                        <svg class="icon-pause" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1 H5 V11 H2 Z M7 1 H10 V11 H7 Z" fill="currentColor"/></svg>
+                        <span data-label>Play</span>
+                    </button>
+                    <div class="group" role="group" aria-label="Speed">
+                        <span class="group-label">Speed</span>
+                        <button type="button" data-jgr-speed="0.5" aria-pressed="false">½×</button>
+                        <button type="button" data-jgr-speed="1" aria-pressed="true">1×</button>
+                        <button type="button" data-jgr-speed="4" aria-pressed="false">4×</button>
+                        <button type="button" data-jgr-speed="16" aria-pressed="false">16×</button>
+                    </div>
+                    <div class="group" role="group" aria-label="View">
+                        <span class="group-label">View</span>
+                        <button type="button" data-jgr-view="whole" aria-pressed="true">Whole clock</button>
+                        <button type="button" data-jgr-view="mechanism" aria-pressed="false">Mechanism</button>
+                    </div>
+                    <div class="scrub">
+                        <label for="jgr-scrub">Time of day, as the water rises in the active receiver</label>
+                        <input type="range" id="jgr-scrub" min="0" max="1000" step="1" value="745">
+                        <div class="scrub-ticks" aria-hidden="true"><span><span class="han" lang="ko">卯</span> 05</span><span><span class="han" lang="ko">午</span> 11</span><span><span class="han" lang="ko">酉</span> 17</span><span><span class="han" lang="ko">子</span> 23</span><span><span class="han" lang="ko">寅</span> 03</span></div>
+                    </div>
+                    <p class="speed-note">At 1×, one double-hour passes every 12 seconds. At ½× you can follow each ball.</p>
+                    <p class="rm-note">Your system asks for reduced motion, so the clock starts paused. Press Play to run it, or drag the time slider.</p>
+                </div>
+
+                <ol class="steps" aria-label="How a strike happens">
+                    <li data-jgr-step="1"><strong>Supply vessels</strong>Four supply vessels of different sizes pass the water down to the receivers.</li>
+                    <li data-jgr-step="2"><strong>Receiver and float rod</strong>Water collects in the receiving vessel and the float rod rises.</li>
+                    <li data-jgr-step="3"><strong>Copper plate</strong>At each mark the rod trips a hole in the copper plate and a small ball drops.</li>
+                    <li data-jgr-step="4"><strong>Copper tube</strong>The small ball rolls down the copper tube, falls through the first open hole and unlatches an egg-sized iron ball.</li>
+                    <li data-jgr-step="5"><strong>Spoon lever</strong>The iron ball drops through a short tube onto a spoon-shaped lever.</li>
+                    <li data-jgr-step="6"><strong>Wooden figures</strong>The lever pushes a figure's arm up: bell for the hour, drum for the watch, gong for the point.</li>
+                    <li data-jgr-step="7"><strong>Wheel of twelve</strong>For the hour, the ball presses a beam that lifts the hour's figure off the wheel, holding its plaque.</li>
+                    <li data-jgr-step="8"><strong>Switch A ↔ B</strong>When a receiver is full, the flow switches to the standby one, which already has its balls set.</li>
+                </ol>
+
+                <figcaption>
+                    A model of the 1434 clock as the Veritable Records describe it.<sup class="ref"><a href="#src-1">1</a></sup> It is not to scale: the receivers are drawn shorter so the whole clock fits.
+                    The Records do not say when the receivers were swapped, so here they swap at 05:00.
+                    Night watches are shown as five equal two-hour periods from 19:00. The real watches lengthened and shortened with the seasons.<sup class="ref"><a href="#src-1">1</a></sup><sup class="ref"><a href="#src-3">3</a></sup>
+                    The plate balls stand for the receiver in use; each receiver had its own set ready.<sup class="ref"><a href="#src-3">3</a></sup>
+                </figcaption>
+                <noscript><p>The animation needs JavaScript. The explanation below does not.</p></noscript>
+            </figure>
+        </div>
+
+        <section class="wrap" id="how">
+            <div class="prose">
+                <h2><span class="num">01</span>How the clock works</h2>
+                <p>
+                    The Veritable Records entry for the first day of the seventh month of Sejong's 16th year describes the clock in detail.<sup class="ref"><a href="#src-1">1</a></sup>
+                    Sejong ordered a new clock because the old one was imprecise, and he worried that the people calling out the time would make mistakes.
+                    So he had <span class="term">Jang Yeong-sil</span>, then holding the military post of hogun, build wooden figures that would announce the time by themselves, without human help.<sup class="ref"><a href="#src-1">1</a></sup>
+                    Other accounts also name Yi Cheon and Kim Jo among the makers.<sup class="ref"><a href="#src-2">2</a></sup><sup class="ref"><a href="#src-3">3</a></sup>
+                </p>
+
+                <h3>Water: four supply vessels, two receivers</h3>
+                <p>
+                    There were four supply vessels of different sizes and two receiving vessels, used in turn when the water was changed.
+                    The receivers were 11 cheok 2 chon long and 1 cheok 8 chon across, in traditional Korean units.<sup class="ref"><a href="#src-1">1</a></sup>
+                    Several supply vessels kept the water pressure steady and the two receivers avoided gaps, which kept the error small. The clock was also checked against instruments such as the sun-and-star time-determining instrument.<sup class="ref"><a href="#src-3">3</a></sup>
+                </p>
+                <p>
+                    Both receivers had their balls set in advance. When one was full, the pipe was moved to the other straight away, and the full one was drained and set again while the second one kept time.<sup class="ref"><a href="#src-3">3</a></sup>
+                </p>
+
+                <h3>The float rod and the copper plates</h3>
+                <p>
+                    A float rod 10 cheok 2 chon long rose in the receiver. Its face was divided into the 12 double-hours of the day, each split into 8 marks; with the extra parts of each hour's first (<span class="han" lang="ko">初</span>) and second (<span class="han" lang="ko">正</span>) halves, a day came to 100 marks.<sup class="ref"><a href="#src-1">1</a></sup>
+                    A hollow square wooden column stood on the vessel. On its left was a copper plate with 12 holes holding small copper balls the size of bullets, one for each double-hour. On the right, a second plate had 25 holes for the night's watches and points.
+                    There were 12 plates in all, one for each of the 12 rods, swapped through the year by solar term.<sup class="ref"><a href="#src-1">1</a></sup>
+                </p>
+
+                <h3>Small balls, iron balls and spoons</h3>
+                <p>
+                    As the rod rose, it tripped the mechanism at the next hole, and a small ball fell into a copper tube.
+                    Every hole in the tube started open. The first ball dropped through the first hole, and the mechanism it struck closed that hole behind it. The next ball rolled over the closed hole to the next one, and so on down the tube.<sup class="ref"><a href="#src-1">1</a></sup>
+                </p>
+                <p>
+                    Each mechanism held back an iron ball the size of an egg. They sat on four partitions laid out like a corridor: 12 on the left for the hours, 5 in the middle for the watches and each watch's first point, and 20 on the right for the remaining points.<sup class="ref"><a href="#src-1">1</a></sup>
+                </p>
+                <blockquote>
+                    <p>The mechanism opens and the big ball drops, rolls into the short tube hung under the seat and, as it falls, moves the spoon-like device. Its other end pushes up from inside the tube against the arm of the figure in charge of the hour, and the bell rings.</p>
+                    <cite>Veritable Records of King Sejong, vol. 65, translated from the modern Korean edition<sup class="ref"><a href="#src-1">1</a></sup></cite>
+                </blockquote>
+                <p>
+                    A watch ball first pushed the watch figure's arm to sound the drum. It then rolled on into the point tube and turned the first-point mechanism, so the point figure sounded the gong.<sup class="ref"><a href="#src-1">1</a></sup>
+                </p>
+
+                <h3>The figures and the wheel of twelve</h3>
+                <p>
+                    The east bay of a three-bay pavilion held a seat on two levels.<sup class="ref"><a href="#src-1">1</a></sup> On the upper level stood three figures. One kept the hours and struck a bell, one kept the watches and struck a drum, and one kept the points and struck a gong.
+                    Under the middle level was a horizontal wheel with twelve figures around it. Each stood on an iron stem so it could rise and fall, and each held the plaque for its hour.<sup class="ref"><a href="#src-1">1</a></sup>
+                </p>
+                <p>
+                    The hour ball then rolled on and fell onto the north end of a beam 6 cheok 6 chon long. Its south end rose and, through a wooden post, lifted that hour's figure above the middle level.
+                    When the hour ended, the figure returned to the wheel and the next hour's figure came up in its place.<sup class="ref"><a href="#src-1">1</a></sup>
+                    The Records add that all the machinery was hidden, so visitors saw only the wooden figures in their caps and belts.<sup class="ref"><a href="#src-1">1</a></sup>
+                </p>
+            </div>
+        </section>
+
+        <section class="wrap" id="time">
+            <div class="prose">
+                <h2><span class="num">02</span>Hours, watches and points</h2>
+                <p>
+                    The day had 12 double-hours (<span class="han" lang="ko">時</span>), each named for one of the twelve earthly branches: <span class="han" lang="ko">子</span> for the Rat, <span class="han" lang="ko">丑</span> for the Ox, <span class="han" lang="ko">寅</span> for the Tiger and so on. The twelve figures on the wheel stood for them.<sup class="ref"><a href="#src-1">1</a></sup><sup class="ref"><a href="#src-4">4</a></sup>
+                    Each double-hour lasted two modern hours, so <span class="han" lang="ko">子時</span> ran from 23:00 to 01:00. Each was split into a first half, <span class="han" lang="ko">初</span>, and a second half, <span class="han" lang="ko">正</span>.<sup class="ref"><a href="#src-1">1</a></sup>
+                    Night was counted separately, in five watches (<span class="han" lang="ko">更</span>), each split into five points (<span class="han" lang="ko">點</span>). That is why the right-hand plate had 25 holes.<sup class="ref"><a href="#src-1">1</a></sup>
+                </p>
+                <ol class="hours" aria-label="The twelve double-hours">
+                    <li><span class="han" lang="ko">子</span><span class="reading">ja · Rat</span><span class="range">23–01</span></li>
+                    <li><span class="han" lang="ko">丑</span><span class="reading">chuk · Ox</span><span class="range">01–03</span></li>
+                    <li><span class="han" lang="ko">寅</span><span class="reading">in · Tiger</span><span class="range">03–05</span></li>
+                    <li><span class="han" lang="ko">卯</span><span class="reading">myo · Rabbit</span><span class="range">05–07</span></li>
+                    <li><span class="han" lang="ko">辰</span><span class="reading">jin · Dragon</span><span class="range">07–09</span></li>
+                    <li><span class="han" lang="ko">巳</span><span class="reading">sa · Snake</span><span class="range">09–11</span></li>
+                    <li><span class="han" lang="ko">午</span><span class="reading">o · Horse</span><span class="range">11–13</span></li>
+                    <li><span class="han" lang="ko">未</span><span class="reading">mi · Sheep</span><span class="range">13–15</span></li>
+                    <li><span class="han" lang="ko">申</span><span class="reading">sin · Monkey</span><span class="range">15–17</span></li>
+                    <li><span class="han" lang="ko">酉</span><span class="reading">yu · Rooster</span><span class="range">17–19</span></li>
+                    <li><span class="han" lang="ko">戌</span><span class="reading">sul · Dog</span><span class="range">19–21</span></li>
+                    <li><span class="han" lang="ko">亥</span><span class="reading">hae · Pig</span><span class="range">21–23</span></li>
+                </ol>
+                <p>
+                    The readout above writes the time the same way. <span class="han" lang="ko">子初</span> is the first half of the hour of the Rat, and <span class="han" lang="ko">三更 初點</span> is the first point of the third watch.
+                </p>
+                <p>
+                    Watches were a share of the night, not a fixed length, so a winter watch ran longer than a summer one.<sup class="ref"><a href="#src-3">3</a></sup>
+                    Instead of 21 separate night rods, the new clock used 12, each covering two solar terms.<sup class="ref"><a href="#src-1">1</a></sup><sup class="ref"><a href="#src-2">2</a></sup>
+                </p>
+                <dl class="facts">
+                    <div><dt>Double-hours (<span class="han" lang="ko">時</span>) per day</dt><dd><b>12</b>, bell</dd></div>
+                    <div><dt>Marks (<span class="han" lang="ko">刻</span>) per hour · per day</dt><dd><b>8</b> · <b>100</b></dd></div>
+                    <div><dt>Watches (<span class="han" lang="ko">更</span>) · points (<span class="han" lang="ko">點</span>) per watch</dt><dd><b>5</b>, drum · <b>5</b>, gong</dd></div>
+                    <div><dt>Iron balls per receiver</dt><dd><b>12 · 5 · 20</b></dd></div>
+                </dl>
+            </div>
+        </section>
+
+        <section class="wrap" id="relay">
+            <div class="prose">
+                <h2><span class="num">03</span>Carrying the time across Seoul</h2>
+                <p>
+                    To be heard beyond the pavilion, the signal was relayed by drummers at the palace gates.
+                    Bell-drums stood at the south gate of Gyeonghoeru, at Wolhwamun and at Geunjeongmun, and a great bell-drum at Gwanghwamun. At night, whoever kept each gate's drum heard the wooden figure and passed the signal on in turn.<sup class="ref"><a href="#src-1">1</a></sup>
+                </p>
+            </div>
+            <ol class="relay" aria-label="The relay, from the clock to the city">
+                <li class="is-source"><b>Borugak</b>Wooden figure<small>the clock</small></li>
+                <li><b>Gyeonghoeru south gate</b>Bell-drum<small>astronomy students</small></li>
+                <li><b>Wolhwamun</b>Bell-drum<small>gate guards</small></li>
+                <li><b>Geunjeongmun</b>Bell-drum<small>gate guards</small></li>
+                <li><b>Gwanghwamun</b>Great bell-drum<small>astronomy students</small></li>
+                <li class="is-namu"><b>Jonggak</b>City drum<small>per Namuwiki</small></li>
+            </ol>
+            <div class="prose">
+                <p>
+                    Students of the Office of Astronomy kept the drums at the Gyeonghoeru south gate, Yeongchumun and Gwanghwamun. Soldiers on night duty at the other gates kept theirs.
+                    At noon (<span class="han" lang="ko">午時</span>) a large drum at Yeongchumun answered the figure's drum and Gwanghwamun passed it on.<sup class="ref"><a href="#src-1">1</a></sup>
+                </p>
+                <p>
+                    Namuwiki adds the last step. At the third watch (<span class="han" lang="ko">三更</span>), roughly 23:00 to 01:00, the clock's drum sounded three times. The gatekeepers at the palace's main gate beat the gate-tower drum three times, and the drummer at Jonggak, the city bell pavilion, beat three more, so the sound spread across the city.<sup class="ref"><a href="#src-3">3</a></sup>
+                </p>
+            </div>
+        </section>
+
+        <section class="wrap" id="history">
+            <div class="prose">
+                <h2><span class="num">04</span>Six centuries of the clock</h2>
+                <ol class="timeline">
+                    <li><time>1398<small>King Taejo, year 7</small></time><p>A water clock called Gyeongnu is made, and a bell is struck to mark the night hours.<sup class="ref"><a href="#src-3">3</a></sup></p></li>
+                    <li><time>1433<small>King Sejong, year 15</small></time><p>Sejong credits Jang Yeong-sil with a self-striking palace clock and promotes him to hogun. Jang had been a government slave of Dongnae County.<sup class="ref"><a href="#src-1">1</a></sup><sup class="ref"><a href="#src-2">2</a></sup></p></li>
+                    <li class="is-key"><time>1434<small>Sejong 16, 7th month, day 1</small></time><p>The new clock goes into use in the Borugak pavilion at Gyeongbokgung Palace, south of Gyeonghoeru, and becomes the dynasty's standard clock.<sup class="ref"><a href="#src-1">1</a></sup><sup class="ref"><a href="#src-2">2</a></sup><sup class="ref"><a href="#src-3">3</a></sup></p></li>
+                    <li><time>1438<small>King Sejong, year 20</small></time><p>A second automatic clock, the Ongnu, is installed in the Heumgyeonggak pavilion.<sup class="ref"><a href="#src-2">2</a></sup></p></li>
+                    <li><time>1455<small>King Danjong, year 3</small></time><p>The automatic striking is stopped, 21 years after it began. Namuwiki suggests that with its makers gone, nobody could repair it.<sup class="ref"><a href="#src-3">3</a></sup></p></li>
+                    <li><time>1469<small>King Yejong, year 1</small></time><p>The clock runs again.<sup class="ref"><a href="#src-3">3</a></sup></p></li>
+                    <li><time>1505<small>Yeonsangun, year 11</small></time><p>The clock moves to Changdeokgung Palace, into a newly built Borugak.<sup class="ref"><a href="#src-3">3</a></sup></p></li>
+                    <li class="is-key"><time>1536<small>King Jungjong, year 31</small></time><p>Its strikes no longer match the time, so a new clock is begun in 1534. The craftsman Bak Se-ryong finishes it in 1536.<sup class="ref"><a href="#src-3">3</a></sup><sup class="ref"><a href="#src-4">4</a></sup></p></li>
+                    <li><time>1550–1652</time><p>Repaired in 1550, 1601 and 1652, 51 years apart each time.<sup class="ref"><a href="#src-3">3</a></sup></p></li>
+                    <li><time>1938</time><p>Under Japanese rule, the surviving vessels are moved to the Gwangmyeongmun gate at Deoksugung Palace for display.<sup class="ref"><a href="#src-4">4</a></sup></p></li>
+                    <li class="is-key"><time>1985<small>August 9</small></time><p>Designated National Treasure No. 229.<sup class="ref"><a href="#src-3">3</a></sup><sup class="ref"><a href="#src-4">4</a></sup></p></li>
+                    <li><time>2018–2020</time><p>Conservation work corrects earlier readings of the names cast into the vessels and finds that the dragon reliefs were cast by the lost-wax method. The vessels then go on display at the National Palace Museum of Korea.<sup class="ref"><a href="#src-3">3</a></sup></p></li>
+                    <li><time>2021<small>June 29</small></time><p>Parts of the ball-release system, known until then only from the Records, are excavated together with Hangul metal type and other instruments.<sup class="ref"><a href="#src-3">3</a></sup></p></li>
+                    <li><time>2024</time><p>A ball-release system rebuilt from those finds is added to the full-size replica at the National Science Museum.<sup class="ref"><a href="#src-3">3</a></sup></p></li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="wrap" id="survives">
+            <h2><span class="num">05</span>What survives</h2>
+            <div class="survivor">
+                <div class="prose">
+                    <p>
+                        The vessels of the 1536 clock survive as National Treasure No. 229, the Clepsydra of Changgyeonggung Palace, also known as Borugak Jagyeokru (officially romanized Jagyeongnu).<sup class="ref"><a href="#src-3">3</a></sup><sup class="ref"><a href="#src-4">4</a></sup>
+                        The ball machinery is gone and only the water vessels remain.<sup class="ref"><a href="#src-3">3</a></sup><sup class="ref"><a href="#src-4">4</a></sup>
+                    </p>
+                    <p>
+                        The largest vessel is inscribed with its casting date, the sixth month of 1536. The two cylindrical vessels carry the titles and names of the officials and craftsmen who made the clock.<sup class="ref"><a href="#src-3">3</a></sup>
+                        Two stone stands that held the receivers are said to remain behind Myeongjeongjeon hall at Changgyeonggung Palace.<sup class="ref"><a href="#src-4">4</a></sup>
+                    </p>
+                    <p>
+                        The Korea Heritage Service's description notes that a Ming dynasty water clock surviving in Guangdong is slightly older, but rates this one as especially valuable for its size and fine workmanship.<sup class="ref"><a href="#src-3">3</a></sup>
+                        The clock also appeared on the front of the old 10,000 won banknote.<sup class="ref"><a href="#src-4">4</a></sup>
+                    </p>
+                    <dl class="facts">
+                        <div><dt>Large bronze vessel</dt><dd><b>⌀ 93.5</b> × <b>70.0</b> cm</dd></div>
+                        <div><dt>Small vessel</dt><dd><b>⌀ 46.0</b> × <b>40.5</b> cm</dd></div>
+                        <div><dt>Made</dt><dd>1536, King Jungjong, year 31</dd></div>
+                        <div><dt>On view</dt><dd>National Palace Museum of Korea, Seoul</dd></div>
+                    </dl>
+                    <p class="note">Dimensions from the Korea Heritage Service description quoted on Namuwiki.<sup class="ref"><a href="#src-3">3</a></sup></p>
+                </div>
+                <svg viewBox="0 0 436 340" role="img" aria-labelledby="jgr-size-title">
+                    <title id="jgr-size-title">The two surviving vessel sizes drawn to the same scale: 93.5 by 70 centimetres and 46 by 40.5 centimetres.</title>
+                    <!-- 2 px per cm; ellipse ratio matches the isometric scene -->
+                    <g transform="translate(130 250)">
+                        <path class="hidden" d="M-93.5 0 A93.5 54 0 0 1 93.5 0"/>
+                        <path class="water" d="M-93.5 -110 L-93.5 0 A93.5 54 0 0 0 93.5 0 L93.5 -110 A93.5 54 0 0 0 -93.5 -110 Z"/>
+                        <path class="wall" d="M-93.5 -140 L-93.5 0 A93.5 54 0 0 0 93.5 0 L93.5 -140"/>
+                        <ellipse class="wall" cx="0" cy="-140" rx="93.5" ry="54"/>
+                        <path class="dim" d="M-93.5 -205 V-215 M93.5 -205 V-215 M-93.5 -210 H93.5"/>
+                        <text class="dim-text" x="0" y="-218" text-anchor="middle">93.5 cm</text>
+                        <path class="dim" d="M-106 -140 H-116 M-106 0 H-116 M-111 -140 V0"/>
+                        <text class="dim-text" x="-118" y="-66" text-anchor="end">70</text>
+                    </g>
+                    <g transform="translate(318 250)">
+                        <path class="hidden" d="M-46 0 A46 26.6 0 0 1 46 0"/>
+                        <path class="water" d="M-46 -64 L-46 0 A46 26.6 0 0 0 46 0 L46 -64 A46 26.6 0 0 0 -46 -64 Z"/>
+                        <path class="wall" d="M-46 -81 L-46 0 A46 26.6 0 0 0 46 0 L46 -81"/>
+                        <ellipse class="wall" cx="0" cy="-81" rx="46" ry="26.6"/>
+                        <path class="dim" d="M-46 -118 V-128 M46 -118 V-128 M-46 -123 H46"/>
+                        <text class="dim-text" x="0" y="-131" text-anchor="middle">46 cm</text>
+                        <path class="dim" d="M56 -81 H66 M56 0 H66 M61 -81 V0"/>
+                        <text class="dim-text" x="70" y="-36">40.5</text>
+                    </g>
+                    <text class="dim-cap" x="218" y="334" text-anchor="middle">same scale · water level illustrative</text>
+                </svg>
+            </div>
+        </section>
+
+        <section class="wrap" id="sources">
+            <div class="prose">
+                <h2><span class="num">06</span>Sources</h2>
+                <ol class="sources">
+                    <li id="src-1">
+                        <a href="https://sillok.history.go.kr/id/kda_11607001_004">Veritable Records of King Sejong, vol. 65: Sejong year 16, 7th month, 1st day, entry 4, on the structure and workings of the new water clock</a>
+                        <small>Annals of the Joseon Dynasty, National Institute of Korean History (in Korean). The primary description of the clock, its relay and Kim Bin's inscription.</small>
+                    </li>
+                    <li id="src-2">
+                        <a href="http://dh.aks.ac.kr/sillokwiki/index.php/%EC%9E%90%EA%B2%A9%EB%A3%A8(%E8%87%AA%E6%93%8A%E6%BC%8F)">Sillokwiki: Jagyeokru</a>
+                        <small>Academy of Korean Studies (in Korean). The makers, the 1433 clock, the Borugak location and the 1438 Ongnu.</small>
+                    </li>
+                    <li id="src-3">
+                        <a href="https://namu.wiki/w/%EC%9E%90%EA%B2%A9%EB%A3%A8">Namuwiki: Jagyeokru</a>
+                        <small>Revision of September 21, 2026 (in Korean). Later history, the two-receiver routine, the third-watch relay, and the Korea Heritage Service description of National Treasure No. 229 with its dimensions.</small>
+                    </li>
+                    <li id="src-4">
+                        <a href="https://ko.wikipedia.org/wiki/%EC%9E%90%EA%B2%A9%EB%A3%A8">Korean Wikipedia: Jagyeokru</a>
+                        <small>Revision 41865122 (in Korean). The 1938 move, the 1985 designation, the stone stands and the banknote.</small>
+                    </li>
+                </ol>
+                <p class="note">
+                    The illustration style follows PlanetScale's isometric water clock in <a href="https://planetscale.com/blog/leaky-buckets-in-software-explained">“Leaky buckets in software, explained”</a>.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="wrap">
+            Built by <a href="/">MJ Kang</a>. Corrections welcome at <a href="mailto:mj.kang@hey.com">mj.kang@hey.com</a>.
+        </div>
+    </footer>
+
+    <script src="./clock.js"></script>
+</body>
+</html>
