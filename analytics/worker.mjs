@@ -9,7 +9,7 @@ const TARGETS = {
     ai_assistant_click: ["chatgpt", "claude", "gemini"],
     view_mode_change: ["human", "machine"],
     copy_click: ["ai_prompt", "machine_profile"],
-    section_view: ["hero", "profile", "history", "works", "footer"],
+    section_view: ["hero", "profile", "history", "works", "playground", "footer"],
     scroll_depth: ["25", "50", "75", "90"],
 };
 const ORIGINS = new Set(["https://mj-kang.com", "https://www.mj-kang.com"]);

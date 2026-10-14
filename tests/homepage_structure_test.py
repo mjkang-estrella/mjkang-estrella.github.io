@@ -174,7 +174,11 @@ class HomePageParser(HTMLParser):
         if tag == "a" and "project-card" in class_names:
             self.project_card_count += 1
             self.project_cards.append(
-                {"id": attr_map.get("data-project-id"), "href": attr_map.get("href")}
+                {
+                    "id": attr_map.get("data-project-id"),
+                    "href": attr_map.get("href"),
+                    "collection": attr_map.get("data-collection") or "work",
+                }
             )
             if attr_map.get("href"):
                 self.project_hrefs.append(attr_map["href"])
@@ -335,6 +339,7 @@ def test_document_structure() -> None:
     assert "MJ Kang" in parser.heading_text
     assert "History" in parser.heading_text
     assert "Selected Works" in parser.heading_text
+    assert "Playground" in parser.heading_text
     assert parser.project_card_count == 19
     assert parser.project_metadata_count == 19
     assert len(parser.project_titles) == 19
@@ -362,6 +367,41 @@ def test_machine_document_mirrors_visible_content() -> None:
         if href.startswith("/"):
             href = f"https://mj-kang.com{href}"
         assert href in machine_text
+
+
+def test_projects_split_into_works_and_playground() -> None:
+    parser, html = parse_homepage()
+    projects = json.loads(PORTFOLIO_JSON.read_text(encoding="utf-8"))["projects"]
+
+    def hrefs(collection: str) -> list[str]:
+        return [
+            project["href"]
+            for project in projects
+            if project.get("collection", "work") == collection
+        ]
+
+    assert hrefs("playground"), "expected at least one playground project"
+    for collection in ("work", "playground"):
+        assert [
+            card["href"]
+            for card in parser.project_cards
+            if card["collection"] == collection
+        ] == hrefs(collection), collection
+
+    # Every playground card sits after the last Selected Works card, inside
+    # its own section and machine block.
+    assert html.index('data-human-block="works"') < html.index(
+        'data-human-block="playground"'
+    )
+    machine_text = " ".join(parser.machine_text)
+    assert "## Selected Works" in machine_text
+    assert "## Playground" in machine_text
+    assert machine_text.index("## Selected Works") < machine_text.index("## Playground")
+
+    llms_text = LLMS_TXT.read_text(encoding="utf-8")
+    playground_section = llms_text.split("## Playground", 1)[1].split("\n## ", 1)[0]
+    for href in hrefs("playground"):
+        assert f"https://mj-kang.com{href}" in playground_section, href
 
 
 def test_project_detail_popup() -> None:
@@ -486,7 +526,7 @@ def test_referenced_assets_exist_on_disk() -> None:
     assert parser.scripts == [
         "/js/analytics.js?v=20261007-jagyeokru",
         "js/homepage.js",
-        "js/project-detail.js?v=20261004-video",
+        "js/project-detail.js?v=20261014-playground",
         "js/ask-ai.js",
     ]
     for stylesheet in parser.stylesheets:
@@ -498,11 +538,12 @@ def test_referenced_assets_exist_on_disk() -> None:
     for content_path in parser.meta_content_paths:
         assert_local_asset_exists(content_path)
 
-    # One image per card plus available screenshots, two per popup template,
+    # One image per card plus Selected Works hover screenshots (Playground
+    # rows have none), two per popup template,
     # the profile badge, 5 timeline logos and 3 Ask-an-AI provider icons.
     projects = json.loads(PORTFOLIO_JSON.read_text(encoding="utf-8"))["projects"]
     detailed = [project for project in projects if "detail" in project]
-    assert len(parser.image_sources) == len(projects) + sum("screenshot" in project for project in projects) + 2 * sum(project.get("embedType") != "video" for project in detailed) + 9
+    assert len(parser.image_sources) == len(projects) + sum("screenshot" in project for project in projects if project.get("collection", "work") == "work") + 2 * sum(project.get("embedType") != "video" for project in detailed) + 9
     for image in parser.image_sources:
         assert_local_asset_exists(image)
 

@@ -1,12 +1,12 @@
-// Project detail popup. Each Selected Works card stays a real link to the
+// Project detail popup. Each Selected Works and Playground card stays a real link to the
 // project; a plain click (or Enter) opens a dialog that explains the product
 // first and can run the live app inline on demand. Modifier clicks, visitors
 // without JS and agents reading the markup still get the direct link.
 (() => {
     const dialog = document.querySelector("[data-project-detail-dialog]");
-    const grid = document.querySelector(".projects-wrapper");
+    const grids = document.querySelectorAll(".projects-wrapper");
 
-    if (!dialog || !grid || typeof dialog.showModal !== "function") {
+    if (!dialog || !grids.length || typeof dialog.showModal !== "function") {
         return;
     }
 
@@ -417,7 +417,7 @@
         }
     };
 
-    grid.addEventListener("click", (event) => {
+    const onCardClick = (event) => {
         const card = event.target.closest(".project-card[data-project-id]");
 
         if (
@@ -436,7 +436,9 @@
 
         event.preventDefault();
         openDetail(card.dataset.projectId, { push: true });
-    });
+    };
+
+    grids.forEach((grid) => grid.addEventListener("click", onCardClick));
 
     closeButton?.addEventListener("click", requestClose);
 

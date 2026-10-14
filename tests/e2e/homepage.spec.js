@@ -85,6 +85,10 @@ test.describe("view mode toggle", () => {
         for (const title of projectTitles) {
             expect(machineText).toContain(title);
         }
+        // Playground projects keep their own heading after Selected Works.
+        const playgroundIndex = machineText.indexOf("## Playground");
+        expect(playgroundIndex).toBeGreaterThan(machineText.indexOf("## Selected Works"));
+        expect(machineText.indexOf("Rent Calculator")).toBeGreaterThan(playgroundIndex);
 
         await page.getByRole("button", { name: "Human", exact: true }).click();
         await expectHumanView(page);
@@ -533,6 +537,9 @@ test.describe("project detail", () => {
             .evaluate((template) =>
                 template.content.querySelector("[data-project-detail-pitch]").textContent.trim()
             );
+        const playground = markdown.split("\n## Playground\n")[1].split("\n## History")[0];
+        expect(playground).toContain("### Rent Calculator");
+        expect(markdown.split("\n## Playground\n")[0]).toContain("### JobSwitch");
         const section = markdown.split("### Rent Calculator")[1].split("\n### ")[0];
         expect(section).toContain(`- Pitch: ${pitch}`);
         expect(section).toContain("- What it does:");

@@ -13,7 +13,7 @@ are at [/privacy/](https://mj-kang.com/privacy/).
 
 ## Editing projects and history
 
-The Selected Works grid, the History timeline, and their machine-readable
+The Selected Works grid, the Playground list, the History timeline, and their machine-readable
 blocks in `index.html` are generated from `data/portfolio.json`. Edit the JSON,
 then run:
 
@@ -26,9 +26,29 @@ outside them is hand-written. Image `width`/`height` attributes are read from
 the JPEG files at build time. CI fails if `index.html` drifts from the data
 (`npm run check:generated`).
 
+## Selected Works and Playground
+
+Projects are split into two sections by their `collection`:
+
+- `"work"` (the default when `collection` is omitted): the Selected Works
+  grid of full artwork cards. These are the projects to evaluate first.
+- `"playground"`: a compact section below it for single-page simulations,
+  games and calculators. Each gets one dense row (square thumbnail, `kind`
+  label, title, description) and no hover screenshot.
+
+Playground entries need less metadata: `cta` defaults to "Open", and
+`domain` and `detailImage` are optional (a popup still needs either a
+`screenshot` or a `detailImage`). A playground project can still have a
+`detail` popup with all the same fields, and with `embed: true` it opens
+in place with "Try it here".
+
+Each section has its own generated regions (`projects`/`playground` and
+`machine:works`/`machine:playground`). Keep the hand-written `llms.txt`
+lists in the same split.
+
 ## Project popups
 
-Clicking a Selected Works card opens a popup that explains the project before
+Clicking a Selected Works or Playground card opens a popup that explains the project before
 sending the visitor to it. Cards stay real links: Cmd/Ctrl/Shift/middle-click,
 visitors without JavaScript, and agents reading the markup all go straight to
 the project. Each popup has its own URL, `/#work/<id>`, and Back closes it.

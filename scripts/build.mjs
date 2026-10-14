@@ -53,8 +53,15 @@ const PROJECT_KEYS = new Set([
     "embedUrl",
     "embedLabel",
     "embedType",
+    "collection",
     "detail",
 ]);
+
+// "work" is the curated Selected Works grid; "playground" is the compact
+// section for single-page toys, simulations and calculators.
+const COLLECTIONS = new Set(["work", "playground"]);
+
+const collectionOf = (project) => project.collection || "work";
 
 const DETAIL_KEYS = new Set([
     "pitch",
@@ -98,8 +105,31 @@ const validatePortfolio = (data) => {
             if (!PROJECT_KEYS.has(key)) fail(`unknown key "${key}"`);
         }
 
-        for (const key of ["title", "description", "href", "cta", "kind", "domain", "status", "image", "detailImage"]) {
+        if (project.collection !== undefined && !COLLECTIONS.has(project.collection)) {
+            fail(`collection must be one of ${[...COLLECTIONS].join(", ")}`);
+        }
+
+        const playground = collectionOf(project) === "playground";
+
+        // A playground entry is a small thing to open and play with, so it
+        // needs less metadata: cta defaults to "Open", domain is optional,
+        // and detailImage is only needed when a popup has no screenshot.
+        const requiredKeys = playground
+            ? ["title", "description", "href", "kind", "status", "image"]
+            : ["title", "description", "href", "cta", "kind", "domain", "status", "image", "detailImage"];
+
+        for (const key of requiredKeys) {
             if (!isText(project[key])) fail(`${key} must be a non-empty string`);
+        }
+
+        for (const key of ["cta", "domain", "detailImage"]) {
+            if (playground && project[key] !== undefined && !isText(project[key])) {
+                fail(`${key} must be a non-empty string when set`);
+            }
+        }
+
+        if (playground && project.detail && !project.screenshot && !project.detailImage) {
+            fail("a playground popup needs a screenshot or a detailImage");
         }
 
         if (project.screenshot !== undefined && !isText(project.screenshot)) {
@@ -253,13 +283,19 @@ const displayHost = (href) => {
     return `${host}${url.pathname.replace(/\/$/, "")}`;
 };
 
+const ctaOf = (project) => project.cta || "Open";
+
 const renderProjectCard = (project) => {
+    if (collectionOf(project) === "playground") {
+        return renderPlaygroundCard(project);
+    }
+
     const flat = jpegSize(project.image);
     const detail = project.screenshot ? jpegSize(project.screenshot) : null;
     const external = isExternal(project.href);
     // With a detail popup the card explains before it launches; without one
     // it still goes straight to the project, so it keeps the project's CTA.
-    const cardCta = project.detail ? "Explore" : project.cta;
+    const cardCta = project.detail ? "Explore" : ctaOf(project);
 
     return lines(
         4,
@@ -308,6 +344,49 @@ const renderProjectCard = (project) => {
     );
 };
 
+/** A compact row for the Playground section: square thumbnail, kind label,
+ *  title and a one-line description. It shares .project-card so the popup,
+ *  hover and machine-view code treat it like any other project. */
+const renderPlaygroundCard = (project) => {
+    const flat = jpegSize(project.image);
+    const external = isExternal(project.href);
+
+    return lines(
+        4,
+        `<li class="project-item">`,
+        `<a`,
+        `    href="${escapeHtml(project.href)}"`,
+        `    class="project-card project-card--compact"`,
+        `    data-reveal`,
+        project.detail ? `    data-project-id="${escapeHtml(project.id)}"` : null,
+        `    data-collection="playground"`,
+        `    data-kind="${escapeHtml(project.kind)}"`,
+        project.domain ? `    data-domain="${escapeHtml(project.domain)}"` : null,
+        `    data-status="${escapeHtml(project.status)}"`,
+        external ? `    target="_blank"` : null,
+        external ? `    rel="noopener noreferrer"` : null,
+        `>`,
+        `    <span class="project-media">`,
+        `        <img`,
+        `            src="${escapeHtml(project.image)}"`,
+        `            class="project-image project-image--flat"`,
+        `            alt=""`,
+        `            width="${flat.width}"`,
+        `            height="${flat.height}"`,
+        `            loading="lazy"`,
+        `            decoding="async"`,
+        `        />`,
+        `    </span>`,
+        `    <div class="project-info">`,
+        `        <span class="project-kind">${escapeHtml(project.kind)}</span>`,
+        `        <h3 class="project-title">${escapeHtml(project.title)}</h3>`,
+        `        <p class="project-desc">${escapeHtml(project.description)}</p>`,
+        `    </div>`,
+        `</a>`,
+        `</li>`
+    );
+};
+
 // data-detail-field lets the Copy-markdown export read a section without
 // depending on its visible heading.
 const detailSection = (field, heading, body) => [
@@ -345,7 +424,7 @@ const renderProjectDetail = (project) => {
     const embedSrc = project.embedUrl || project.href;
     const stageHref = project.embed ? embedSrc : project.href;
     const isVideo = project.embedType === "video";
-    const openLabel = isVideo ? "Open video" : project.embed ? "Open full site" : project.cta;
+    const openLabel = isVideo ? "Open video" : project.embed ? "Open full site" : ctaOf(project);
     const title = escapeHtml(project.title);
 
     const narrative = [
@@ -377,7 +456,7 @@ const renderProjectDetail = (project) => {
               ])
             : []),
         `<div class="project-detail__actions">`,
-        `    <a class="project-detail__cta" href="${escapeHtml(project.href)}"${externalLinkAttributes(project.href)}>${escapeHtml(project.cta)}${externalMark(project.href)}</a>`,
+        `    <a class="project-detail__cta" href="${escapeHtml(project.href)}"${externalLinkAttributes(project.href)}>${escapeHtml(ctaOf(project))}${externalMark(project.href)}</a>`,
         ...(detail.links || []).map((link) => renderDetailLink(link, project)),
         `</div>`,
     ];
@@ -406,7 +485,7 @@ const renderProjectDetail = (project) => {
         `    <header class="project-detail__header">`,
         `        <p class="project-detail__meta">`,
         `            <span>${escapeHtml(project.kind)}</span>`,
-        `            <span>${escapeHtml(project.domain)}</span>`,
+        project.domain ? `            <span>${escapeHtml(project.domain)}</span>` : null,
         `            <span>${escapeHtml(project.status)}</span>`,
         `        </p>`,
         `        <h2 class="project-detail__title" data-project-detail-title>${title}</h2>`,
@@ -519,10 +598,10 @@ const renderMachineHistory = (timeline) =>
             .map((item) => paragraph(machineTimelineLine(item)))
     );
 
-const renderMachineWorks = (projects) =>
+const renderMachineWorks = (heading, projects) =>
     lines(
         4,
-        `<h2>## Selected Works</h2>`,
+        `<h2>## ${heading}</h2>`,
         projects.map((project) =>
             paragraph(
                 `- ${markdownLink(project.title, project.href)} · ${project.description}`
@@ -530,23 +609,30 @@ const renderMachineWorks = (projects) =>
         )
     );
 
-const renderRegions = (data) => ({
-    "timeline:experience": data.timeline
-        .filter((item) => item.kind === "experience")
-        .map(renderTimelineItem)
-        .join("\n\n"),
-    "timeline:education": data.timeline
-        .filter((item) => item.kind === "education")
-        .map(renderTimelineItem)
-        .join("\n\n"),
-    projects: data.projects.map(renderProjectCard).join("\n"),
-    "project-details": data.projects
-        .filter((project) => project.detail)
-        .map(renderProjectDetail)
-        .join("\n"),
-    "machine:history": renderMachineHistory(data.timeline),
-    "machine:works": renderMachineWorks(data.projects),
-});
+const renderRegions = (data) => {
+    const works = data.projects.filter((project) => collectionOf(project) === "work");
+    const playground = data.projects.filter((project) => collectionOf(project) === "playground");
+
+    return {
+        "timeline:experience": data.timeline
+            .filter((item) => item.kind === "experience")
+            .map(renderTimelineItem)
+            .join("\n\n"),
+        "timeline:education": data.timeline
+            .filter((item) => item.kind === "education")
+            .map(renderTimelineItem)
+            .join("\n\n"),
+        projects: works.map(renderProjectCard).join("\n"),
+        playground: playground.map(renderProjectCard).join("\n"),
+        "project-details": data.projects
+            .filter((project) => project.detail)
+            .map(renderProjectDetail)
+            .join("\n"),
+        "machine:history": renderMachineHistory(data.timeline),
+        "machine:works": renderMachineWorks("Selected Works", works),
+        "machine:playground": renderMachineWorks("Playground", playground),
+    };
+};
 
 const applyRegions = (html, regions) => {
     let output = html;

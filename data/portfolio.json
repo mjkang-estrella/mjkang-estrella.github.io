@@ -693,6 +693,7 @@
     },
     {
       "id": "jagyeokru",
+      "collection": "playground",
       "title": "자격루 (Jagyeokru)",
       "description": "Animated isometric model of King Sejong's 1434 self-striking water clock, built from the Veritable Records.",
       "href": "/jagyeokru/",
@@ -737,6 +738,7 @@
     },
     {
       "id": "three-body-simulator",
+      "collection": "playground",
       "title": "Three Body Simulator",
       "description": "Interactive two-dimensional gravity simulation for chaotic multi-body orbital dynamics.",
       "href": "/three-body-problem-simulation/",
@@ -781,6 +783,7 @@
     },
     {
       "id": "block-fighter",
+      "collection": "playground",
       "title": "Block Fighter",
       "description": "Browser-based physics mini-game built with Canvas API.",
       "href": "/block-fighter/",
@@ -830,6 +833,7 @@
     },
     {
       "id": "rent-calculator",
+      "collection": "playground",
       "title": "Rent Calculator",
       "description": "Interactive Jeonse rent calculator for exploring deposit, monthly rent, and conversion tradeoffs.",
       "href": "/jeonse/",
@@ -873,6 +877,7 @@
     },
     {
       "id": "retirement-calculator",
+      "collection": "playground",
       "title": "Retirement Calculator",
       "description": "Interactive retirement simulator for estimating long-term savings growth and monthly income.",
       "href": "/retirement-calculator/",

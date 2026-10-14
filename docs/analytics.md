@@ -69,7 +69,7 @@ is not controlled by the custom counter's opt-out.
 - `ai_assistant_click`: `chatgpt`, `claude`, or `gemini`; no prompt text.
 - `view_mode_change`: `human` or `machine`.
 - `copy_click`: `ai_prompt` or `machine_profile`; counts a click, not copy success.
-- `section_view`: `hero`, `profile`, `history`, `works`, `footer` at 10% intersection.
+- `section_view`: `hero`, `profile`, `history`, `works`, `playground`, `footer` at 10% intersection.
 - `scroll_depth`: `25`, `50`, `75`, `90` percent of document height reached.
 
 ## Cloudflare resources and reports
