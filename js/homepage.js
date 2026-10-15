@@ -174,8 +174,9 @@
             description: textOf(project, ".project-desc"),
             href: absoluteUrl(project.getAttribute("href") || "/"),
             kind: project.dataset.kind || "project",
-            domain: project.dataset.domain || "unspecified",
+            domain: project.dataset.domain || null,
             status: project.dataset.status || "available",
+            collection: project.dataset.collection || "work",
             detail: getProjectDetail(project.dataset.projectId),
         }));
 
@@ -338,17 +339,27 @@
         ]);
     };
 
+    const projectLines = (projects) =>
+        projects.map((project) =>
+            createMachineElement(
+                "p",
+                `- ${markdownLink(project.title, project.href)} · ${
+                    project.description
+                }`
+            )
+        );
+
+    const inCollection = (projects, collection) =>
+        projects.filter((project) => project.collection === collection);
+
     const renderMachineWorks = (projects) => {
         replaceMachineBlock("works", [
             createMachineElement("h2", "## Selected Works"),
-            ...projects.map((project) =>
-                createMachineElement(
-                    "p",
-                    `- ${markdownLink(project.title, project.href)} · ${
-                        project.description
-                    }`
-                )
-            ),
+            ...projectLines(inCollection(projects, "work")),
+        ]);
+        replaceMachineBlock("playground", [
+            createMachineElement("h2", "## Playground"),
+            ...projectLines(inCollection(projects, "playground")),
         ]);
     };
 
@@ -401,23 +412,28 @@
             "- Focus: fintech, live streaming, logistics, agentic AI, product systems",
             `- Contact: ${getContactEmail()}`,
             "",
-            "## Selected Works",
-            "",
         ];
 
-        projects.forEach((project) => {
-            lines.push(
-                `### ${project.title}`,
-                "",
-                `- Description: ${project.description}`,
-                `- URL: ${project.href}`,
-                `- Kind: ${project.kind}`,
-                `- Domain: ${project.domain}`,
-                `- Status: ${project.status}`,
-                ...detailMarkdownLines(project.detail),
-                ""
-            );
-        });
+        const pushProjects = (heading, collection) => {
+            lines.push(`## ${heading}`, "");
+
+            inCollection(projects, collection).forEach((project) => {
+                lines.push(
+                    `### ${project.title}`,
+                    "",
+                    `- Description: ${project.description}`,
+                    `- URL: ${project.href}`,
+                    `- Kind: ${project.kind}`,
+                    ...(project.domain ? [`- Domain: ${project.domain}`] : []),
+                    `- Status: ${project.status}`,
+                    ...detailMarkdownLines(project.detail),
+                    ""
+                );
+            });
+        };
+
+        pushProjects("Selected Works", "work");
+        pushProjects("Playground", "playground");
 
         lines.push("## History", "");
 

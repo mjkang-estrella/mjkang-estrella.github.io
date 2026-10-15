@@ -13,7 +13,7 @@ are at [/privacy/](https://mj-kang.com/privacy/).
 
 ## Editing projects and history
 
-The Selected Works grid, the History timeline, and their machine-readable
+The Selected Works grid, the Playground list, the History timeline, and their machine-readable
 blocks in `index.html` are generated from `data/portfolio.json`. Edit the JSON,
 then run:
 
@@ -26,9 +26,29 @@ outside them is hand-written. Image `width`/`height` attributes are read from
 the JPEG files at build time. CI fails if `index.html` drifts from the data
 (`npm run check:generated`).
 
+## Selected Works and Playground
+
+Projects are split into two sections by their `collection`:
+
+- `"work"` (the default when `collection` is omitted): the Selected Works
+  grid of full artwork cards. These are the projects to evaluate first.
+- `"playground"`: a compact section below it for single-page simulations,
+  games and calculators. Each gets one dense row (square thumbnail, `kind`
+  label, title, description) and no hover screenshot.
+
+Playground entries need less metadata: `cta` defaults to "Open", and
+`domain` and `detailImage` are optional (a popup still needs either a
+`screenshot` or a `detailImage`). A playground project can still have a
+`detail` popup with all the same fields, and with `embed: true` it opens
+in place with "Try it here".
+
+Each section has its own generated regions (`projects`/`playground` and
+`machine:works`/`machine:playground`). Keep the hand-written `llms.txt`
+lists in the same split.
+
 ## Project popups
 
-Clicking a Selected Works card opens a popup that explains the project before
+Clicking a Selected Works or Playground card opens a popup that explains the project before
 sending the visitor to it. Cards stay real links: Cmd/Ctrl/Shift/middle-click,
 visitors without JavaScript, and agents reading the markup all go straight to
 the project. Each popup has its own URL, `/#work/<id>`, and Back closes it.
@@ -58,12 +78,13 @@ refused frame, so the build rejects `embed: true` for hosts known to refuse
 later would break embeds the same way.
 
 Set `screenshot` to a local JPEG capture of the actual homepage or public demo
-to show it on card hover and inside the popup. Screenshots fit without cropping.
+to show it inside the popup and, for Selected Works cards, on card hover
+(Playground rows never swap images). Screenshots fit without cropping.
 The grid uses `image` at rest and keeps it on hover if no screenshot is available.
 Without a screenshot the popup falls back to the `detailImage` illustration.
 
 For a recorded demo, use `embed: true`, `embedType: "video"`, and an embeddable
-player URL in `embedUrl`. The card shows its screenshot on hover. The popup
+player URL in `embedUrl`. A Selected Works card shows its screenshot on hover. The popup
 loads the video player immediately and removes it on close. The player and
 project explanation stay visible on phones. Keep `href` pointing to the project
 itself; the player toolbar includes an "Open video" fallback link.

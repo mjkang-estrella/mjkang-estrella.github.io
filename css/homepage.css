@@ -464,6 +464,11 @@ body[data-portfolio-view="machine"] .machine-document::after {
     view-transition-name: works;
 }
 
+[data-human-block="playground"],
+[data-machine-block="playground"] {
+    view-transition-name: playground;
+}
+
 [data-human-block="footer"],
 [data-machine-block="footer"] {
     view-transition-name: footer;
@@ -504,6 +509,10 @@ body[data-portfolio-view="machine"] .machine-document::after {
 
 ::view-transition-group(works) {
     animation-delay: calc(120ms * var(--motion-scale));
+}
+
+::view-transition-group(playground) {
+    animation-delay: calc(140ms * var(--motion-scale));
 }
 
 ::view-transition-group(footer) {
@@ -1154,6 +1163,106 @@ html.has-motion [data-reveal].is-visible {
     color: var(--surface-color);
 }
 
+/* Playground: single-page toys get one dense row each instead of a full
+   artwork card, so the section reads as secondary to Selected Works while
+   keeping the same ink rules. Three columns here, two on tablets; phones
+   fall back to the shared slim bar cards below. :nth-child(n) outranks the
+   main grid's per-column border resets. */
+/* The rule above separates Playground from the empty cells of a partial
+   last row in Selected Works; -1px overlaps the cards' bottom border. */
+.works-header--playground {
+    border-top: var(--border-width) solid var(--border-color);
+    margin-top: calc(-1 * var(--border-width));
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+}
+
+.works-note {
+    max-width: 46ch;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: var(--ink-muted);
+}
+
+/* -1px lets the footer's heavy top rule cover the last row's hairline
+   instead of stacking under it. */
+.projects-wrapper--compact {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-bottom: calc(-1 * var(--border-width));
+}
+
+.projects-wrapper--compact .project-item:nth-child(n) .project-card {
+    border-right: var(--border-width) solid var(--border-color);
+}
+
+.projects-wrapper--compact .project-item:nth-child(3n) .project-card {
+    border-right: none;
+}
+
+.project-card--compact {
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px 14px 14px;
+}
+
+.project-card--compact .project-media {
+    flex: none;
+    width: 72px;
+    aspect-ratio: 1;
+    border: 1px solid var(--ink-color);
+}
+
+.project-card--compact .project-info {
+    gap: 0.2rem;
+    min-width: 0;
+    padding: 0;
+}
+
+.project-kind {
+    order: -1;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+}
+
+.project-card--compact .project-title {
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+.project-card--compact .project-desc {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    color: var(--ink-muted);
+}
+
+/* The whole row is the link, so a chevron stands in for the button. */
+.project-card--compact::before {
+    content: "";
+    flex: none;
+    order: 3;
+    margin-left: auto;
+    width: 0;
+    height: 0;
+    border-top: 0.35rem solid transparent;
+    border-bottom: 0.35rem solid transparent;
+    border-left: 0.5rem solid currentColor;
+    transition: transform var(--motion-fast) var(--ease-out-quart);
+}
+
+.project-card--compact:focus-visible::before {
+    transform: translateX(calc(4px * var(--motion-scale)));
+}
+
 /* Project detail dialog: the narrative on the left explains the product,
    the stage on the right shows a screenshot that can be swapped for the
    live app. It reuses the grid's ink rules and pill buttons so it reads as
@@ -1642,6 +1751,18 @@ html.has-motion [data-reveal].is-visible {
         border-right: none;
     }
 
+    .projects-wrapper--compact {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .projects-wrapper--compact .project-item:nth-child(3n) .project-card {
+        border-right: var(--border-width) solid var(--border-color);
+    }
+
+    .projects-wrapper--compact .project-item:nth-child(2n) .project-card {
+        border-right: none;
+    }
+
     .project-detail__body {
         grid-template-columns: clamp(300px, 36vw, 340px) minmax(0, 1fr);
     }
@@ -1792,6 +1913,32 @@ html.has-motion [data-reveal].is-visible {
     }
 
     .project-link {
+        display: none;
+    }
+
+    /* Playground rows become the same slim bars as Selected Works. */
+    .projects-wrapper--compact {
+        grid-template-columns: 1fr;
+    }
+
+    .projects-wrapper--compact .project-item:nth-child(n) .project-card {
+        border: var(--border-width) solid var(--border-color);
+        padding: 8px 14px 8px 8px;
+    }
+
+    .project-card--compact .project-media {
+        width: 48px;
+    }
+
+    .project-card--compact .project-title {
+        font-size: 0.95rem;
+    }
+
+    .project-card--compact .project-desc {
+        display: block;
+    }
+
+    .project-kind {
         display: none;
     }
 
@@ -2049,6 +2196,10 @@ html.has-motion [data-reveal].is-visible {
     .project-card:hover .project-link {
         background-color: var(--ink-color);
         color: var(--surface-color);
+    }
+
+    .project-card--compact:hover::before {
+        transform: translateX(calc(4px * var(--motion-scale)));
     }
 
     .project-detail__close:hover {
