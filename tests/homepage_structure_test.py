@@ -182,10 +182,14 @@ class HomePageParser(HTMLParser):
             )
             if attr_map.get("href"):
                 self.project_hrefs.append(attr_map["href"])
+            # Playground entries may omit their domain.
             if (
                 attr_map.get("data-kind")
-                and attr_map.get("data-domain")
                 and attr_map.get("data-status")
+                and (
+                    attr_map.get("data-domain")
+                    or attr_map.get("data-collection") == "playground"
+                )
             ):
                 self.project_metadata_count += 1
 
@@ -522,10 +526,10 @@ def test_structured_data_parses() -> None:
 def test_referenced_assets_exist_on_disk() -> None:
     parser, _ = parse_homepage()
 
-    assert "css/homepage.css" in parser.stylesheets
+    assert "css/homepage.css?v=20261014-playground" in parser.stylesheets
     assert parser.scripts == [
         "/js/analytics.js?v=20261007-jagyeokru",
-        "js/homepage.js",
+        "js/homepage.js?v=20261014-playground",
         "js/project-detail.js?v=20261014-playground",
         "js/ask-ai.js",
     ]

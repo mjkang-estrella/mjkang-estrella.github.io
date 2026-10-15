@@ -1168,7 +1168,11 @@ html.has-motion [data-reveal].is-visible {
    keeping the same ink rules. Three columns here, two on tablets; phones
    fall back to the shared slim bar cards below. :nth-child(n) outranks the
    main grid's per-column border resets. */
+/* The rule above separates Playground from the empty cells of a partial
+   last row in Selected Works; -1px overlaps the cards' bottom border. */
 .works-header--playground {
+    border-top: var(--border-width) solid var(--border-color);
+    margin-top: calc(-1 * var(--border-width));
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
@@ -1183,8 +1187,11 @@ html.has-motion [data-reveal].is-visible {
     color: var(--ink-muted);
 }
 
+/* -1px lets the footer's heavy top rule cover the last row's hairline
+   instead of stacking under it. */
 .projects-wrapper--compact {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-bottom: calc(-1 * var(--border-width));
 }
 
 .projects-wrapper--compact .project-item:nth-child(n) .project-card {
@@ -1216,6 +1223,7 @@ html.has-motion [data-reveal].is-visible {
 }
 
 .project-kind {
+    order: -1;
     font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.08em;

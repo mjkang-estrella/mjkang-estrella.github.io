@@ -45,3 +45,6 @@ playwright-report/
 
 # Local Worker development state
 .wrangler/
+
+# Per-machine Claude Code settings (e.g. impeccable hooks)
+.claude/settings.local.json

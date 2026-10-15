@@ -345,8 +345,11 @@ const renderProjectCard = (project) => {
 };
 
 /** A compact row for the Playground section: square thumbnail, kind label,
- *  title and a one-line description. It shares .project-card so the popup,
- *  hover and machine-view code treat it like any other project. */
+ *  title and a description clamped to two lines (one on phones). The kind
+ *  label follows the title in the source so the link's accessible name
+ *  starts with the project; CSS lifts it above the title. It shares
+ *  .project-card so the popup, hover and machine-view code treat it like
+ *  any other project. */
 const renderPlaygroundCard = (project) => {
     const flat = jpegSize(project.image);
     const external = isExternal(project.href);
@@ -378,8 +381,8 @@ const renderPlaygroundCard = (project) => {
         `        />`,
         `    </span>`,
         `    <div class="project-info">`,
-        `        <span class="project-kind">${escapeHtml(project.kind)}</span>`,
         `        <h3 class="project-title">${escapeHtml(project.title)}</h3>`,
+        `        <span class="project-kind">${escapeHtml(project.kind)}</span>`,
         `        <p class="project-desc">${escapeHtml(project.description)}</p>`,
         `    </div>`,
         `</a>`,
