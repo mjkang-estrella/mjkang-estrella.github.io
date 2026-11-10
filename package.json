@@ -2,13 +2,11 @@
   "name": "mj-kang-site",
   "version": "1.0.0",
   "description": "Static portfolio site for mj-kang.com",
-  "directories": {
-    "test": "tests"
-  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "check:generated": "node scripts/build.mjs --check",
-    "test": "npm run check:generated && npm run test:structure && npm run test:counter && npm run test:e2e",
+    "check:syntax": "node scripts/check-syntax.mjs",
+    "test": "npm run check:generated && npm run check:syntax && npm run test:structure && npm run test:counter && npm run test:e2e",
     "test:e2e": "playwright test",
     "test:structure": "python3 tests/homepage_structure_test.py",
     "test:counter": "node --test tests/counter.test.mjs"

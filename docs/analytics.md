@@ -12,7 +12,7 @@ Analytics remains a separate aggregate traffic/performance report.
 | --- | --- |
 | `day` | Server-selected UTC calendar date |
 | `event` | Known event name |
-| `page` | One of five public local page paths |
+| `page` | One of six public local page paths |
 | `target` | Known project ID or category, never arbitrary text or a URL |
 | `context` | `page` or `embed` |
 | `count` | Number of accepted increments |
@@ -42,8 +42,9 @@ key `mj-anonymous-counts-disabled` is not sent to the server. An earlier refusal
 of GA tracking is migrated to this opt-out; the old consent key is removed.
 Old `_ga` and `_ga_7SZGKKSJT4` cookies from this integration are expired. The GA4
 property remains intact for historical records, but the site no longer loads
-its tag or sends Google analytics requests. The optional JobSwitch recording
-loads Google's Drive player only after a visitor chooses Watch demo.
+its tag or sends Google analytics requests. The JobSwitch recording
+loads Google's Drive player only when a visitor opens the JobSwitch popup, and
+removes it when the popup closes.
 
 Counting runs only on `mj-kang.com` and `www.mj-kang.com`. Coverage is `/`,
 `/block-fighter/`, `/three-body-problem-simulation/`, `/jeonse/`,

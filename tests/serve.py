@@ -19,6 +19,13 @@ class TestServer(ThreadingHTTPServer):
     request_queue_size = 256
     daemon_threads = True
 
+    def handle_error(self, request: object, client_address: object) -> None:
+        # A browser that navigates away mid-download drops the socket; that
+        # is routine here and not worth a traceback per aborted image.
+        if isinstance(sys.exc_info()[1], ConnectionError):
+            return
+        super().handle_error(request, client_address)
+
 
 class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self, format: str, *args: object) -> None:

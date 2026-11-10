@@ -106,6 +106,17 @@
         return match ? match.textContent.trim().replace(/\s+/g, " ") : "";
     };
 
+    // A <br> carries no text, so the lines it separates would run together.
+    const textWithLineBreaks = (element) => {
+        const clone = element.cloneNode(true);
+
+        clone.querySelectorAll("br").forEach((lineBreak) => {
+            lineBreak.replaceWith(" ");
+        });
+
+        return clone.textContent.trim().replace(/\s+/g, " ");
+    };
+
     const absoluteUrl = (href) => {
         const siteOrigin = "https://mj-kang.com";
         return href.startsWith("/")
@@ -262,7 +273,7 @@
             heading.remove();
         }
 
-        return clone.textContent.trim().replace(/\s+/g, " ");
+        return textWithLineBreaks(clone);
     };
 
     const getProfileFacts = () => {
@@ -297,7 +308,10 @@
 
     const renderMachineHero = () => {
         replaceMachineBlock("hero", [
-            createMachineElement("h1", `# ${textOf(document, "#profile-title")}`),
+            createMachineElement(
+                "h1",
+                `# ${textWithLineBreaks(document.querySelector("#profile-title"))}`
+            ),
             createMachineElement("p", textOf(document, ".profile-subtitle")),
             createMachineElement("p", textOf(document, ".intro-heading")),
         ]);
@@ -316,53 +330,6 @@
         ]);
     };
 
-    const renderTimelineGroup = (timelineItems, kind) =>
-        timelineItems
-            .filter((item) => item.kind === kind)
-            .map((item) =>
-                createMachineElement(
-                    "p",
-                    `- ${item.date} · ${markdownLink(
-                        item.organization,
-                        item.href
-                    )} · ${item.title} · ${item.description}`
-                )
-            );
-
-    const renderMachineHistory = (timelineItems) => {
-        replaceMachineBlock("history", [
-            createMachineElement("h2", "## History"),
-            createMachineElement("h3", "### Experience"),
-            ...renderTimelineGroup(timelineItems, "experience"),
-            createMachineElement("h3", "### Education"),
-            ...renderTimelineGroup(timelineItems, "education"),
-        ]);
-    };
-
-    const projectLines = (projects) =>
-        projects.map((project) =>
-            createMachineElement(
-                "p",
-                `- ${markdownLink(project.title, project.href)} · ${
-                    project.description
-                }`
-            )
-        );
-
-    const inCollection = (projects, collection) =>
-        projects.filter((project) => project.collection === collection);
-
-    const renderMachineWorks = (projects) => {
-        replaceMachineBlock("works", [
-            createMachineElement("h2", "## Selected Works"),
-            ...projectLines(inCollection(projects, "work")),
-        ]);
-        replaceMachineBlock("playground", [
-            createMachineElement("h2", "## Playground"),
-            ...projectLines(inCollection(projects, "playground")),
-        ]);
-    };
-
     const renderMachineFooter = (socialLinks, emailMarkdownLink) => {
         replaceMachineBlock("footer", [
             createMachineElement("h2", "## Contact"),
@@ -377,21 +344,24 @@
         ]);
     };
 
+    const inCollection = (projects, collection) =>
+        projects.filter((project) => project.collection === collection);
+
+    // History, Selected Works and Playground are written into the machine
+    // document by scripts/build.mjs from data/portfolio.json. Only the
+    // hand-written blocks, which have no data source, are mirrored from the
+    // visible page here so the two views cannot drift.
     const renderMachineDocumentFromPage = () => {
         if (!machineDocument) {
             return;
         }
 
-        const projects = getProjectData();
-        const timelineItems = getTimelineData();
         const socialLinks = getSocialMarkdownLinks();
         const emailMarkdownLink = getEmailMarkdownLink();
 
         renderMachineNav(socialLinks, emailMarkdownLink);
         renderMachineHero();
         renderMachineProfile();
-        renderMachineHistory(timelineItems);
-        renderMachineWorks(projects);
         renderMachineFooter(socialLinks, emailMarkdownLink);
     };
 

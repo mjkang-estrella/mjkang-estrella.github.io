@@ -526,10 +526,10 @@ def test_structured_data_parses() -> None:
 def test_referenced_assets_exist_on_disk() -> None:
     parser, _ = parse_homepage()
 
-    assert "css/homepage.css?v=20261014-playground" in parser.stylesheets
+    assert "css/homepage.css?v=20261109-cleanup" in parser.stylesheets
     assert parser.scripts == [
         "/js/analytics.js?v=20261007-jagyeokru",
-        "js/homepage.js?v=20261014-playground",
+        "js/homepage.js?v=20261109-cleanup",
         "js/project-detail.js?v=20261014-playground",
         "js/ask-ai.js",
     ]
@@ -543,11 +543,11 @@ def test_referenced_assets_exist_on_disk() -> None:
         assert_local_asset_exists(content_path)
 
     # One image per card plus Selected Works hover screenshots (Playground
-    # rows have none), two per popup template,
+    # rows have none), the artwork plus any screenshot per popup template,
     # the profile badge, 5 timeline logos and 3 Ask-an-AI provider icons.
     projects = json.loads(PORTFOLIO_JSON.read_text(encoding="utf-8"))["projects"]
     detailed = [project for project in projects if "detail" in project]
-    assert len(parser.image_sources) == len(projects) + sum("screenshot" in project for project in projects if project.get("collection", "work") == "work") + 2 * sum(project.get("embedType") != "video" for project in detailed) + 9
+    assert len(parser.image_sources) == len(projects) + sum("screenshot" in project for project in projects if project.get("collection", "work") == "work") + sum(1 + ("screenshot" in project) for project in detailed if project.get("embedType") != "video") + 9
     for image in parser.image_sources:
         assert_local_asset_exists(image)
 

@@ -2,7 +2,6 @@
     --surface-color: #f3f0e6;
     --surface-elevated: #f8f5ed;
     --surface-contrast: #050505;
-    --surface-accent: #ddcb9a;
     --surface-media: #d8d1c0;
     --ink-color: #050505;
     --ink-soft: rgba(5, 5, 5, 0.8);
@@ -17,8 +16,6 @@
     --machine-ink-subtle: oklch(58% 0.012 78);
     --machine-border: oklch(93% 0.01 78 / 0.28);
     --machine-border-subtle: oklch(93% 0.01 78 / 0.18);
-    --machine-overlay: oklch(18% 0.006 78 / 0.42);
-    --human-transition-overlay: oklch(94% 0.025 86 / 0.22);
     --machine-dock-surface: oklch(24% 0.007 78 / 0.94);
     --border-width: 1px;
     --border-color: #050505;
@@ -882,10 +879,6 @@ html.has-motion [data-reveal].is-visible {
     padding-bottom: 0.1em;
 }
 
-.cta-text--primary::after {
-    content: none;
-}
-
 .cta-triangle {
     width: 0;
     height: 0;
@@ -1225,7 +1218,7 @@ html.has-motion [data-reveal].is-visible {
 .project-kind {
     order: -1;
     font-size: 0.7rem;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--ink-soft);
@@ -1943,7 +1936,6 @@ html.has-motion [data-reveal].is-visible {
     }
 
     .timeline-item {
-        grid-template-columns: 80px minmax(0, 1fr);
         margin-bottom: 2rem;
     }
 

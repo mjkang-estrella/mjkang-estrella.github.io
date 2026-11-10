@@ -37,7 +37,7 @@
             <canvas id="pongCanvas" width="600" height="600" role="img" aria-label="Block Fighter playfield: two balls and two paddles battle to paint the board for Day or Night.">
                 Block Fighter is a two-player Pong variant. Day moves with W/S,
                 Night with the arrow keys; on touch screens each half of the
-                board drags its own paddle. Paint over half the board or hold
+                board drags its own paddle. Paint 60% of the board or hold
                 the most territory when the timer ends to win.
             </canvas>
             <div id="overlay" role="status" aria-live="polite"></div>
@@ -45,7 +45,7 @@
             <div id="overlayRight" class="side-overlay hidden">3</div>
             <p id="made">
                 made by <a href="https://mj-kang.com/" target="_top">MJ</a> | Inspired by
-                <a href="https://github.com/vnglst/pong-wars">Pong Wars</a>
+                <a href="https://github.com/vnglst/pong-wars" target="_blank" rel="noopener noreferrer">Pong Wars</a>
             </p>
         </div>
 
@@ -151,17 +151,21 @@
 
         const keysDown = new Set();
 
+        // Letters are lower-cased so W/S still work with Caps Lock or Shift.
+        const keyOf = (e) => (e.key.length === 1 ? e.key.toLowerCase() : e.key);
+
         document.addEventListener("keydown", (e) => {
-            if (["w", "s", "ArrowUp", "ArrowDown"].includes(e.key)) {
-                keysDown.add(e.key);
+            const key = keyOf(e);
+            if (["w", "s", "ArrowUp", "ArrowDown"].includes(key)) {
+                keysDown.add(key);
             }
-            if (e.key === " ") {
+            if (key === " ") {
                 handleSpace();
             }
         });
 
         document.addEventListener("keyup", (e) => {
-            keysDown.delete(e.key);
+            keysDown.delete(keyOf(e));
         });
 
         function handleGlobalPointerStart() {
@@ -639,14 +643,8 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawSquares();
 
-            if (
-                state === GAME_STATE.PLAYING ||
-                state === GAME_STATE.COUNTDOWN
-            ) {
-                movePaddles(dtMs);
-            }
-
             if (state === GAME_STATE.PLAYING) {
+                movePaddles(dtMs);
                 balls.forEach((b) => {
                     if (b.cooldownMs > 0) {
                         b.cooldownMs -= dtMs;

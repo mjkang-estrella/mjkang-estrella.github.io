@@ -47,7 +47,6 @@ const PROJECT_KEYS = new Set([
     "domain",
     "status",
     "image",
-    "detailImage",
     "screenshot",
     "embed",
     "embedUrl",
@@ -112,24 +111,19 @@ const validatePortfolio = (data) => {
         const playground = collectionOf(project) === "playground";
 
         // A playground entry is a small thing to open and play with, so it
-        // needs less metadata: cta defaults to "Open", domain is optional,
-        // and detailImage is only needed when a popup has no screenshot.
+        // needs less metadata: cta defaults to "Open" and domain is optional.
         const requiredKeys = playground
             ? ["title", "description", "href", "kind", "status", "image"]
-            : ["title", "description", "href", "cta", "kind", "domain", "status", "image", "detailImage"];
+            : ["title", "description", "href", "cta", "kind", "domain", "status", "image"];
 
         for (const key of requiredKeys) {
             if (!isText(project[key])) fail(`${key} must be a non-empty string`);
         }
 
-        for (const key of ["cta", "domain", "detailImage"]) {
+        for (const key of ["cta", "domain"]) {
             if (playground && project[key] !== undefined && !isText(project[key])) {
                 fail(`${key} must be a non-empty string when set`);
             }
-        }
-
-        if (playground && project.detail && !project.screenshot && !project.detailImage) {
-            fail("a playground popup needs a screenshot or a detailImage");
         }
 
         if (project.screenshot !== undefined && !isText(project.screenshot)) {
@@ -422,8 +416,10 @@ const renderDetailLink = (link, project) => {
 const renderProjectDetail = (project) => {
     const { detail } = project;
     const flat = jpegSize(project.image);
-    const detailSrc = project.screenshot || project.detailImage;
-    const screenshot = jpegSize(detailSrc);
+    // The artwork is already cached from the card, so it paints at once and
+    // the screenshot covers it when it arrives. Without a screenshot the
+    // artwork is the popup's picture.
+    const screenshot = project.screenshot ? jpegSize(project.screenshot) : null;
     const embedSrc = project.embedUrl || project.href;
     const stageHref = project.embed ? embedSrc : project.href;
     const isVideo = project.embedType === "video";
@@ -508,20 +504,22 @@ const renderProjectDetail = (project) => {
             `                <img`,
             `                    class="project-detail__image project-detail__image--flat"`,
             `                    src="${escapeHtml(project.image)}"`,
-            `                    alt=""`,
-            `                    aria-hidden="true"`,
+            screenshot ? `                    alt=""` : `                    alt="Artwork for ${title}"`,
+            screenshot ? `                    aria-hidden="true"` : null,
             `                    width="${flat.width}"`,
             `                    height="${flat.height}"`,
             `                    decoding="async"`,
             `                />`,
-            `                <img`,
-            `                    class="project-detail__image project-detail__image--detail${project.screenshot ? " project-detail__image--screenshot" : ""}"`,
-            `                    src="${escapeHtml(detailSrc)}"`,
-            `                    alt="${project.screenshot ? "Screenshot" : "Illustration"} of ${title}"`,
-            `                    width="${screenshot.width}"`,
-            `                    height="${screenshot.height}"`,
-            `                    decoding="async"`,
-            `                />`,
+            ...(screenshot ? [
+                `                <img`,
+                `                    class="project-detail__image project-detail__image--detail project-detail__image--screenshot"`,
+                `                    src="${escapeHtml(project.screenshot)}"`,
+                `                    alt="Screenshot of ${title}"`,
+                `                    width="${screenshot.width}"`,
+                `                    height="${screenshot.height}"`,
+                `                    decoding="async"`,
+                `                />`,
+            ] : []),
             `            </figure>`,
         ] : []),
         tryButton.map((row) => `        ${row}`),
