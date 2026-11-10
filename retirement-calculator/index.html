@@ -2,17 +2,17 @@
 <html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retirement Plan Simulator</title>
+    <title>Retirement Projector | MJ Kang</title>
     <meta name="description" content="Interactive retirement calculator projecting long-term savings growth and monthly income from your age, savings, contributions, and expected return.">
     <meta name="author" content="MJ Kang">
     <link rel="canonical" href="https://mj-kang.com/retirement-calculator/">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Retirement Plan Simulator">
+    <meta property="og:title" content="Retirement Projector">
     <meta property="og:description" content="Interactive retirement calculator projecting long-term savings growth and monthly income.">
     <meta property="og:url" content="https://mj-kang.com/retirement-calculator/">
     <meta property="og:image" content="https://mj-kang.com/images/projects/retirement-calculator-thumbnail.jpg">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Retirement Plan Simulator">
+    <meta name="twitter:title" content="Retirement Projector">
     <meta name="twitter:description" content="Interactive retirement calculator projecting long-term savings growth and monthly income.">
     <meta name="twitter:image" content="https://mj-kang.com/images/projects/retirement-calculator-thumbnail.jpg">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/logo/favicon-32x32.png" />
@@ -332,18 +332,6 @@
         }
 
         
-        .geo-marker {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: var(--bg-app);
-            border: 1px solid var(--accent-lime);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        
         .footer {
             grid-column: 1 / -1;
             grid-row: 3;
@@ -429,22 +417,6 @@
         }
 
         
-        .wire-icon {
-            width: 24px;
-            height: 24px;
-            border: 1px solid var(--accent-lime);
-            position: relative;
-        }
-        .wire-icon::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 100%;
-            width: 8px;
-            height: 1px;
-            background: var(--accent-lime);
-        }
-
         @media (max-width: 900px) {
             .layout-grid {
                 grid-template-columns: 280px 1fr;
@@ -647,7 +619,7 @@
             const monthly = parseInt(document.getElementById('in-contrib').value);
             const rate = parseFloat(document.getElementById('in-rate').value) / 100;
 
-            const years = Math.max(1, retireAge - currentAge);
+            const years = retireAge - currentAge;
             const months = years * 12;
             const monthlyRate = rate / 12;
 
@@ -679,11 +651,11 @@
         }
 
         function updateSim() {
-            // Keep the horizon coherent: retirement age can never trail current age.
+            // Keep the horizon coherent: retirement comes at least a year after today.
             const ageInput = document.getElementById('in-age');
             const retireInput = document.getElementById('in-retire');
-            if (parseInt(retireInput.value) < parseInt(ageInput.value)) {
-                retireInput.value = ageInput.value;
+            if (parseInt(retireInput.value) <= parseInt(ageInput.value)) {
+                retireInput.value = parseInt(ageInput.value) + 1;
             }
 
             document.getElementById('disp-age').textContent = document.getElementById('in-age').value;
@@ -711,7 +683,6 @@
         }
 
         function drawChart(data) {
-            const svg = document.getElementById('chart-svg');
             const width = 800;
             const height = 400;
             // Floor of 1 keeps the path finite when every point is 0.

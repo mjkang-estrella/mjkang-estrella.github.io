@@ -1,5 +1,20 @@
-# Github-Page
-This repository is for my github page.
+# mj-kang.com
+
+Source for [mj-kang.com](https://mj-kang.com/), MJ Kang's portfolio, served by
+GitHub Pages from `main`. It is a static site with no deploy-time build:
+what is committed is what ships.
+
+- `index.html`, `css/`, `js/`: the homepage, with a human view and a
+  machine-readable view of the same content.
+- `data/portfolio.json` and `scripts/build.mjs`: the data and generator
+  behind the homepage's project and history sections.
+- `block-fighter/`, `jagyeokru/`, `jeonse/`, `retirement-calculator/`,
+  `three-body-problem-simulation/`: the self-contained Playground pages.
+- `analytics/`, `docs/analytics.md`: the anonymous counter's Worker and notes.
+- `tests/`: structure, counter and browser tests.
+
+To preview locally, run `python3 tests/serve.py` and open
+http://127.0.0.1:4173/.
 
 ## Analytics
 
@@ -22,7 +37,9 @@ npm run build
 ```
 
 The generated regions sit between `<!-- generated:NAME -->` markers; anything
-outside them is hand-written. Image `width`/`height` attributes are read from
+outside them is hand-written. In the machine view, History, Selected Works and
+Playground are generated here, while `js/homepage.js` mirrors the hand-written
+blocks (navigation, hero, profile, footer) from the visible page at load. Image `width`/`height` attributes are read from
 the JPEG files at build time. CI fails if `index.html` drifts from the data
 (`npm run check:generated`).
 
@@ -36,9 +53,8 @@ Projects are split into two sections by their `collection`:
   games and calculators. Each gets one dense row (square thumbnail, `kind`
   label, title, description) and no hover screenshot.
 
-Playground entries need less metadata: `cta` defaults to "Open", and
-`domain` and `detailImage` are optional (a popup still needs either a
-`screenshot` or a `detailImage`). A playground project can still have a
+Playground entries need less metadata: `cta` defaults to "Open" and
+`domain` is optional. A playground project can still have a
 `detail` popup with all the same fields, and with `embed: true` it opens
 in place with "Try it here".
 
@@ -81,7 +97,7 @@ Set `screenshot` to a local JPEG capture of the actual homepage or public demo
 to show it inside the popup and, for Selected Works cards, on card hover
 (Playground rows never swap images). Screenshots fit without cropping.
 The grid uses `image` at rest and keeps it on hover if no screenshot is available.
-Without a screenshot the popup falls back to the `detailImage` illustration.
+Without a screenshot the popup shows the `image` artwork instead.
 
 For a recorded demo, use `embed: true`, `embedType: "video"`, and an embeddable
 player URL in `embedUrl`. A Selected Works card shows its screenshot on hover. The popup
@@ -94,8 +110,8 @@ itself; the player toolbar includes an "Open video" fallback link.
 ## Shared styles
 
 `css/base.css` is linked from every page except Block Fighter, which is kept
-self-contained by design (see `block-fighter/AGENTS.md`) and has no CSS motion
-to govern. It carries only what must behave the same site-wide: the `--motion-*` duration tokens, easing curves, and the
+self-contained by design (see `block-fighter/AGENTS.md`), and the plain
+`/privacy/` notice; neither has CSS motion to govern. It carries only what must behave the same site-wide: the `--motion-*` duration tokens, easing curves, and the
 `prefers-reduced-motion` fallback. Each project page keeps its own palette and
 type. Page-local transitions should use `var(--motion-base)` and friends rather
 than literal durations so reduced motion works without extra rules.
@@ -108,9 +124,11 @@ npx playwright install chromium
 npm test
 ```
 
-`npm test` checks the generated markup, runs the Python structure tests, and
-runs the Playwright smoke tests (mode toggle, motion, reduced motion, the
-project popups, and each sub-project page). The browser tests are served by
+`npm test` checks the generated markup, syntax-checks every script including
+the pages' inline ones (`npm run check:syntax`), runs the Python structure
+tests and the counter tests, and runs the Playwright smoke tests (mode toggle,
+motion, reduced motion, the project popups, and each sub-project page). CI
+runs the same steps, static checks first. The browser tests are served by
 `tests/serve.py`, a stdlib server with a deeper listen queue than
 `python3 -m http.server`, which resets connections under parallel workers.
 
@@ -133,6 +151,9 @@ The site exposes agent-friendly discovery files:
 - `/sitemap.xml` lists canonical public pages and is referenced from `/robots.txt`.
 - `/llms.txt` provides a concise agent-readable site summary.
 - `/.well-known/agent-skills/index.json` publishes a small site-navigation skill.
+  Its `SKILL.md` lists the same projects as the site; after editing it, update
+  the `sha256` digest in `index.json` (`sha256sum` of the file), which
+  `npm test` verifies.
 
 `.nojekyll` is included so GitHub Pages publishes dot-prefixed discovery paths
 such as `/.well-known/`.

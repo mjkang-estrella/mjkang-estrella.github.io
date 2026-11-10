@@ -19,9 +19,12 @@ depend on analytics. There is no environment file.
 - Local preview (no build step): `python3 -m http.server 8000` from the repo
   root, then open `http://localhost:8000/block-fighter/`. Any static server
   works (e.g., `npx serve`).
-- No automated test harness. Manual checks in a browser: page loads without
-  console errors, balls animate, squares repaint on collisions, HUD/timer
-  update, and touch controls drag each paddle on its half of the board.
+- From the repo root, `npm test` syntax-checks the inline script and runs a
+  browser smoke test (the sub-page test in `tests/e2e/homepage.spec.js`) that loads the page and
+  fails on console errors. Gameplay itself has no automated coverage, so
+  check it by hand: balls animate, squares repaint on collisions, HUD/timer
+  update, `W`/`S` and the arrow keys move the paddles, and touch controls drag
+  each paddle on its half of the board.
 
 ## Gameplay Rules Encoded in the Script
 

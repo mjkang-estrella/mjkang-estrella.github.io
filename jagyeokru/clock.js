@@ -797,7 +797,10 @@
         const vb = svg.viewBox.baseVal;
         const start = [vb.x, vb.y, vb.width, vb.height];
         cancelAnimationFrame(viewAnim);
-        const duration = parseFloat(getComputedStyle(svg).getPropertyValue("--motion-page")) || 0;
+        // --motion-page is a registered <time>, so it computes to seconds
+        // ("0.76s"); an unregistered fallback would still read "760ms".
+        const token = getComputedStyle(svg).getPropertyValue("--motion-page").trim();
+        const duration = (parseFloat(token) || 0) * (token.endsWith("ms") ? 1 : 1000);
         if (!duration) {
             svg.setAttribute("viewBox", target.map(r1).join(" "));
             return;

@@ -19,7 +19,7 @@
     <meta name="twitter:title" content="Three Body Simulator">
     <meta name="twitter:description" content="Interactive two-dimensional three-body problem simulator with preset periodic orbits and draggable bodies.">
     <meta name="twitter:image" content="https://mj-kang.com/images/projects/three-body-simulator-thumbnail.jpg">
-    <title>Three Body Simulator</title>
+    <title>Three Body Simulator | MJ Kang</title>
     <link rel="stylesheet" href="/css/base.css">
     <style>
         :root {
@@ -34,7 +34,6 @@
             
             --s-spacing: 24px;
             --s-spacing-sm: 12px;
-            --s-spacing-xs: 8px;
             
             --border-width: 1px;
         }
@@ -163,11 +162,6 @@
         .body-2 { width: 60px; height: 60px; background: var(--c-purple); top: 60%; left: 60%; }
         .body-3 { width: 20px; height: 20px; background: var(--c-sand); top: 45%; left: 55%; }
 
-        .trail {
-            display: none;
-        }
-        .trail-1 { border-color: var(--c-orange); width: 300px; height: 300px; top: 20%; left: 30%; transform: rotate(45deg); }
-        .trail-2 { border-color: var(--c-purple); width: 400px; height: 100px; top: 55%; left: 50%; transform: rotate(-15deg); }
 
         
         .control-block {
@@ -474,8 +468,6 @@
         <div class="sim-background-text t-headline">THREE<br>BODY<br>PROB</div>
         
         
-        <div class="trail trail-1"></div>
-        <div class="trail trail-2"></div>
         
         <div class="body-render body-1" id="body-alpha" role="button" tabindex="0" data-body-label="Alpha Centauri A" aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight" aria-label="Alpha Centauri A body. Use arrow keys to reposition.">
             <span class="coord-label" id="label-alpha" style="top: 100%; left: 0;">ALPHA [X:-9.70 Y:2.43]</span>
