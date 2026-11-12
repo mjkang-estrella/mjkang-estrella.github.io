@@ -348,12 +348,12 @@ def test_document_structure() -> None:
     assert parser.project_metadata_count == 19
     assert len(parser.project_titles) == 19
     assert parser.project_hrefs[:6] == [
-        "https://jobswitch-sooty.vercel.app/",
-        "https://folio-subscription-manager.vercel.app/",
         "https://akashic.computer/",
-        "https://github.com/mjkang-estrella/poincare-lean",
         "https://blog.mj-kang.com/my-ai-homelab/",
+        "https://github.com/mjkang-estrella/poincare-lean",
+        "https://jobswitch-sooty.vercel.app/",
         "https://mj-kang.com/soma-context/",
+        "https://prism.mj-kang.com/",
     ]
     assert "https://cwi.mj-kang.com/" in parser.project_hrefs
     assert parser.timeline_item_count == 5

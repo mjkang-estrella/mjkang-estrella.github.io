@@ -60,6 +60,149 @@
   ],
   "projects": [
     {
+      "id": "akashic-computer",
+      "title": "Akashic Computer",
+      "description": "An open-weight model atlas for comparing families, artifacts, runtimes, benchmarks, and hardware fit.",
+      "href": "https://akashic.computer/",
+      "cta": "Launch",
+      "kind": "product",
+      "domain": "model catalog",
+      "status": "live",
+      "image": "images/projects/akashic-computer-iso.jpg",
+      "embed": true,
+      "detail": {
+        "pitch": "An atlas of open-weight models that follows the path from family to release, size, variant, and quantized artifact, with memory estimates, runtime support, and creator-reported benchmarks. It shows evidence without naming a best model.",
+        "problem": "People curious about running open-weight models locally often do not yet understand model families, parameter sizes, variants, quantization formats, runtimes, or hardware requirements. Akashic organizes the ecosystem into a legible hierarchy so a newcomer can see what exists and what is runnable, while experienced users can scan and compare the same detail quickly.",
+        "features": [
+          "Filters releases by category, capability, company, parameter range, variant, quantization, and provider.",
+          "Model pages list original and quantized artifacts per variant, with weight and KV-cache memory estimates and supported runtimes such as vLLM and SGLang.",
+          "A memory budget (16–384 GB presets or a custom value) marks which model sizes have an artifact estimated to fit, and states that runtime fit is unverified.",
+          "Benchmark leaderboards show creator-reported scores, each linked to its source report and labeled as not normalized retests.",
+          "A material-changes feed records new artifacts, license changes, and official recipe updates; short docs explain quantization, MoE, and memory."
+        ],
+        "tryThis": [
+          "Open the memory menu (icon at top right), choose 24 GB, and read how many model sizes have an artifact estimated to fit.",
+          "Open Model, pick any release, and compare its artifacts' memory estimates against that budget.",
+          "Open Benchmark to scan creator-reported leaderboards such as GPQA Diamond, each linked to its source report."
+        ],
+        "stack": [
+          "Next.js (App Router)",
+          "TypeScript",
+          "Tailwind CSS",
+          "Convex",
+          "Hugeicons"
+        ],
+        "links": [
+          {
+            "label": "Source",
+            "href": "https://github.com/mjkang-estrella/akashic-computer"
+          }
+        ],
+        "sources": [
+          "https://akashic.computer/",
+          "https://akashic.computer/models",
+          "https://akashic.computer/benchmarks",
+          "https://akashic.computer/models/glm-glm-5-3-753b",
+          "https://github.com/mjkang-estrella/akashic-computer/blob/main/README.md",
+          "https://github.com/mjkang-estrella/akashic-computer/blob/main/PRODUCT.md"
+        ]
+      },
+      "screenshot": "images/projects/akashic-computer-screenshot.jpg"
+    },
+    {
+      "id": "personal-ai-lab",
+      "title": "Personal AI Lab",
+      "description": "Operating local AI infrastructure for large open-weight models, long-running proof agents, and web search.",
+      "href": "https://blog.mj-kang.com/my-ai-homelab/",
+      "cta": "Read",
+      "kind": "case study",
+      "domain": "AI infrastructure",
+      "status": "article",
+      "image": "images/projects/personal-ai-lab-iso.jpg",
+      "embed": false,
+      "detail": {
+        "pitch": "A home AI lab running models beyond a 48 GB laptop’s capacity. Inference, services, and storage run separately so model servers can restart independently, supporting a proof-agent harness and a web-search agent.",
+        "problem": "A MacBook Pro with 48 GB of unified memory handles many useful models but becomes restrictive once checkpoints move beyond the 30B range. The lab exists to run larger open-weight models locally, with CUDA and serving tools such as vLLM, without cutting every experiment down to the smallest quantization that fits.",
+        "features": [
+          "Two NVIDIA DGX Sparks (at the time of writing) either split one large model across both GPUs or run an independent model server each.",
+          "A ZimaBoard runs applications, databases, monitoring, and remote access, so model servers can restart without taking down the rest of the lab.",
+          "A NAS stores checkpoints and experiment artifacts, while the Sparks serve active models from local NVMe.",
+          "Hosts long-running agent systems, including the Poincaré Lean proof harness and a web-search agent.",
+          "Argues that evaluations, routing decisions, and operating history, which the author calls Owned Intelligence, outlast any single checkpoint."
+        ],
+        "tryThisHeading": "Where to look",
+        "tryThis": [
+          "“What I built” for how inference, services, and storage are split across machines.",
+          "“The model became more useful inside a system” for the Poincaré formalizer and search-agent examples.",
+          "“Why I Think Local AI Will Thrive” for the argument on cost, privacy, and replaceable open weights."
+        ],
+        "stack": [
+          "NVIDIA DGX Spark",
+          "vLLM",
+          "ComfyUI",
+          "ZimaBoard",
+          "NAS storage"
+        ],
+        "links": [
+          {
+            "label": "GLM-5.3 on DGX Sparks (repo)",
+            "href": "https://github.com/mjkang-estrella/glm53-full-exl3-tp3"
+          }
+        ],
+        "sources": [
+          "https://blog.mj-kang.com/my-ai-homelab/",
+          "https://github.com/mjkang-estrella/glm53-full-exl3-tp3/blob/main/README.md"
+        ]
+      },
+      "screenshot": "images/projects/personal-ai-lab-screenshot.jpg"
+    },
+    {
+      "id": "poincare-lean",
+      "title": "Poincaré Lean",
+      "description": "A long-running proof-agent system with isolated workers and independent Lean checks, working toward the Poincaré conjecture.",
+      "href": "https://github.com/mjkang-estrella/poincare-lean",
+      "cta": "View Repo",
+      "kind": "research",
+      "domain": "formal verification",
+      "status": "ongoing",
+      "image": "images/projects/poincare-lean-iso.jpg",
+      "embed": false,
+      "detail": {
+        "pitch": "A long-running proof-agent harness that isolates workers, independently checks their Lean output, and preserves verified progress. Its workload is an ongoing Poincaré conjecture formalization, not a completed proof.",
+        "problem": "A formalization this large runs for weeks or months, so producing another proof attempt is not the hard part. The work needs a system that divides the proof into bounded tasks, keeps accepted work, rejects invalid results, and recovers from failed runs, with Lean elaboration as the final authority on every change.",
+        "features": [
+          "Codex chooses bounded proof Tasks, allocates isolated Git worktrees, reruns the Lean checks independently, and commits only verified progress.",
+          "Leanstral workers run through a bounded Pi job adapter with six scoped tools, inside a no-network, deny-by-default Bubblewrap sandbox.",
+          "Audit scripts reject sorry, admit, new axioms, and native_decide; the completion audit is expected to fail while the final theorem is absent.",
+          "Conditional end-to-end assembly routes make the remaining mathematical interfaces explicit instead of hiding them.",
+          "The long-running harness records durable evidence every three hours."
+        ],
+        "tryThisHeading": "Where to look",
+        "tryThis": [
+          "README.md, then HANDOFF.md and docs/PROJECT_MAP.md, for the current state and how the proof and support surfaces fit together.",
+          "Poincare/Statement.lean for the canonical target statement the project is working toward.",
+          "harness/README.md and harness/v2/SPEC.md for the proof-agent control plane.",
+          "CURRENT_STATUS.md for the latest generated audit snapshot; check its timestamp before relying on it."
+        ],
+        "stack": [
+          "Lean 4",
+          "Mathlib",
+          "Lake",
+          "Codex (orchestrator)",
+          "Leanstral (proof workers)",
+          "Pi 0.80.10 job adapter",
+          "Bubblewrap sandbox"
+        ],
+        "sources": [
+          "https://github.com/mjkang-estrella/poincare-lean/blob/main/README.md",
+          "https://github.com/mjkang-estrella/poincare-lean/blob/main/lakefile.lean",
+          "https://github.com/mjkang-estrella/poincare-lean/blob/main/lean-toolchain",
+          "https://blog.mj-kang.com/my-ai-homelab/"
+        ]
+      },
+      "screenshot": "images/projects/poincare-lean-screenshot.jpg"
+    },
+    {
       "id": "jobswitch",
       "title": "JobSwitch",
       "description": "An agent for comparing benefits, preparing claims, and following up with HR when changing jobs.",
@@ -114,200 +257,6 @@
       "screenshot": "images/projects/jobswitch-thumbnail.jpg"
     },
     {
-      "id": "folio",
-      "title": "Folio",
-      "description": "A subscription management agent that connects recurring costs, usage evidence, and renewal decisions.",
-      "href": "https://folio-subscription-manager.vercel.app/",
-      "cta": "Open Folio",
-      "kind": "product",
-      "domain": "subscription management",
-      "status": "live",
-      "image": "images/projects/folio-iso.jpg",
-      "embed": false,
-      "detail": {
-        "pitch": "A personal subscription manager that helps decide what is worth renewing, using reviewed imports, usage evidence, and confirmed plan terms. Its agent demonstrates approved changes against controlled test merchants.",
-        "problem": "A list of recurring charges cannot tell you which services are worth keeping. Folio connects spending to usage, shared value, and upcoming renewals, then turns that evidence into a decision you can review and follow through on.",
-        "features": [
-          "Imports card-statement CSVs and email receipts into reviewable candidates, preserving charge history and source excerpts.",
-          "Combines usage observations and renewal check-ins. Browser visits alone never establish that a subscription is unused.",
-          "Builds a renewal queue and researches alternatives with source-backed prices that need confirmation before counting savings.",
-          "Runs approved cancellation, plan-change, and migration demos through Kernel, verifying results against independent test-merchant records.",
-          "Tracks user-recorded personal changes separately from demo results, with a private renewal calendar, recovery codes, and JSON backups."
-        ],
-        "tryThis": [
-          "Open the public subscription overview, then choose “My workspace” to explore the separate Demo workspace.",
-          "Open Adobe Creative Cloud to inspect its sample usage evidence and renewal decision.",
-          "Compare monthly equivalent costs with the payment calendar, where annual subscriptions retain their actual billing amounts."
-        ],
-        "stack": [
-          "React",
-          "TypeScript",
-          "Vite & Express",
-          "Neon Postgres",
-          "Mastra & Neon AI Gateway",
-          "Kernel",
-          "Exa",
-          "Assistant UI"
-        ],
-        "links": [
-          {
-            "label": "Source",
-            "href": "https://github.com/mjkang-estrella/subscription-manager"
-          }
-        ],
-        "sources": [
-          "https://folio-subscription-manager.vercel.app/",
-          "https://folio-subscription-manager.vercel.app/workspace",
-          "https://github.com/mjkang-estrella/subscription-manager/blob/main/README.md",
-          "https://github.com/mjkang-estrella/subscription-manager/blob/main/docs/roadmap.md"
-        ]
-      },
-      "screenshot": "images/projects/folio-thumbnail.jpg"
-    },
-    {
-      "id": "akashic-computer",
-      "title": "Akashic Computer",
-      "description": "An open-weight model atlas for comparing families, artifacts, runtimes, benchmarks, and hardware fit.",
-      "href": "https://akashic.computer/",
-      "cta": "Launch",
-      "kind": "product",
-      "domain": "model catalog",
-      "status": "live",
-      "image": "images/projects/akashic-computer-iso.jpg",
-      "embed": true,
-      "detail": {
-        "pitch": "An atlas of open-weight models that follows the path from family to release, size, variant, and quantized artifact, with memory estimates, runtime support, and creator-reported benchmarks. It shows evidence without naming a best model.",
-        "problem": "People curious about running open-weight models locally often do not yet understand model families, parameter sizes, variants, quantization formats, runtimes, or hardware requirements. Akashic organizes the ecosystem into a legible hierarchy so a newcomer can see what exists and what is runnable, while experienced users can scan and compare the same detail quickly.",
-        "features": [
-          "Filters releases by category, capability, company, parameter range, variant, quantization, and provider.",
-          "Model pages list original and quantized artifacts per variant, with weight and KV-cache memory estimates and supported runtimes such as vLLM and SGLang.",
-          "A memory budget (16–384 GB presets or a custom value) marks which model sizes have an artifact estimated to fit, and states that runtime fit is unverified.",
-          "Benchmark leaderboards show creator-reported scores, each linked to its source report and labeled as not normalized retests.",
-          "A material-changes feed records new artifacts, license changes, and official recipe updates; short docs explain quantization, MoE, and memory."
-        ],
-        "tryThis": [
-          "Open the memory menu (icon at top right), choose 24 GB, and read how many model sizes have an artifact estimated to fit.",
-          "Open Model, pick any release, and compare its artifacts' memory estimates against that budget.",
-          "Open Benchmark to scan creator-reported leaderboards such as GPQA Diamond, each linked to its source report."
-        ],
-        "stack": [
-          "Next.js (App Router)",
-          "TypeScript",
-          "Tailwind CSS",
-          "Convex",
-          "Hugeicons"
-        ],
-        "links": [
-          {
-            "label": "Source",
-            "href": "https://github.com/mjkang-estrella/akashic-computer"
-          }
-        ],
-        "sources": [
-          "https://akashic.computer/",
-          "https://akashic.computer/models",
-          "https://akashic.computer/benchmarks",
-          "https://akashic.computer/models/glm-glm-5-3-753b",
-          "https://github.com/mjkang-estrella/akashic-computer/blob/main/README.md",
-          "https://github.com/mjkang-estrella/akashic-computer/blob/main/PRODUCT.md"
-        ]
-      },
-      "screenshot": "images/projects/akashic-computer-screenshot.jpg"
-    },
-    {
-      "id": "poincare-lean",
-      "title": "Poincaré Lean",
-      "description": "An ongoing Lean 4 formalization of the Poincaré conjecture with proof-agent workflows.",
-      "href": "https://github.com/mjkang-estrella/poincare-lean",
-      "cta": "View Repo",
-      "kind": "research",
-      "domain": "formal verification",
-      "status": "ongoing",
-      "image": "images/projects/poincare-lean-iso.jpg",
-      "embed": false,
-      "detail": {
-        "pitch": "An ongoing Lean 4 project that aims to formalize the Poincaré conjecture on Mathlib, driven by a long-running proof-agent harness. It is not a completed proof: the final theorem is deliberately absent until Lean can check it.",
-        "problem": "A formalization this large runs for weeks or months, so producing another proof attempt is not the hard part. The work needs a system that divides the proof into bounded tasks, keeps accepted work, rejects invalid results, and recovers from failed runs, with Lean elaboration as the final authority on every change.",
-        "features": [
-          "Codex chooses bounded proof Tasks, allocates isolated Git worktrees, reruns the Lean checks independently, and commits only verified progress.",
-          "Leanstral workers run through a bounded Pi job adapter with six scoped tools, inside a no-network, deny-by-default Bubblewrap sandbox.",
-          "Audit scripts reject sorry, admit, new axioms, and native_decide; the completion audit is expected to fail while the final theorem is absent.",
-          "Conditional end-to-end assembly routes make the remaining mathematical interfaces explicit instead of hiding them.",
-          "The long-running harness records durable evidence every three hours."
-        ],
-        "tryThisHeading": "Where to look",
-        "tryThis": [
-          "README.md, then HANDOFF.md and docs/PROJECT_MAP.md, for the current state and how the proof and support surfaces fit together.",
-          "Poincare/Statement.lean for the canonical target statement the project is working toward.",
-          "harness/README.md and harness/v2/SPEC.md for the proof-agent control plane.",
-          "CURRENT_STATUS.md for the latest generated audit snapshot; check its timestamp before relying on it."
-        ],
-        "stack": [
-          "Lean 4",
-          "Mathlib",
-          "Lake",
-          "Codex (orchestrator)",
-          "Leanstral (proof workers)",
-          "Pi 0.80.10 job adapter",
-          "Bubblewrap sandbox"
-        ],
-        "sources": [
-          "https://github.com/mjkang-estrella/poincare-lean/blob/main/README.md",
-          "https://github.com/mjkang-estrella/poincare-lean/blob/main/lakefile.lean",
-          "https://github.com/mjkang-estrella/poincare-lean/blob/main/lean-toolchain",
-          "https://blog.mj-kang.com/my-ai-homelab/"
-        ]
-      },
-      "screenshot": "images/projects/poincare-lean-screenshot.jpg"
-    },
-    {
-      "id": "personal-ai-lab",
-      "title": "Personal AI Lab",
-      "description": "A personal AI platform spanning applications, dual-DGX inference, storage, and observability.",
-      "href": "https://blog.mj-kang.com/my-ai-homelab/",
-      "cta": "Read",
-      "kind": "case study",
-      "domain": "AI infrastructure",
-      "status": "article",
-      "image": "images/projects/personal-ai-lab-iso.jpg",
-      "embed": false,
-      "detail": {
-        "pitch": "An article about a home AI lab built to run open-weight models too large for a 48 GB laptop (DGX Spark inference nodes, a NAS, and a ZimaBoard for services) and what operating it taught about the systems around a model.",
-        "problem": "A MacBook Pro with 48 GB of unified memory handles many useful models but becomes restrictive once checkpoints move beyond the 30B range. The lab exists to run larger open-weight models locally, with CUDA and serving tools such as vLLM, without cutting every experiment down to the smallest quantization that fits.",
-        "features": [
-          "Two NVIDIA DGX Sparks (at the time of writing) either split one large model across both GPUs or run an independent model server each.",
-          "A ZimaBoard runs applications, databases, monitoring, and remote access, so model servers can restart without taking down the rest of the lab.",
-          "A NAS stores checkpoints and experiment artifacts, while the Sparks serve active models from local NVMe.",
-          "Hosts long-running agent systems, including the Poincaré Lean proof harness and a web-search agent.",
-          "Argues that evaluations, routing decisions, and operating history, which the author calls Owned Intelligence, outlast any single checkpoint."
-        ],
-        "tryThisHeading": "Where to look",
-        "tryThis": [
-          "“What I built” for how inference, services, and storage are split across machines.",
-          "“The model became more useful inside a system” for the Poincaré formalizer and search-agent examples.",
-          "“Why I Think Local AI Will Thrive” for the argument on cost, privacy, and replaceable open weights."
-        ],
-        "stack": [
-          "NVIDIA DGX Spark",
-          "vLLM",
-          "ComfyUI",
-          "ZimaBoard",
-          "NAS storage"
-        ],
-        "links": [
-          {
-            "label": "GLM-5.3 on DGX Sparks (repo)",
-            "href": "https://github.com/mjkang-estrella/glm53-full-exl3-tp3"
-          }
-        ],
-        "sources": [
-          "https://blog.mj-kang.com/my-ai-homelab/",
-          "https://github.com/mjkang-estrella/glm53-full-exl3-tp3/blob/main/README.md"
-        ]
-      },
-      "screenshot": "images/projects/personal-ai-lab-screenshot.jpg"
-    },
-    {
       "id": "soma",
       "title": "Soma",
       "description": "A local-first health context and reporting system for private, evidence-grounded AI workflows.",
@@ -355,57 +304,6 @@
         ]
       },
       "screenshot": "images/projects/soma-screenshot.jpg"
-    },
-    {
-      "id": "precortex",
-      "title": "Precortex",
-      "description": "A task planner with an AI assistant that suggests priorities and breaks work into smaller steps.",
-      "href": "https://www.pre-cortex.com/",
-      "cta": "Open",
-      "kind": "product",
-      "domain": "agentic workflows",
-      "status": "live",
-      "image": "images/projects/precortex-iso.jpg",
-      "embed": true,
-      "embedUrl": "https://www.pre-cortex.com/?demo=1",
-      "detail": {
-        "pitch": "A task planner with an assistant that helps turn an unscheduled inbox into a deliberate plan for today. A public demo runs the real planner on fictional tasks, with no account needed.",
-        "problem": "Most planners pile on features. Precortex narrows the job to knowing what to do next and having room to think about it: the inbox holds everything until you are ready to decide, and each assistant suggestion can be reviewed, changed, or left unapplied, so the user's judgment sets the plan.",
-        "features": [
-          "Inbox, Today, Upcoming, and project views; tasks carry priority, due date, tags, and subtasks.",
-          "A side assistant suggests priorities and smaller steps and explains its reasoning before anything is applied.",
-          "Account workspaces sync across devices through Convex; voice capture uses AssemblyAI transcription when it is configured.",
-          "The demo keeps every change in tab memory with undo (up to 50 steps) and reset, never calls live AI, and is labeled as a prewritten example."
-        ],
-        "tryThis": [
-          "Tap “today” on a sample task to schedule it, then choose Undo last change.",
-          "Open the assistant (the chat button on narrow screens) and choose Apply example plan; the venue task moves to Today.",
-          "Open a task to edit its priority, due date, project, and subtasks.",
-          "Choose Reset demo to restore the starting workspace."
-        ],
-        "stack": [
-          "TypeScript",
-          "Convex",
-          "Auth0",
-          "Tailwind CSS",
-          "esbuild",
-          "AssemblyAI",
-          "Vercel"
-        ],
-        "links": [
-          {
-            "label": "Source",
-            "href": "https://github.com/mjkang-estrella/precortex"
-          }
-        ],
-        "sources": [
-          "https://www.pre-cortex.com/",
-          "https://www.pre-cortex.com/?demo=1",
-          "https://github.com/mjkang-estrella/precortex/blob/main/README.md",
-          "https://github.com/mjkang-estrella/precortex/blob/main/PRODUCT.md"
-        ]
-      },
-      "screenshot": "images/projects/precortex-screenshot.jpg"
     },
     {
       "id": "prism",
@@ -480,37 +378,55 @@
       "screenshot": "images/projects/caption-with-intent-screenshot.jpg"
     },
     {
-      "id": "reader",
-      "title": "Reader",
-      "description": "Personal reader for feeds, saved articles, highlights, and a focused library.",
-      "href": "https://reader.mj-kang.com/",
-      "cta": "Launch",
+      "id": "precortex",
+      "title": "Precortex",
+      "description": "A task planner with an AI assistant that suggests priorities and breaks work into smaller steps.",
+      "href": "https://www.pre-cortex.com/",
+      "cta": "Open",
       "kind": "product",
-      "domain": "reading workflow",
+      "domain": "agentic workflows",
       "status": "live",
-      "image": "images/projects/reader-iso.jpg",
-      "embed": false,
+      "image": "images/projects/precortex-iso.jpg",
+      "embed": true,
+      "embedUrl": "https://www.pre-cortex.com/?demo=1",
       "detail": {
-        "pitch": "A personal reading app that brings RSS feeds, emailed newsletters, saved web pages, YouTube videos, and books into one library, with a daily digest and an inspector that summarizes the open article.",
+        "pitch": "A task planner with an assistant that helps turn an unscheduled inbox into a deliberate plan for today. A public demo runs the real planner on fictional tasks, with no account needed.",
+        "problem": "Most planners pile on features. Precortex narrows the job to knowing what to do next and having room to think about it: the inbox holds everything until you are ready to decide, and each assistant suggestion can be reviewed, changed, or left unapplied, so the user's judgment sets the plan.",
         "features": [
-          "Today builds a daily digest of feed articles, browsable by date on a calendar.",
-          "Feeds sync hourly through Convex; newsletters arrive at a dedicated email address; any article URL can be pasted in.",
-          "Separate views for saved articles, a library of clipped pages, YouTube videos, and books split into sections with reading progress.",
-          "An inspector pane summarizes the open article, alongside highlights and a link to the original."
+          "Inbox, Today, Upcoming, and project views; tasks carry priority, due date, tags, and subtasks.",
+          "A side assistant suggests priorities and smaller steps and explains its reasoning before anything is applied.",
+          "Account workspaces sync across devices through Convex; voice capture uses AssemblyAI transcription when it is configured.",
+          "The demo keeps every change in tab memory with undo (up to 50 steps) and reset, never calls live AI, and is labeled as a prewritten example."
         ],
         "tryThis": [
-          "Open All Articles to browse recent items from feeds and newsletters.",
-          "Open Books to see a book split into sections with reading progress."
+          "Tap “today” on a sample task to schedule it, then choose Undo last change.",
+          "Open the assistant (the chat button on narrow screens) and choose Apply example plan; the venue task moves to Today.",
+          "Open a task to edit its priority, due date, project, and subtasks.",
+          "Choose Reset demo to restore the starting workspace."
         ],
         "stack": [
-          "Convex"
+          "TypeScript",
+          "Convex",
+          "Auth0",
+          "Tailwind CSS",
+          "esbuild",
+          "AssemblyAI",
+          "Vercel"
+        ],
+        "links": [
+          {
+            "label": "Source",
+            "href": "https://github.com/mjkang-estrella/precortex"
+          }
         ],
         "sources": [
-          "https://reader.mj-kang.com/",
-          "https://reader.mj-kang.com/api/config"
+          "https://www.pre-cortex.com/",
+          "https://www.pre-cortex.com/?demo=1",
+          "https://github.com/mjkang-estrella/precortex/blob/main/README.md",
+          "https://github.com/mjkang-estrella/precortex/blob/main/PRODUCT.md"
         ]
       },
-      "screenshot": "images/projects/reader-screenshot.jpg"
+      "screenshot": "images/projects/precortex-screenshot.jpg"
     },
     {
       "id": "agent-newsletter",
@@ -559,6 +475,90 @@
         ]
       },
       "screenshot": "images/projects/agent-newsletter-screenshot.jpg"
+    },
+    {
+      "id": "folio",
+      "title": "Folio",
+      "description": "A subscription management agent that connects recurring costs, usage evidence, and renewal decisions.",
+      "href": "https://folio-subscription-manager.vercel.app/",
+      "cta": "Open Folio",
+      "kind": "product",
+      "domain": "subscription management",
+      "status": "live",
+      "image": "images/projects/folio-iso.jpg",
+      "embed": false,
+      "detail": {
+        "pitch": "A personal subscription manager that helps decide what is worth renewing, using reviewed imports, usage evidence, and confirmed plan terms. Its agent demonstrates approved changes against controlled test merchants.",
+        "problem": "A list of recurring charges cannot tell you which services are worth keeping. Folio connects spending to usage, shared value, and upcoming renewals, then turns that evidence into a decision you can review and follow through on.",
+        "features": [
+          "Imports card-statement CSVs and email receipts into reviewable candidates, preserving charge history and source excerpts.",
+          "Combines usage observations and renewal check-ins. Browser visits alone never establish that a subscription is unused.",
+          "Builds a renewal queue and researches alternatives with source-backed prices that need confirmation before counting savings.",
+          "Runs approved cancellation, plan-change, and migration demos through Kernel, verifying results against independent test-merchant records.",
+          "Tracks user-recorded personal changes separately from demo results, with a private renewal calendar, recovery codes, and JSON backups."
+        ],
+        "tryThis": [
+          "Open the public subscription overview, then choose “My workspace” to explore the separate Demo workspace.",
+          "Open Adobe Creative Cloud to inspect its sample usage evidence and renewal decision.",
+          "Compare monthly equivalent costs with the payment calendar, where annual subscriptions retain their actual billing amounts."
+        ],
+        "stack": [
+          "React",
+          "TypeScript",
+          "Vite & Express",
+          "Neon Postgres",
+          "Mastra & Neon AI Gateway",
+          "Kernel",
+          "Exa",
+          "Assistant UI"
+        ],
+        "links": [
+          {
+            "label": "Source",
+            "href": "https://github.com/mjkang-estrella/subscription-manager"
+          }
+        ],
+        "sources": [
+          "https://folio-subscription-manager.vercel.app/",
+          "https://folio-subscription-manager.vercel.app/workspace",
+          "https://github.com/mjkang-estrella/subscription-manager/blob/main/README.md",
+          "https://github.com/mjkang-estrella/subscription-manager/blob/main/docs/roadmap.md"
+        ]
+      },
+      "screenshot": "images/projects/folio-thumbnail.jpg"
+    },
+    {
+      "id": "reader",
+      "title": "Reader",
+      "description": "Personal reader for feeds, saved articles, highlights, and a focused library.",
+      "href": "https://reader.mj-kang.com/",
+      "cta": "Launch",
+      "kind": "product",
+      "domain": "reading workflow",
+      "status": "live",
+      "image": "images/projects/reader-iso.jpg",
+      "embed": false,
+      "detail": {
+        "pitch": "A personal reading app that brings RSS feeds, emailed newsletters, saved web pages, YouTube videos, and books into one library, with a daily digest and an inspector that summarizes the open article.",
+        "features": [
+          "Today builds a daily digest of feed articles, browsable by date on a calendar.",
+          "Feeds sync hourly through Convex; newsletters arrive at a dedicated email address; any article URL can be pasted in.",
+          "Separate views for saved articles, a library of clipped pages, YouTube videos, and books split into sections with reading progress.",
+          "An inspector pane summarizes the open article, alongside highlights and a link to the original."
+        ],
+        "tryThis": [
+          "Open All Articles to browse recent items from feeds and newsletters.",
+          "Open Books to see a book split into sections with reading progress."
+        ],
+        "stack": [
+          "Convex"
+        ],
+        "sources": [
+          "https://reader.mj-kang.com/",
+          "https://reader.mj-kang.com/api/config"
+        ]
+      },
+      "screenshot": "images/projects/reader-screenshot.jpg"
     },
     {
       "id": "resume-os",
