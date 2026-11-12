@@ -4,6 +4,7 @@
   "description": "Static portfolio site for mj-kang.com",
   "scripts": {
     "build": "node scripts/build.mjs",
+    "build:thumbnails": "node scripts/thumbnails/render.mjs",
     "check:generated": "node scripts/build.mjs --check",
     "check:syntax": "node scripts/check-syntax.mjs",
     "test": "npm run check:generated && npm run check:syntax && npm run test:structure && npm run test:counter && npm run test:e2e",

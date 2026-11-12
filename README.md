@@ -99,6 +99,11 @@ to show it inside the popup and, for Selected Works cards, on card hover
 The grid uses `image` at rest and keeps it on hover if no screenshot is available.
 Without a screenshot the popup shows the `image` artwork instead.
 
+Each `image` is an isometric illustration at `images/projects/<id>-iso.jpg`,
+drawn from code: one scene per project in `scripts/thumbnails/scenes.mjs`. After
+adding or editing a scene, run `npm run build:thumbnails` (or pass project ids
+to redraw only those), then `npm run build`.
+
 For a recorded demo, use `embed: true`, `embedType: "video"`, and an embeddable
 player URL in `embedUrl`. A Selected Works card shows its screenshot on hover. The popup
 loads the video player immediately and removes it on close. The player and
