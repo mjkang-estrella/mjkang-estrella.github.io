@@ -68,7 +68,7 @@
       "kind": "hackathon",
       "domain": "job transitions",
       "status": "live demo",
-      "image": "images/projects/jobswitch-artwork.jpg",
+      "image": "images/projects/jobswitch-iso.jpg",
       "embed": true,
       "embedType": "video",
       "embedUrl": "https://drive.google.com/file/d/1v3rAq66T40dje1TkuuASHaEHmZAyQG2n/preview",
@@ -122,7 +122,7 @@
       "kind": "product",
       "domain": "subscription management",
       "status": "live",
-      "image": "images/projects/folio-artwork.jpg",
+      "image": "images/projects/folio-iso.jpg",
       "embed": false,
       "detail": {
         "pitch": "A personal subscription manager that helps decide what is worth renewing, using reviewed imports, usage evidence, and confirmed plan terms. Its agent demonstrates approved changes against controlled test merchants.",
@@ -173,7 +173,7 @@
       "kind": "product",
       "domain": "model catalog",
       "status": "live",
-      "image": "images/projects/akashic-simple.jpg",
+      "image": "images/projects/akashic-computer-iso.jpg",
       "embed": true,
       "detail": {
         "pitch": "An atlas of open-weight models that follows the path from family to release, size, variant, and quantized artifact, with memory estimates, runtime support, and creator-reported benchmarks. It shows evidence without naming a best model.",
@@ -223,7 +223,7 @@
       "kind": "research",
       "domain": "formal verification",
       "status": "ongoing",
-      "image": "images/projects/poincare-lean-simple.jpg",
+      "image": "images/projects/poincare-lean-iso.jpg",
       "embed": false,
       "detail": {
         "pitch": "An ongoing Lean 4 project that aims to formalize the Poincaré conjecture on Mathlib, driven by a long-running proof-agent harness. It is not a completed proof: the final theorem is deliberately absent until Lean can check it.",
@@ -269,7 +269,7 @@
       "kind": "case study",
       "domain": "AI infrastructure",
       "status": "article",
-      "image": "images/projects/personal-ai-lab-simple.jpg",
+      "image": "images/projects/personal-ai-lab-iso.jpg",
       "embed": false,
       "detail": {
         "pitch": "An article about a home AI lab built to run open-weight models too large for a 48 GB laptop (DGX Spark inference nodes, a NAS, and a ZimaBoard for services) and what operating it taught about the systems around a model.",
@@ -316,7 +316,7 @@
       "kind": "repository",
       "domain": "personal health data",
       "status": "source",
-      "image": "images/projects/soma-simple.jpg",
+      "image": "images/projects/soma-iso.jpg",
       "embed": false,
       "detail": {
         "pitch": "SomaContext gives a personal AI agent selected health context (records, their sources, and what is still unknown) from a local SQLite workspace. It uses deterministic rules and local search, with no LLM, GPU, or API key required.",
@@ -365,7 +365,7 @@
       "kind": "product",
       "domain": "agentic workflows",
       "status": "live",
-      "image": "images/projects/precortex-minimal.jpg",
+      "image": "images/projects/precortex-iso.jpg",
       "embed": true,
       "embedUrl": "https://www.pre-cortex.com/?demo=1",
       "detail": {
@@ -416,7 +416,7 @@
       "kind": "product",
       "domain": "product specification",
       "status": "live",
-      "image": "images/projects/prism-minimal.jpg",
+      "image": "images/projects/prism-iso.jpg",
       "embed": true,
       "detail": {
         "pitch": "An AI-guided workspace that turns a rough product idea into a buildable spec: an interviewer asks the highest-risk open question each round until users, problem, scope, constraints, and acceptance criteria are concrete.",
@@ -445,7 +445,7 @@
       "kind": "prototype",
       "domain": "media tooling",
       "status": "live",
-      "image": "images/projects/cwi-minimal.jpg",
+      "image": "images/projects/caption-with-intent-iso.jpg",
       "embed": false,
       "detail": {
         "pitch": "A browser-based editor prototype for Caption with Intention (CWI), a caption style that adds speaker attribution, word-level timing, and intonation cues such as color, motion, and size. It edits CWI overlays on a sample clip.",
@@ -488,7 +488,7 @@
       "kind": "product",
       "domain": "reading workflow",
       "status": "live",
-      "image": "images/projects/reader-minimal.jpg",
+      "image": "images/projects/reader-iso.jpg",
       "embed": false,
       "detail": {
         "pitch": "A personal reading app that brings RSS feeds, emailed newsletters, saved web pages, YouTube videos, and books into one library, with a daily digest and an inspector that summarizes the open article.",
@@ -521,7 +521,7 @@
       "kind": "repository",
       "domain": "agent discovery",
       "status": "source",
-      "image": "images/projects/agent-newsletter-minimal.jpg",
+      "image": "images/projects/agent-newsletter-iso.jpg",
       "embed": false,
       "detail": {
         "pitch": "A daily review queue for AI agents, served as JSON, on changes to tools and techniques: what changed, why it may matter to a task, and which source to check next. It never installs packages or runs instructions from articles.",
@@ -569,7 +569,7 @@
       "kind": "product",
       "domain": "interactive resume",
       "status": "live",
-      "image": "images/projects/resume-os-minimal.jpg",
+      "image": "images/projects/resume-os-iso.jpg",
       "embed": false,
       "detail": {
         "pitch": "An interactive resume where each bullet opens the story behind it (context, decisions, and results), with an AI agent that answers interview questions from the same material.",
@@ -616,7 +616,7 @@
       "kind": "case study",
       "domain": "fitness analytics",
       "status": "case",
-      "image": "images/projects/conditioned-minimal.jpg",
+      "image": "images/projects/conditioned-iso.jpg",
       "embed": false,
       "detail": {
         "pitch": "Published as CrossFit Analyzer, this prototype classifies each CrossFit workout (WOD) across CrossFit's ten fitness domains, so athletes and coaches can see where training is balanced and where it has gaps.",
@@ -667,7 +667,7 @@
       "kind": "ios app",
       "domain": "voice journaling",
       "status": "testflight",
-      "image": "images/projects/reflect-ios-minimal.jpg",
+      "image": "images/projects/reflect-ios-iso.jpg",
       "embed": false,
       "detail": {
         "pitch": "An iOS voice-journaling app that applies natural-language processing to entries for sentiment analysis, distributed as a beta through Apple TestFlight.",
@@ -687,7 +687,7 @@
       "kind": "illustration",
       "domain": "history of technology",
       "status": "live",
-      "image": "images/projects/jagyeokru-minimal.jpg",
+      "image": "images/projects/jagyeokru-iso.jpg",
       "embed": true,
       "detail": {
         "pitch": "An animated isometric model of Jagyeokru, the water clock King Sejong's court began using in 1434. It follows the Veritable Records step by step, from water rising in a receiver to wooden figures striking a bell, a drum and a gong.",
@@ -731,7 +731,7 @@
       "kind": "simulation",
       "domain": "physics",
       "status": "live",
-      "image": "images/projects/three-body-simulator-minimal.jpg",
+      "image": "images/projects/three-body-simulator-iso.jpg",
       "embed": true,
       "detail": {
         "pitch": "A two-dimensional three-body gravity simulator with adaptive RK4 integration and 705 starting presets, from the figure-eight orbit to 695 periodic orbits labeled from the Li–Liao catalog. Drag bodies to break an orbit.",
@@ -775,7 +775,7 @@
       "kind": "game",
       "domain": "canvas physics",
       "status": "live",
-      "image": "images/projects/block-fighter-minimal.jpg",
+      "image": "images/projects/block-fighter-iso.jpg",
       "embed": true,
       "detail": {
         "pitch": "A two-player Pong Wars variant for one keyboard or touch screen: each ball repaints squares in its side's color, and a side wins by painting 60% of the board or holding more territory when the 60-second timer ends.",
@@ -824,7 +824,7 @@
       "kind": "calculator",
       "domain": "housing finance",
       "status": "live",
-      "image": "images/projects/rent-calculator-minimal.jpg",
+      "image": "images/projects/rent-calculator-iso.jpg",
       "embed": true,
       "detail": {
         "pitch": "A Korean-language calculator comparing jeonse (lump-sum deposit) with wolse (monthly rent) from the landlord's side: deposits repay the loan first, the rest earns after-tax interest, and it compares monthly net cash flow.",
@@ -867,7 +867,7 @@
       "kind": "calculator",
       "domain": "financial planning",
       "status": "live",
-      "image": "images/projects/retirement-calculator-minimal.jpg",
+      "image": "images/projects/retirement-calculator-iso.jpg",
       "embed": true,
       "detail": {
         "pitch": "A retirement projector that compounds current savings and monthly contributions up to a chosen retirement age, charts the projected balance, and estimates monthly retirement income with the 4% rule.",
