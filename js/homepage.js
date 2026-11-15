@@ -480,59 +480,6 @@
     updateMode(getModeFromUrl() || getStoredMode() || "human", false);
 })();
 
-// Detail screenshots are only revealed by hover/focus-visible, so their src
-// lives in data-detail-src and is attached only on hover-capable devices —
-// touch devices never pay for images they cannot reveal.
-const initProjectDetailImages = () => {
-    const detailImages = document.querySelectorAll(
-        ".project-card img[data-detail-src]"
-    );
-
-    if (!detailImages.length) {
-        return;
-    }
-
-    if (!(window.matchMedia && window.matchMedia("(hover: hover)").matches)) {
-        return;
-    }
-
-    const attachDetailSource = (img) => {
-        if (img.dataset.detailSrc) {
-            img.src = img.dataset.detailSrc;
-            delete img.dataset.detailSrc;
-        }
-    };
-
-    document.querySelectorAll(".project-card").forEach((card) => {
-        const loadCardDetail = () => {
-            card.querySelectorAll("img[data-detail-src]").forEach(
-                attachDetailSource
-            );
-        };
-
-        card.addEventListener("mouseenter", loadCardDetail, { once: true });
-        card.addEventListener("focus", loadCardDetail, { once: true });
-    });
-
-    // Prefetch the rest once the page is idle so the first hover crossfade
-    // is instant; loading="lazy" still defers offscreen fetches.
-    const prefetchAll = () => {
-        detailImages.forEach(attachDetailSource);
-    };
-
-    window.addEventListener(
-        "load",
-        () => {
-            if ("requestIdleCallback" in window) {
-                window.requestIdleCallback(prefetchAll, { timeout: 4000 });
-            } else {
-                window.setTimeout(prefetchAll, 2500);
-            }
-        },
-        { once: true }
-    );
-};
-
 const initProfilePhotoFallback = () => {
     const profilePhoto = document.querySelector(".profile-photo");
 
@@ -674,7 +621,6 @@ const initScrollProgress = (root) => {
 
 (() => {
     const root = document.documentElement;
-    initProjectDetailImages();
     initProfilePhotoFallback();
     initRevealMotion(root);
     initScrollProgress(root);

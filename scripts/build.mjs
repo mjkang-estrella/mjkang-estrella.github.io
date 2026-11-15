@@ -285,7 +285,6 @@ const renderProjectCard = (project) => {
     }
 
     const flat = jpegSize(project.image);
-    const detail = project.screenshot ? jpegSize(project.screenshot) : null;
     const external = isExternal(project.href);
     // With a detail popup the card explains before it launches; without one
     // it still goes straight to the project, so it keeps the project's CTA.
@@ -315,18 +314,6 @@ const renderProjectCard = (project) => {
         `            loading="lazy"`,
         `            decoding="async"`,
         `        />`,
-        ...(detail ? [
-            `        <img`,
-            `            data-detail-src="${escapeHtml(project.screenshot)}"`,
-            `            class="project-image project-image--detail"`,
-            `            alt=""`,
-            `            aria-hidden="true"`,
-            `            width="${detail.width}"`,
-            `            height="${detail.height}"`,
-            `            loading="lazy"`,
-            `            decoding="async"`,
-            `        />`,
-        ] : []),
         `    </span>`,
         `    <div class="project-info">`,
         `        <h3 class="project-title">${escapeHtml(project.title)}</h3>`,

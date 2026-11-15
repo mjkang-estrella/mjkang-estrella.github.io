@@ -1104,13 +1104,6 @@ html.has-motion [data-reveal].is-visible {
     opacity: 1;
 }
 
-.project-image--detail {
-    opacity: 0;
-    object-fit: contain;
-    background: var(--surface-media);
-    filter: none;
-}
-
 .project-card:focus-visible .project-image--flat {
     filter: none;
     transform: scale(calc(1 + 0.035 * var(--motion-scale)));
