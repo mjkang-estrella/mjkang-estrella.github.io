@@ -1094,7 +1094,10 @@ html.has-motion [data-reveal].is-visible {
     height: 100%;
     filter: grayscale(100%) contrast(0.96);
     object-fit: cover;
-    transition: opacity var(--motion-base) var(--ease-out-quart);
+    transition:
+        opacity var(--motion-base) var(--ease-out-quart),
+        filter var(--motion-slow) var(--ease-out-quart),
+        transform var(--motion-slow) var(--ease-out-quart);
 }
 
 .project-image--flat {
@@ -1108,8 +1111,9 @@ html.has-motion [data-reveal].is-visible {
     filter: none;
 }
 
-.project-card:focus-visible .project-image--detail {
-    opacity: 1;
+.project-card:focus-visible .project-image--flat {
+    filter: none;
+    transform: scale(calc(1 + 0.035 * var(--motion-scale)));
 }
 
 .project-info {
@@ -2181,8 +2185,9 @@ html.has-motion [data-reveal].is-visible {
         transform: scaleX(1);
     }
 
-    .project-card:hover .project-image--detail {
-        opacity: 1;
+    .project-card:hover .project-image--flat {
+        filter: none;
+        transform: scale(calc(1 + 0.035 * var(--motion-scale)));
     }
 
     .project-card:hover .project-link {

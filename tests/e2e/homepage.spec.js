@@ -503,7 +503,8 @@ test.describe("project detail", () => {
             const card = page.locator('[data-project-id="jobswitch"]');
             await card.hover();
             await expect(card.locator('.project-image--detail')).toHaveAttribute('src', 'images/projects/jobswitch-thumbnail.jpg');
-            await expect(card.locator('.project-image--detail')).toHaveCSS('opacity', '1');
+            await expect(card.locator('.project-image--detail')).toHaveCSS('opacity', '0');
+            await expect(card.locator('.project-image--flat')).toHaveCSS('filter', 'none');
             expect(loads).toBe(0);
             const { dialog } = await openProject(page, "jobswitch");
             const frame = dialog.locator("iframe");

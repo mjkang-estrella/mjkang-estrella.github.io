@@ -94,9 +94,10 @@ refused frame, so the build rejects `embed: true` for hosts known to refuse
 later would break embeds the same way.
 
 Set `screenshot` to a local JPEG capture of the actual homepage or public demo
-to show it inside the popup and, for Selected Works cards, on card hover
-(Playground rows never swap images). Screenshots fit without cropping.
-The grid uses `image` at rest and keeps it on hover if no screenshot is available.
+to show it inside the popup. Screenshots fit without cropping.
+The grid uses grayscale `image` artwork at rest, then smoothly reveals its
+original colors with a gentle zoom on hover or keyboard focus. Reduced motion
+disables the transition and zoom.
 Without a screenshot the popup shows the `image` artwork instead.
 
 Each `image` is an isometric illustration at `images/projects/<id>-iso.jpg`,
@@ -105,7 +106,7 @@ adding or editing a scene, run `npm run build:thumbnails` (or pass project ids
 to redraw only those), then `npm run build`.
 
 For a recorded demo, use `embed: true`, `embedType: "video"`, and an embeddable
-player URL in `embedUrl`. A Selected Works card shows its screenshot on hover. The popup
+player URL in `embedUrl`. The popup
 loads the video player immediately and removes it on close. The player and
 project explanation stay visible on phones. Keep `href` pointing to the project
 itself; the player toolbar includes an "Open video" fallback link.
