@@ -526,10 +526,11 @@ def test_structured_data_parses() -> None:
 def test_referenced_assets_exist_on_disk() -> None:
     parser, _ = parse_homepage()
 
-    assert "css/homepage.css?v=20261114-artwork-hover" in parser.stylesheets
+    assert "css/homepage.css?v=20261119-drawing" in parser.stylesheets
     assert parser.scripts == [
         "/js/analytics.js?v=20261007-jagyeokru",
         "js/homepage.js?v=20261114-artwork-hover",
+        "js/thumbnail-drawing.js",
         "js/project-detail.js?v=20261014-playground",
         "js/ask-ai.js",
     ]
