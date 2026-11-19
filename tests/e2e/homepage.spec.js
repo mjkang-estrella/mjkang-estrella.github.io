@@ -555,3 +555,20 @@ test.describe("project detail", () => {
         await context.close();
     });
 });
+
+test('isometric artwork traces on hover and respects reduced motion', async ({ page }) => {
+    await page.goto('/');
+    const card = page.locator('.project-card[data-project-id="soma"]');
+    const drawing = card.locator('.thumbnail-drawing');
+    await card.hover();
+    await expect(drawing.locator('[pathLength]').first()).toHaveCSS('animation-name', /drawing-trace/);
+    await expect(drawing).toHaveCount(0);
+    await page.mouse.move(0, 0);
+    await card.hover();
+    await expect(drawing).toHaveCount(1);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await expect(drawing).toHaveCount(0);
+    await page.mouse.move(0, 0);
+    await card.hover();
+    await expect(drawing).toHaveCount(0);
+});
